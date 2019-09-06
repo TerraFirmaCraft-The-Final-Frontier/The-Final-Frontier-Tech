@@ -1,8 +1,0 @@
-﻿{
-	"version": "0.2.10-A15",
-	"changelog": [
-		"Fixed Small bauxite can be melted in the crucible without any heat (wormzjl)",
-		"Fixed crash on startup without some BC modules (I hope so)",
-		"Added options that allow you to disable some heat recipes"
-	]
-}

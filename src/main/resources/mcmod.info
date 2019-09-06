@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "tfctech",
+    "name": "TFCTech Unofficial",
+    "description": "Adds devices to work into industrial era for TerraFirmaCraft",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "logoFile": "/assets/tfc/textures/gui/logo.png",
+    "authorList": [
+      "DisasterMoo",
+      "UnlimatedStone9",
+	  "Abdyman"
+    ],
+    "credits": "Shurgent for the original addon and the TFC dev team."
+  }
+]

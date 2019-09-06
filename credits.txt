@@ -1,6 +1,0 @@
-Author:
-	Shurgent
-
-Textures:
-	Shurgent
-	Starblood(Archemagos)
