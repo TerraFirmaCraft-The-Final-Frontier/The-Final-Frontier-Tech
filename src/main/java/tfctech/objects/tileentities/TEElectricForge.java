@@ -1,40 +1,64 @@
 package tfctech.objects.tileentities;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
+import net.dries007.tfc.ConfigTFC;
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
 import net.dries007.tfc.api.capability.heat.IItemHeat;
 import net.dries007.tfc.api.capability.metal.IMetalItem;
 import net.dries007.tfc.api.recipes.heat.HeatRecipe;
+import net.dries007.tfc.objects.te.ITileFields;
 import net.dries007.tfc.objects.te.TEInventory;
+import tfctech.ModConfig;
+import tfctech.TFCTech;
+import tfctech.objects.storage.MachineEnergyContainer;
 
+import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MAX_TEMPERATURE;
+import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MIN_TEMPERATURE;
 import static tfctech.objects.blocks.devices.BlockElectricForge.LIT;
 
 @SuppressWarnings("WeakerAccess")
-public class TEElectricForge extends TEInventory implements ITickable, IEnergyStorage
+@ParametersAreNonnullByDefault
+public class TEElectricForge extends TEInventory implements ITickable, ITileFields
 {
     public static final int SLOT_INPUT_MIN = 0;
     public static final int SLOT_INPUT_MAX = 8;
     public static final int SLOT_EXTRA_MIN = 9;
-    public static final int SLOT_EXTRA_MAX = 12;
-    public static final int ENERGY_CAPACITY = 10000;
+    public static final int SLOT_EXTRA_MAX = 11;
     private HeatRecipe[] cachedRecipes = new HeatRecipe[9];
     private float targetTemperature = 0.0F;
-    private int storedEnergy = 0;
+    private MachineEnergyContainer energyContainer;
     private int litTime = 0; //visual only
 
     public TEElectricForge()
     {
-        super(13);
+        super(12);
+        energyContainer = new MachineEnergyContainer(ModConfig.DEVICES.electricForgeEnergyCapacity, ModConfig.DEVICES.electricForgeEnergyCapacity, 0);
+        for (int i = 0; i < cachedRecipes.length; i++)
+        {
+            cachedRecipes[i] = null;
+        }
+    }
+
+    public void addTargetTemperature(int value)
+    {
+        targetTemperature += value;
+        if (targetTemperature > (float) ModConfig.DEVICES.electricForgeMaxTemperature) targetTemperature = (float) ModConfig.DEVICES.electricForgeMaxTemperature;
+        if (targetTemperature < MIN_TEMPERATURE) targetTemperature = MIN_TEMPERATURE;
     }
 
     @Override
@@ -43,7 +67,8 @@ public class TEElectricForge extends TEInventory implements ITickable, IEnergySt
         if (world.isRemote) return;
         IBlockState state = world.getBlockState(pos);
         boolean isLit = state.getValue(LIT);
-        int energyUsage = (int) (5 * targetTemperature / 100);
+        int energyUsage = (int) ((float) ModConfig.DEVICES.electricForgeEnergyConsumption * targetTemperature / 100);
+        if(energyUsage < 1)energyUsage = 1;
         for (int i = SLOT_INPUT_MIN; i <= SLOT_INPUT_MAX; i++)
         {
             ItemStack stack = inventory.getStackInSlot(i);
@@ -54,10 +79,11 @@ public class TEElectricForge extends TEInventory implements ITickable, IEnergySt
                 // Update temperature of item
                 float itemTemp = cap.getTemperature();
                 int energy = (int) (energyUsage * modifier);
-                if (targetTemperature > itemTemp && extractEnergy(energy, true) == energy)
+                if (targetTemperature > itemTemp && energyContainer.consumeEnergy(energy, false))
                 {
-                    CapabilityItemHeat.addTemp(cap);
-                    extractEnergy(energy, false);
+                    float heatSpeed = (float)ModConfig.DEVICES.electricForgeSpeed * 15.0F;
+                    float temp = cap.getTemperature() + heatSpeed * cap.getHeatCapacity() * (float) ConfigTFC.GENERAL.temperatureModifierGlobal;
+                    cap.setTemperature(temp > targetTemperature ? targetTemperature : temp);
                     litTime = 15;
                     if (!isLit)
                     {
@@ -81,48 +107,6 @@ public class TEElectricForge extends TEInventory implements ITickable, IEnergySt
     }
 
     @Override
-    public int receiveEnergy(int maxReceive, boolean simulate)
-    {
-        int energyReceived = Math.min(ENERGY_CAPACITY - storedEnergy, maxReceive);
-        if (!simulate)
-            storedEnergy += energyReceived;
-        return energyReceived;
-    }
-
-    @Override
-    public int extractEnergy(int maxExtract, boolean simulate)
-    {
-        int energyExtracted = Math.min(storedEnergy, maxExtract);
-        if (!simulate)
-            storedEnergy -= energyExtracted;
-        return energyExtracted;
-    }
-
-    @Override
-    public int getEnergyStored()
-    {
-        return storedEnergy;
-    }
-
-    @Override
-    public int getMaxEnergyStored()
-    {
-        return ENERGY_CAPACITY;
-    }
-
-    @Override
-    public boolean canExtract()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean canReceive()
-    {
-        return true;
-    }
-
-    @Override
     public void setAndUpdateSlots(int slot)
     {
         this.markDirty();
@@ -133,7 +117,7 @@ public class TEElectricForge extends TEInventory implements ITickable, IEnergySt
     public void readFromNBT(NBTTagCompound nbt)
     {
         targetTemperature = nbt.getFloat("targetTemperature");
-        storedEnergy = nbt.getInteger("storedEnergy");
+        energyContainer.deserializeNBT(nbt.getCompoundTag("energyContainer"));
         super.readFromNBT(nbt);
 
         updateCachedRecipes();
@@ -144,7 +128,7 @@ public class TEElectricForge extends TEInventory implements ITickable, IEnergySt
     public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
         nbt.setFloat("targetTemperature", targetTemperature);
-        nbt.setInteger("storedEnergy", storedEnergy);
+        nbt.setTag("energyContainer", energyContainer.serializeNBT());
         return super.writeToNBT(nbt);
     }
 
@@ -170,6 +154,52 @@ public class TEElectricForge extends TEInventory implements ITickable, IEnergySt
     public boolean isLit()
     {
         return litTime > 0;
+    }
+
+    @Override
+    public int getFieldCount()
+    {
+        return 2;
+    }
+
+    public int getEnergyCapacity()
+    {
+        return energyContainer.getMaxEnergyStored();
+    }
+
+    @Override
+    public void setField(int index, int value)
+    {
+        if (index == 0)
+        {
+            this.targetTemperature = (float) value;
+        }
+        else if (index == 1)
+        {
+            this.energyContainer.setEnergy(value);
+        }
+        else
+        {
+            TFCTech.getLog().warn("Invalid field ID {} in TEElectricForge#setField", index);
+        }
+    }
+
+    @Override
+    public int getField(int index)
+    {
+        if (index == 0)
+        {
+            return (int) this.targetTemperature;
+        }
+        else if (index == 1)
+        {
+            return this.energyContainer.getEnergyStored();
+        }
+        else
+        {
+            TFCTech.getLog().warn("Invalid field ID {} in TEElectricForge#setField", index);
+            return 0;
+        }
     }
 
     private void handleInputMelting(ItemStack stack, int index)
@@ -217,6 +247,19 @@ public class TEElectricForge extends TEInventory implements ITickable, IEnergySt
             // Handle possible item output
             inventory.setStackInSlot(index, recipe.getOutputStack(stack));
         }
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
+    {
+        return (capability == CapabilityEnergy.ENERGY && facing == EnumFacing.UP) || super.hasCapability(capability, facing);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
+    {
+        return capability == CapabilityEnergy.ENERGY && facing == EnumFacing.UP ? (T) this.energyContainer : super.getCapability(capability, facing);
     }
 
     private void updateCachedRecipes()
