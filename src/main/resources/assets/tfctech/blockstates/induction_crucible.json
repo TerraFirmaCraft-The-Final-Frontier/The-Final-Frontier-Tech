@@ -1,0 +1,33 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "tfc:crucible",
+    "textures": {
+      "side": "tfc:blocks/devices/crucible/side",
+      "top": "tfc:blocks/devices/crucible/top",
+      "particle": "tfc:blocks/devices/crucible/side"
+    }
+  },
+  "variants": {
+    "facing": {
+      "south": {
+        "y": 180
+      },
+      "east": {
+        "y": 90
+      },
+      "north": {},
+      "west": {
+        "y": 270
+      }
+    },
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
+    "normal": [
+      {}
+    ]
+  }
+}
