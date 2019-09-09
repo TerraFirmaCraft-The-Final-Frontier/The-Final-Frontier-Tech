@@ -3,10 +3,12 @@
   "defaults": {
     "textures": {
 		"side": "tfctech:blocks/devices/electric_forge/side",
-		"top": "tfctech:blocks/devices/electric_forge/top",
 		"front": "tfctech:blocks/devices/electric_forge/front",
-		"bottom": "tfctech:blocks/devices/electric_forge/bottom",
-		"particle": "tfctech:blocks/devices/electric_forge/side"
+      "back": "tfctech:blocks/devices/electric_forge/back",
+      "coils": "tfctech:blocks/devices/electric_forge/coils",
+      "casing": "tfctech:blocks/devices/electric_forge/casing",
+      "box": "tfctech:blocks/devices/electric_forge/box",
+      "particle": "tfctech:blocks/devices/electric_forge/back"
 	},
     "model": "tfctech:electric_forge"
   },
