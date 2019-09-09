@@ -13,7 +13,9 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import net.dries007.tfc.objects.items.itemblock.ItemBlockTFC;
 import tfctech.objects.blocks.devices.BlockElectricForge;
+import tfctech.objects.blocks.devices.BlockInductionCrucible;
 import tfctech.objects.tileentities.TEElectricForge;
+import tfctech.objects.tileentities.TEInductionCrucible;
 
 import static net.dries007.tfc.objects.CreativeTabsTFC.CT_MISC;
 import static net.dries007.tfc.util.Helpers.getNull;
@@ -43,11 +45,13 @@ public final class ModBlocks
         ImmutableList.Builder<ItemBlock> inventoryItemBlocks = ImmutableList.builder();
 
         inventoryItemBlocks.add(new ItemBlockTFC(register(r, "electric_forge", new BlockElectricForge(), CT_MISC)));
+        inventoryItemBlocks.add(new ItemBlockTFC(register(r, "induction_crucible", new BlockInductionCrucible(), CT_MISC)));
 
         allInventoryItemBlocks = inventoryItemBlocks.build();
 
         //Register TEs
         register(TEElectricForge.class, "electric_forge");
+        register(TEInductionCrucible.class, "induction_crucible");
     }
 
     private static <T extends Block> T register(IForgeRegistry<Block> r, String name, T block, CreativeTabs ct)

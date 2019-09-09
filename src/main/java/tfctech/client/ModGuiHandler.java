@@ -10,11 +10,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
+import net.dries007.tfc.objects.container.ContainerCrucible;
 import net.dries007.tfc.util.Helpers;
 import tfctech.TFCTech;
 import tfctech.client.gui.GuiElectricForge;
+import tfctech.client.gui.GuiInductionCrucible;
 import tfctech.objects.container.ContainerElectricForge;
 import tfctech.objects.tileentities.TEElectricForge;
+import tfctech.objects.tileentities.TEInductionCrucible;
 
 import static tfctech.TFCTech.MODID;
 
@@ -38,6 +41,9 @@ public class ModGuiHandler implements IGuiHandler
             case ELECTRIC_FORGE:
                 TEElectricForge teElectricForge = Helpers.getTE(world, pos, TEElectricForge.class);
                 return teElectricForge == null ? null : new ContainerElectricForge(player.inventory, teElectricForge);
+            case INDUCTION_CRUCIBLE:
+                TEInductionCrucible teInductionCrucible = Helpers.getTE(world, pos, TEInductionCrucible.class);
+                return teInductionCrucible == null ? null : new ContainerCrucible(player.inventory, teInductionCrucible);
             default:
                 return null;
         }
@@ -55,6 +61,8 @@ public class ModGuiHandler implements IGuiHandler
         {
             case ELECTRIC_FORGE:
                 return new GuiElectricForge(container, player.inventory, Helpers.getTE(world, pos, TEElectricForge.class));
+            case INDUCTION_CRUCIBLE:
+                return new GuiInductionCrucible(container, player.inventory, Helpers.getTE(world, pos, TEInductionCrucible.class));
             default:
                 return null;
         }
@@ -62,7 +70,8 @@ public class ModGuiHandler implements IGuiHandler
 
     public enum Type
     {
-        ELECTRIC_FORGE;
+        ELECTRIC_FORGE,
+        INDUCTION_CRUCIBLE;
 
         private static Type[] values = values();
 

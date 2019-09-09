@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import static tfctech.TFCTech.MODID;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings("unused")
 @Config(modid = MODID, category = "")
 @Config.LangKey("config." + MODID)
 @Mod.EventBusSubscriber(modid = MODID)
@@ -49,5 +49,16 @@ public final class ModConfig
         @Config.RangeInt(min = 1000, max = 1_000_000_000)
         @Config.LangKey("config." + MODID + ".general.electricForgeEnergyCapacity")
         public int electricForgeEnergyCapacity = 10000;
+
+        @Config.Comment({"Induction crucible energy consumption, in RF/t."})
+        @Config.RangeInt(min = 1, max = 1_000_000_000)
+        @Config.LangKey("config." + MODID + ".general.inductionCrucibleEnergyConsumption")
+        public int inductionCrucibleEnergyConsumption = 20;
+
+        @Config.RequiresWorldRestart
+        @Config.Comment({"Induction crucible energy capacity."})
+        @Config.RangeInt(min = 1000, max = 1_000_000_000)
+        @Config.LangKey("config." + MODID + ".general.inductionCrucibleEnergyCapacity")
+        public int inductionCrucibleEnergyCapacity = 10000;
     }
 }
