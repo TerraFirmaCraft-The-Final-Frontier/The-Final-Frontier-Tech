@@ -4,11 +4,6 @@
 		"0": "3d models/coils",
 		"1": "3d models/Machine Casing",
 		"2": "3d models/box",
-		"4": "tfctech:blocks/devices/electric_forge/top",
-		"7": "tfctech:blocks/devices/electric_forge/front",
-		"8": "tfctech:blocks/devices/electric_forge/side",
-		"9": "tfctech:blocks/devices/electric_forge/bottom",
-		"10": "tfctech:blocks/devices/electric_forge/back",
 		"particle": "3d models/coils"
 	},
 	"elements": [
@@ -1104,84 +1099,6 @@
 				"up": {"uv": [0, 0, 0.3, 3], "texture": "#0"},
 				"down": {"uv": [0, 0, 0.3, 3], "texture": "#0"}
 			}
-		},
-		{
-			"name": "bottom",
-			"from": [0, -0.001, 0],
-			"to": [16, 0.999, 16],
-			"faces": {
-				"north": {"uv": [0, 0, 16, 1], "texture": "#missing"},
-				"east": {"uv": [0, 0, 16, 1], "texture": "#missing"},
-				"south": {"uv": [0, 0, 16, 1], "texture": "#missing"},
-				"west": {"uv": [0, 0, 16, 1], "texture": "#missing"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#missing"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#9"}
-			}
-		},
-		{
-			"name": "top",
-			"from": [0, 15, 0],
-			"to": [16, 16.001, 16],
-			"faces": {
-				"north": {"uv": [0, 0, 16, 1.001], "texture": "#missing"},
-				"east": {"uv": [0, 0, 16, 1.001], "texture": "#missing"},
-				"south": {"uv": [0, 0, 16, 1.001], "texture": "#missing"},
-				"west": {"uv": [0, 0, 16, 1.001], "texture": "#missing"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#4"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#missing"}
-			}
-		},
-		{
-			"name": "side1",
-			"from": [-0.001, 0, 0],
-			"to": [0.999, 16, 16],
-			"faces": {
-				"north": {"uv": [0, 0, 1, 16], "texture": "#missing"},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#missing"},
-				"south": {"uv": [0, 0, 1, 16], "texture": "#missing"},
-				"west": {"uv": [0, 0, 16, 16], "texture": "#8"},
-				"up": {"uv": [0, 0, 1, 16], "texture": "#missing"},
-				"down": {"uv": [0, 0, 1, 16], "texture": "#missing"}
-			}
-		},
-		{
-			"name": "side2",
-			"from": [15.001, 0, 0],
-			"to": [16.001, 16, 16],
-			"faces": {
-				"north": {"uv": [0, 0, 1, 16], "texture": "#missing"},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#8"},
-				"south": {"uv": [0, 0, 1, 16], "texture": "#missing"},
-				"west": {"uv": [0, 0, 16, 16], "texture": "#missing"},
-				"up": {"uv": [0, 0, 1, 16], "texture": "#missing"},
-				"down": {"uv": [0, 0, 1, 16], "texture": "#missing"}
-			}
-		},
-		{
-			"name": "back",
-			"from": [0, 0, 15.001],
-			"to": [16, 16, 16.001],
-			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#missing"},
-				"east": {"uv": [0, 0, 1, 16], "texture": "#missing"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#10"},
-				"west": {"uv": [0, 0, 1, 16], "texture": "#missing"},
-				"up": {"uv": [0, 0, 16, 1], "texture": "#missing"},
-				"down": {"uv": [0, 0, 16, 1], "texture": "#missing"}
-			}
-		},
-		{
-			"name": "front",
-			"from": [0, 0, -0.001],
-			"to": [16, 16, 1],
-			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#7"},
-				"east": {"uv": [0, 0, 1.001, 16], "texture": "#missing"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#missing"},
-				"west": {"uv": [0, 0, 1.001, 16], "texture": "#missing"},
-				"up": {"uv": [0, 0, 16, 1.001], "texture": "#missing"},
-				"down": {"uv": [0, 0, 16, 1.001], "texture": "#missing"}
-			}
 		}
 	],
 	"display": {
@@ -1289,11 +1206,6 @@
 					"children": [78, 79, 80, 81, 82, 83, 84]
 				}
 			]
-		},
-		{
-			"name": "Outer Casing",
-			"origin": [8, 8, 8],
-			"children": [85, 86, 87, 88, 89, 90]
 		}
 	]
 }
