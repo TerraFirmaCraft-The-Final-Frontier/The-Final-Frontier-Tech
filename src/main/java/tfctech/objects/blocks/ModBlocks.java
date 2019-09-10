@@ -14,8 +14,10 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.dries007.tfc.objects.items.itemblock.ItemBlockTFC;
 import tfctech.objects.blocks.devices.BlockElectricForge;
 import tfctech.objects.blocks.devices.BlockInductionCrucible;
+import tfctech.objects.blocks.devices.BlockLatexExtractor;
 import tfctech.objects.tileentities.TEElectricForge;
 import tfctech.objects.tileentities.TEInductionCrucible;
+import tfctech.objects.tileentities.TELatexExtractor;
 
 import static net.dries007.tfc.objects.CreativeTabsTFC.CT_MISC;
 import static net.dries007.tfc.util.Helpers.getNull;
@@ -27,6 +29,8 @@ import static tfctech.TFCTech.MODID;
 public final class ModBlocks
 {
     public static final BlockElectricForge ELECTRIC_FORGE = getNull();
+    public static final BlockInductionCrucible INDUCTION_CRUCIBLE = getNull();
+    public static final BlockLatexExtractor LATEX_EXTRACTOR = getNull();
 
     private static ImmutableList<ItemBlock> allInventoryItemBlocks;
     //todo latex
@@ -49,9 +53,13 @@ public final class ModBlocks
 
         allInventoryItemBlocks = inventoryItemBlocks.build();
 
+        //No itemblocks
+        register(r, "latex_extractor", new BlockLatexExtractor());
+
         //Register TEs
         register(TEElectricForge.class, "electric_forge");
         register(TEInductionCrucible.class, "induction_crucible");
+        register(TELatexExtractor.class, "latex_extractor");
     }
 
     private static <T extends Block> T register(IForgeRegistry<Block> r, String name, T block, CreativeTabs ct)

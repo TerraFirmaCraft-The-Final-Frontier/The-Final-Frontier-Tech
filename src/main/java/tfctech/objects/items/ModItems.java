@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.event.RegistryEvent;
@@ -13,7 +14,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import tfctech.objects.blocks.ModBlocks;
+import tfctech.objects.items.tools.ItemTreeTapper;
 
+import static net.dries007.tfc.objects.CreativeTabsTFC.CT_MISC;
 import static tfctech.TFCTech.MODID;
 
 @SuppressWarnings("unused")
@@ -34,6 +37,8 @@ public final class ModItems
     {
         IForgeRegistry<Item> r = event.getRegistry();
         ImmutableList.Builder<Item> simpleItems = ImmutableList.builder();
+
+        simpleItems.add(register(r, "tree_tapper", new ItemTreeTapper(), CT_MISC));
 
         allSimpleItems = simpleItems.build();
 
@@ -56,5 +61,14 @@ public final class ModItems
         item.setRegistryName(item.getBlock().getRegistryName());
         item.setCreativeTab(item.getBlock().getCreativeTab());
         r.register(item);
+    }
+
+    private static <T extends Item> T register(IForgeRegistry<Item> r, String name, T item, CreativeTabs ct)
+    {
+        item.setRegistryName(MODID, name);
+        item.setTranslationKey(MODID + "." + name.replace('/', '.'));
+        item.setCreativeTab(ct);
+        r.register(item);
+        return item;
     }
 }
