@@ -2,8 +2,8 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-		"side": "tfctech:blocks/devices/electric_forge/side",
-		"front": "tfctech:blocks/devices/electric_forge/front",
+	  "side": "tfctech:blocks/devices/electric_forge/side",
+	  "front": "tfctech:blocks/devices/electric_forge/front",
       "back": "tfctech:blocks/devices/electric_forge/back",
       "coils": "tfctech:blocks/devices/electric_forge/coils",
       "casing": "tfctech:blocks/devices/electric_forge/casing",

@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -211,6 +212,14 @@ public class BlockInductionCrucible extends Block implements IItemSize
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
+	@SideOnly(Side.CLIENT)
+    @Override
+    @Nonnull
+    public BlockRenderLayer getRenderLayer()
+    {
+        return BlockRenderLayer.CUTOUT_MIPPED;
+    }
+	
     @Override
     public Size getSize(@Nonnull ItemStack itemStack)
     {
