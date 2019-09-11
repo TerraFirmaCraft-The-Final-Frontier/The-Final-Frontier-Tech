@@ -16,12 +16,14 @@
     "lit": {
       "true": {
         "textures": {
-          "front": "tfctech:blocks/devices/electric_forge/front_on"
+          "front": "tfctech:blocks/devices/electric_forge/front_on",
+		  "coils": "tfctech:blocks/devices/electric_forge/coils_on"
         }
       },
       "false": {
         "textures": {
-          "front": "tfctech:blocks/devices/electric_forge/front"
+          "front": "tfctech:blocks/devices/electric_forge/front",
+		  "coils": "tfctech:blocks/devices/electric_forge/coils"
         }
       }
     },
