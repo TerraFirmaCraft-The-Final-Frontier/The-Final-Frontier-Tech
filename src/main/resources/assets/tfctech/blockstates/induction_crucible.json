@@ -1,14 +1,32 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "tfc:crucible",
     "textures": {
-      "side": "tfc:blocks/devices/crucible/side",
-      "top": "tfc:blocks/devices/crucible/top",
-      "particle": "tfc:blocks/devices/crucible/side"
-    }
+		"side": "tfctech:blocks/devices/induction_crucible/sides",
+		"front": "tfctech:blocks/devices/induction_crucible/front",
+      "back": "tfctech:blocks/devices/induction_crucible/sides",
+      "coils": "tfctech:blocks/devices/induction_crucible/coils",
+      "casing": "tfctech:blocks/devices/induction_crucible/casing",
+      "box": "tfctech:blocks/devices/induction_cruciblee/side",
+      "particle": "tfctech:blocks/devices/induction_crucible/sides"
+	},
+    "model": "tfctech:induction_crucible", 
   },
   "variants": {
+    "lit": {
+      "true": {
+        "textures": {
+          "front": "tfctech:blocks/devices/induction_crucible/controller_on",
+		  "coils": "tfctech:blocks/devices/induction_crucible/coils_on"
+        }
+      },
+      "false": {
+        "textures": {
+          "front": "tfctech:blocks/devices/induction_crucible/controller",
+		  "coils": "tfctech:blocks/devices/induction_crucible/coils"
+        }
+      }
+    },
     "facing": {
       "south": {
         "y": 180
