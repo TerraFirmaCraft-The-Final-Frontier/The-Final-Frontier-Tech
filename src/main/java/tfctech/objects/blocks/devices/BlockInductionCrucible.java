@@ -5,9 +5,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -38,6 +40,8 @@ import static net.minecraft.block.BlockHorizontal.FACING;
 @MethodsReturnNonnullByDefault
 public class BlockInductionCrucible extends Block implements IItemSize
 {
+    public static final PropertyBool LIT = PropertyBool.create("lit");
+
     private static final AxisAlignedBB CRUCIBLE_AABB = new AxisAlignedBB(0.0625, 0, 0.0625, 0.9375, 0.9375, 0.9375);
     private static final AxisAlignedBB AABB_LEGS = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.9375D, 0.125D, 0.9375D);
     private static final AxisAlignedBB AABB_WALL_NORTH = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.9375D, 0.1875D);
@@ -52,7 +56,7 @@ public class BlockInductionCrucible extends Block implements IItemSize
         setHardness(3.0f);
         setHarvestLevel("pickaxe", 0);
         setSoundType(SoundType.METAL);
-        setDefaultState(getBlockState().getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        setDefaultState(getBlockState().getBaseState().withProperty(LIT, false).withProperty(FACING, EnumFacing.NORTH));
 
     }
 
@@ -173,7 +177,7 @@ public class BlockInductionCrucible extends Block implements IItemSize
     @Override
     protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, FACING);
+        return new BlockStateContainer(this, FACING, LIT);
     }
 
     @Override
@@ -208,6 +212,14 @@ public class BlockInductionCrucible extends Block implements IItemSize
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
+	@SideOnly(Side.CLIENT)
+    @Override
+    @Nonnull
+    public BlockRenderLayer getRenderLayer()
+    {
+        return BlockRenderLayer.CUTOUT_MIPPED;
+    }
+	
     @Override
     public Size getSize(@Nonnull ItemStack itemStack)
     {

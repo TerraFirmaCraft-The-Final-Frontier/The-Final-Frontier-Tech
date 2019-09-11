@@ -2,27 +2,29 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-		"side": "tfctech:blocks/devices/induction_crucible/sides",
-		"front": "tfctech:blocks/devices/induction_crucible/front",
-      "back": "tfctech:blocks/devices/induction_crucible/sides",
+      "controller": "tfctech:blocks/devices/induction_crucible/controller",
+      "side_internal": "tfctech:blocks/devices/induction_crucible/side_internal",
+      "side_external": "tfctech:blocks/devices/induction_crucible/side_external",
+      "front": "tfctech:blocks/devices/induction_crucible/front",
+      "bottom_internal": "tfctech:blocks/devices/induction_crucible/bottom_internal",
+      "bottom_external": "tfctech:blocks/devices/induction_crucible/bottom_external",
       "coils": "tfctech:blocks/devices/induction_crucible/coils",
       "casing": "tfctech:blocks/devices/induction_crucible/casing",
-      "box": "tfctech:blocks/devices/induction_cruciblee/side",
       "particle": "tfctech:blocks/devices/induction_crucible/sides"
 	},
-    "model": "tfctech:induction_crucible", 
+    "model": "tfctech:induction_crucible"
   },
   "variants": {
     "lit": {
       "true": {
         "textures": {
-          "front": "tfctech:blocks/devices/induction_crucible/controller_on",
+          "controller": "tfctech:blocks/devices/induction_crucible/controller_on",
 		  "coils": "tfctech:blocks/devices/induction_crucible/coils_on"
         }
       },
       "false": {
         "textures": {
-          "front": "tfctech:blocks/devices/induction_crucible/controller",
+          "controller": "tfctech:blocks/devices/induction_crucible/controller",
 		  "coils": "tfctech:blocks/devices/induction_crucible/coils"
         }
       }

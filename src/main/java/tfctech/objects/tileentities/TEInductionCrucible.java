@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -15,6 +16,7 @@ import net.dries007.tfc.api.capability.heat.IItemHeat;
 import net.dries007.tfc.objects.te.TECrucible;
 import tfctech.ModConfig;
 import tfctech.TFCTech;
+import tfctech.objects.blocks.devices.BlockElectricForge;
 import tfctech.objects.storage.MachineEnergyContainer;
 
 import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MAX_TEMPERATURE;
@@ -24,6 +26,7 @@ import static net.minecraft.block.BlockHorizontal.FACING;
 public class TEInductionCrucible extends TECrucible
 {
     private MachineEnergyContainer energyContainer;
+    private int litTime = 0; //visual only
 
     public TEInductionCrucible()
     {
@@ -53,12 +56,30 @@ public class TEInductionCrucible extends TECrucible
     public void update()
     {
         if (world.isRemote) return;
+        IBlockState state = world.getBlockState(pos);
+        boolean isLit = state.getValue(BlockElectricForge.LIT);
         ItemStack stack = inventory.getStackInSlot(SLOT_INPUT);
         IItemHeat cap = stack.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);
         int energyUsage = ModConfig.DEVICES.inductionCrucibleEnergyConsumption;
         if ((cap != null || this.getAlloy().removeAlloy(1, true) > 0) && energyContainer.consumeEnergy(energyUsage, false))
         {
             this.acceptHeat(MAX_TEMPERATURE);
+            litTime = 15;
+            if (!isLit)
+            {
+                isLit = true;
+                state = state.withProperty(BlockElectricForge.LIT, true);
+                world.setBlockState(pos, state, 2);
+            }
+        }
+        if (--litTime <= 0)
+        {
+            litTime = 0;
+            if (isLit)
+            {
+                state = state.withProperty(BlockElectricForge.LIT, false);
+                world.setBlockState(pos, state, 2);
+            }
         }
         super.update();
     }
