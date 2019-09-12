@@ -10,7 +10,7 @@
       "bottom_external": "tfctech:blocks/devices/induction_crucible/bottom_external",
       "coils": "tfctech:blocks/devices/induction_crucible/coils",
       "casing": "tfctech:blocks/devices/induction_crucible/casing",
-      "particle": "tfctech:blocks/devices/induction_crucible/sides"
+      "particle": "tfctech:blocks/devices/induction_crucible/side_external"
 	},
     "model": "tfctech:induction_crucible"
   },
