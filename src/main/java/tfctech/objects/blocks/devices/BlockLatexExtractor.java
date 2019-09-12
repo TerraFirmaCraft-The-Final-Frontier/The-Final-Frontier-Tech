@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,7 +31,6 @@ import tfctech.objects.tileentities.TELatexExtractor;
 import static net.minecraft.block.BlockHorizontal.FACING;
 import static net.minecraft.util.EnumFacing.NORTH;
 
-@SuppressWarnings("WeakerAccess")
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class BlockLatexExtractor extends Block
@@ -38,8 +38,12 @@ public class BlockLatexExtractor extends Block
 
     public static final PropertyBool BASE = PropertyBool.create("base"); //from TE
     public static final PropertyBool POT = PropertyBool.create("pot"); //from TE
-    //public static final PropertyBool TAP = PropertyBool.create("tap"); //always true. start by placing this one and only allow removal when user removes the rest
     public static final PropertyInteger CUT = PropertyInteger.create("cut", 0, 2); //from TE
+
+    private static final AxisAlignedBB AABB_N = new AxisAlignedBB(0.1875D, 0.125D, 0.3125D, 0.8125D, 0.875D, 1.0D);
+    private static final AxisAlignedBB AABB_S = new AxisAlignedBB(0.1875D, 0.125D, 0.0D, 0.8125D, 0.875D, 0.6875D);
+    private static final AxisAlignedBB AABB_E = new AxisAlignedBB(0.0D, 0.125D, 0.1875D, 0.6875D, 0.875D, 0.8125D);
+    private static final AxisAlignedBB AABB_W = new AxisAlignedBB(0.3125D, 0.125D, 0.1875D, 1.0D, 0.875D, 0.8125D);
 
     public BlockLatexExtractor()
     {
@@ -87,6 +91,13 @@ public class BlockLatexExtractor extends Block
 
     @SuppressWarnings("deprecation")
     @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
+    {
+        return BlockFaceShape.UNDEFINED;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
     public boolean isFullCube(IBlockState state)
     {
         return false;
@@ -104,7 +115,19 @@ public class BlockLatexExtractor extends Block
     {
         //todo return pot + holder bounding box
         //if there's only the tap, return it's bounding box
-        return super.getBoundingBox(state, source, pos);
+        switch (state.getValue(FACING))
+        {
+            case NORTH:
+                return AABB_N;
+            case SOUTH:
+                return AABB_S;
+            case EAST:
+                return AABB_E;
+            case WEST:
+                return AABB_W;
+            default:
+                return FULL_BLOCK_AABB;
+        }
     }
 
     @SuppressWarnings("deprecation")

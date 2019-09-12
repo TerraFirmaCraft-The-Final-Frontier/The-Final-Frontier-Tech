@@ -10,20 +10,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import mcp.MethodsReturnNonnullByDefault;
 import net.dries007.tfc.Constants;
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.objects.te.ITileFields;
 import net.dries007.tfc.objects.te.TEBase;
 import net.dries007.tfc.util.calendar.ICalendar;
 import tfctech.TFCTech;
+import tfctech.network.PacketLatexUpdate;
 
 import static net.minecraftforge.fluids.Fluid.BUCKET_VOLUME;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TELatexExtractor extends TEBase implements ITickable, ITileFields
+public class TELatexExtractor extends TEBase implements ITickable
 {
-    private static final int MAX_FLUID = BUCKET_VOLUME;
+    public static final int MAX_FLUID = BUCKET_VOLUME;
 
     private int flowTicks = -1; //-1 No cut, 0 stopped, >= 1 still flowing
     private int fluid = 0;
@@ -73,7 +79,7 @@ public class TELatexExtractor extends TEBase implements ITickable, ITileFields
 
     public int getFluidAmount()
     {
-        return Math.min(MAX_FLUID, fluid);
+        return !hasFluid() ? 0 : Math.min(MAX_FLUID, fluid);
     }
 
     /**
@@ -94,63 +100,6 @@ public class TELatexExtractor extends TEBase implements ITickable, ITileFields
             return null;
         }
         return world.getBlockState(pos);
-    }
-
-    @Override
-    public int getFieldCount()
-    {
-        return 4;
-    }
-
-    @Override
-    public void setField(int index, int value)
-    {
-        if (index == 0)
-        {
-            this.flowTicks = value;
-        }
-        else if (index == 1)
-        {
-            this.fluid = value;
-        }
-        else if (index == 2)
-        {
-            this.pot = value > 0;
-        }
-        else if (index == 3)
-        {
-            this.base = value > 0;
-        }
-        else
-        {
-            TFCTech.getLog().warn("Invalid field ID {} in TELatexExtractor#setField", index);
-        }
-    }
-
-    @Override
-    public int getField(int index)
-    {
-        if (index == 0)
-        {
-            return this.flowTicks;
-        }
-        else if (index == 1)
-        {
-            return this.fluid;
-        }
-        else if (index == 2)
-        {
-            return this.pot ? 1 : 0;
-        }
-        else if (index == 3)
-        {
-            return this.base ? 1 : 0;
-        }
-        else
-        {
-            TFCTech.getLog().warn("Invalid field ID {} in TELatexExtractor#setField", index);
-            return 0;
-        }
     }
 
     public void makeCut()
@@ -214,7 +163,25 @@ public class TELatexExtractor extends TEBase implements ITickable, ITileFields
             if (flowTicks % 20 == 0)
             {
                 fluid++;
+                if(fluid >= MAX_FLUID)
+                {
+                    fluid = MAX_FLUID;
+                    flowTicks = 0;
+                }
+                TFCTech.getNetwork().sendToAllTracking(new PacketLatexUpdate(this), new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 64));
             }
         }
+    }
+
+    /**
+     * Update client TE for gui purposes only!
+     */
+    @SideOnly(Side.CLIENT)
+    public void updateClient(int flowTicks, int fluid, boolean pot, boolean base)
+    {
+        this.flowTicks = flowTicks;
+        this.fluid = fluid;
+        this.pot = pot;
+        this.base = base;
     }
 }
