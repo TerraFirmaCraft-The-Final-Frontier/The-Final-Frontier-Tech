@@ -7,7 +7,7 @@ public class BlockWireDrawBench extends Block
 {
     public BlockWireDrawBench()
     {
-        super(Material.WOOD);
+        super(Material.IRON);
     }
     //todo
 }
