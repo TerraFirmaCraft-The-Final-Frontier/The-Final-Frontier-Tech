@@ -1,0 +1,40 @@
+#Hevea
+tile.tfc.wood.bookshelf.hevea.name=Hevea Bookshelf
+tile.tfc.wood.workbench.hevea.name=Hevea Workbench
+tile.tfc.wood.planks.hevea.name=Hevea Planks
+tile.tfc.wood.leaves.hevea.name=Hevea Leaves
+tile.tfc.wood.chest.hevea.name=Hevea Chest
+tile.tfc.wood.chest_trap.hevea.name=Trapped Hevea Chest
+tile.tfc.wood.tool_rack.hevea.name=Hevea Tool Rack
+tile.tfc.wood.loom.hevea.name=Hevea Loom
+tile.tfc.wood.support.hevea.name=Hevea Support beam
+tile.tfc.stairs.wood.hevea.name=Hevea Stairs
+tile.tfc.wood.fence.hevea.name=Hevea Fence
+tile.tfc.wood.button.hevea.name=Hevea Button
+tile.tfc.wood.fence_gate.hevea.name=Hevea Fence Gate
+tile.tfc.wood.sapling.hevea.name=Hevea Sapling
+tile.tfc.wood.door.hevea.name=Hevea Door
+tile.tfc.wood.trapdoor.hevea.name=Hevea Trapdoor
+tile.tfc.wood.barrel.hevea.name=Hevea Barrel
+tile.tfc.wood.log.hevea.name=Hevea Log
+tile.tfc.wood.lumber.hevea.name=Hevea Lumber
+tile.tfc.slab.wood.hevea.name=Hevea Slab
+
+#Devices
+tile.tfctech.electric_forge.name=Electric Forge
+tile.tfctech.induction_crucible.name=Induction Crucible
+
+#Items
+item.tfctech.tools.groove.name=Groove
+item.tfctech.tools.bowl_mount.name=Bowl mount
+item.tfctech.tools.draw_plate.name=Draw Plate
+item.tfctech.tools.fluid_bowl.name=Empty Bowl
+item.tfctech.tools.fluid_bowl.filled=%s Bowl
+item.tfctech.rubber_ball.name=Rubber Ball
+item.tfctech.rubber.name=Rubber
+
+#Fluids
+fluid.latex=Latex
+
+#Tooltip
+tooltip.tfctech.tools.fluid_bowl.fluid=Contains %smB of %s

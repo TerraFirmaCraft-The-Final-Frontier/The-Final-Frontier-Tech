@@ -2,19 +2,23 @@ package tfctech.objects.blocks;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import net.dries007.tfc.objects.blocks.BlockFluidTFC;
 import net.dries007.tfc.objects.items.itemblock.ItemBlockTFC;
 import tfctech.objects.blocks.devices.BlockElectricForge;
 import tfctech.objects.blocks.devices.BlockInductionCrucible;
 import tfctech.objects.blocks.devices.BlockLatexExtractor;
+import tfctech.objects.fluids.ModFluids;
 import tfctech.objects.tileentities.TEElectricForge;
 import tfctech.objects.tileentities.TEInductionCrucible;
 import tfctech.objects.tileentities.TELatexExtractor;
@@ -33,6 +37,8 @@ public final class ModBlocks
     public static final BlockLatexExtractor LATEX_EXTRACTOR = getNull();
 
     private static ImmutableList<ItemBlock> allInventoryItemBlocks;
+    private static ImmutableList<BlockFluidBase> allFluidBlocks;
+
     //todo latex
     //todo recipe for rubber akin to vulcanization process(look for TFCTech)
 
@@ -41,11 +47,25 @@ public final class ModBlocks
         return allInventoryItemBlocks;
     }
 
+    public static ImmutableList<BlockFluidBase> getAllFluidBlocks()
+    {
+        return allFluidBlocks;
+    }
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event)
     {
+
         IForgeRegistry<Block> r = event.getRegistry();
+        ModFluids.registerFluids();
+
+        ImmutableList.Builder<BlockFluidBase> b = ImmutableList.builder();
+        if (ModFluids.LATEX.isDefault())
+        {
+            b.add(register(r, "fluid/" + ModFluids.LATEX.get().getName(), new BlockFluidTFC(ModFluids.LATEX.get(), Material.WATER)));
+        }
+        allFluidBlocks = b.build();
+
         ImmutableList.Builder<ItemBlock> inventoryItemBlocks = ImmutableList.builder();
 
         inventoryItemBlocks.add(new ItemBlockTFC(register(r, "electric_forge", new BlockElectricForge(), CT_MISC)));

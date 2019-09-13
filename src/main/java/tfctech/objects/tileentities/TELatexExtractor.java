@@ -5,23 +5,25 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
-
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import mcp.MethodsReturnNonnullByDefault;
 import net.dries007.tfc.Constants;
-import net.dries007.tfc.TerraFirmaCraft;
-import net.dries007.tfc.objects.te.ITileFields;
 import net.dries007.tfc.objects.te.TEBase;
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.ICalendar;
 import tfctech.TFCTech;
 import tfctech.network.PacketLatexUpdate;
+import tfctech.objects.fluids.ModFluids;
+import tfctech.objects.items.ModItems;
 
 import static net.minecraftforge.fluids.Fluid.BUCKET_VOLUME;
 
@@ -102,54 +104,106 @@ public class TELatexExtractor extends TEBase implements ITickable
         return world.getBlockState(pos);
     }
 
-    public void makeCut()
+    public boolean makeCut()
     {
         if (flowTicks < 1 && hasPot() && hasBase())
         {
             flowTicks = ICalendar.TICKS_IN_DAY / 2 + Constants.RNG.nextInt(ICalendar.TICKS_IN_DAY * 2);
-            //play sound
+            return true;
         }
+        return false;
+    }
+
+    public void onBreakBlock()
+    {
+        if (hasPot())
+        {
+            ItemStack pot = removePot();
+            if (pot != ItemStack.EMPTY)
+            {
+                Helpers.spawnItemStack(world, pos, pot);
+            }
+        }
+        if (hasBase())
+        {
+            ItemStack base = removeBase();
+            if (base != ItemStack.EMPTY)
+            {
+                Helpers.spawnItemStack(world, pos, base);
+            }
+        }
+        Helpers.spawnItemStack(world, pos, new ItemStack(ModItems.GROOVE));
     }
 
     public boolean isValidPot(ItemStack pot)
     {
-        return pot.getItem() == Items.EGG; //todo change
+        return pot.getItem() == ModItems.FLUID_BOWL;
     }
 
     public boolean isValidBase(ItemStack base)
     {
-        return base.getItem() == Items.BOOK; //todo change
+        return base.getItem() == ModItems.BOWL_MOUNT;
     }
 
-    public void addPot(ItemStack stack)
+    public boolean addPot(ItemStack stack)
     {
-        if (!hasPot() && hasBase())
+        if (!hasPot() && hasBase() && isValidPot(stack))
         {
+            IFluidHandler cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+            if (cap != null)
+            {
+                FluidStack fluidStack = cap.drain(MAX_FLUID, false);
+                if (fluidStack != null)
+                {
+                    if (fluidStack.getFluid() != ModFluids.LATEX.get())
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        fluid = Math.min(fluidStack.amount, MAX_FLUID);
+                    }
+                }
+            }
             pot = true;
+            return true;
         }
+        return false;
     }
 
-    public void addBase(ItemStack stack)
+    public boolean addBase(ItemStack stack)
     {
-        if (!hasBase())
+        if (!hasBase() && isValidBase(stack))
         {
             base = true;
+            return true;
         }
+        return false;
     }
 
     public ItemStack removePot()
     {
-        //todo create itemstack with contents
-        flowTicks = 0;
-        fluid = 0;
-        return ItemStack.EMPTY;
+        ItemStack stack = new ItemStack(ModItems.FLUID_BOWL);
+        IFluidHandler cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        if (cap != null && hasFluid())
+        {
+            cap.fill(new FluidStack(ModFluids.LATEX.get(), fluid), true);
+        }
+        if (flowTicks > -1)
+        {
+            flowTicks = 0;
+            fluid = 0;
+        }
+        pot = false;
+        return stack;
     }
 
     public ItemStack removeBase()
     {
         if (!hasPot())
         {
-            //todo remove base only when no pot is here
+            base = false;
+            return new ItemStack(ModItems.BOWL_MOUNT);
         }
         return ItemStack.EMPTY;
     }
@@ -160,7 +214,7 @@ public class TELatexExtractor extends TEBase implements ITickable
         if (!world.isRemote && flowTicks > 0)
         {
             flowTicks--;
-            if (flowTicks % 20 == 0)
+            if (flowTicks % 40 == 0)
             {
                 fluid++;
                 if(fluid >= MAX_FLUID)

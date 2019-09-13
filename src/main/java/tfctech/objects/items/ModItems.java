@@ -14,9 +14,12 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import tfctech.objects.blocks.ModBlocks;
-import tfctech.objects.items.tools.ItemTreeTapper;
+import tfctech.objects.items.tools.ItemFluidBowl;
+import tfctech.objects.items.tools.ItemGroove;
 
 import static net.dries007.tfc.objects.CreativeTabsTFC.CT_MISC;
+import static net.dries007.tfc.objects.CreativeTabsTFC.CT_POTTERY;
+import static net.dries007.tfc.util.Helpers.getNull;
 import static tfctech.TFCTech.MODID;
 
 @SuppressWarnings("unused")
@@ -24,6 +27,19 @@ import static tfctech.TFCTech.MODID;
 @GameRegistry.ObjectHolder(MODID)
 public final class ModItems
 {
+    @GameRegistry.ObjectHolder("tools/fluid_bowl")
+    public static final ItemFluidBowl FLUID_BOWL = getNull();
+
+    @GameRegistry.ObjectHolder("tools/bowl_mount")
+    public static final Item BOWL_MOUNT = getNull();
+
+    @GameRegistry.ObjectHolder("tools/draw_plate")
+    public static final Item DRAW_PLATE = getNull();
+
+    @GameRegistry.ObjectHolder("tools/groove")
+    public static final ItemGroove GROOVE = getNull();
+
+    public static final Item RUBBER_BALL = getNull();
 
     private static ImmutableList<Item> allSimpleItems;
 
@@ -38,9 +54,15 @@ public final class ModItems
         IForgeRegistry<Item> r = event.getRegistry();
         ImmutableList.Builder<Item> simpleItems = ImmutableList.builder();
 
-        simpleItems.add(register(r, "tree_tapper", new ItemTreeTapper(), CT_MISC));
+        simpleItems.add(register(r, "tools/groove", new ItemGroove(), CT_MISC));
+        simpleItems.add(register(r, "tools/bowl_mount", new Item(), CT_MISC));
+        simpleItems.add(register(r, "tools/draw_plate", new Item(), CT_MISC));
+        simpleItems.add(register(r, "rubber_ball", new Item(), CT_MISC));
+        simpleItems.add(register(r, "rubber", new Item(), CT_MISC));
 
         allSimpleItems = simpleItems.build();
+
+        register(r, "tools/fluid_bowl", new ItemFluidBowl(), CT_POTTERY);
 
         //todo register items
         //todo ceramic molds for glass
