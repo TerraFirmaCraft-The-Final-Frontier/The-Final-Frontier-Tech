@@ -22,8 +22,8 @@ import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.ICalendar;
 import tfctech.TFCTech;
 import tfctech.network.PacketLatexUpdate;
-import tfctech.objects.fluids.ModFluids;
-import tfctech.objects.items.ModItems;
+import tfctech.objects.fluids.TechFluids;
+import tfctech.objects.items.TechItems;
 
 import static net.minecraftforge.fluids.Fluid.BUCKET_VOLUME;
 
@@ -132,17 +132,17 @@ public class TELatexExtractor extends TEBase implements ITickable
                 Helpers.spawnItemStack(world, pos, base);
             }
         }
-        Helpers.spawnItemStack(world, pos, new ItemStack(ModItems.GROOVE));
+        Helpers.spawnItemStack(world, pos, new ItemStack(TechItems.IRON_GROOVE));
     }
 
     public boolean isValidPot(ItemStack pot)
     {
-        return pot.getItem() == ModItems.FLUID_BOWL;
+        return pot.getItem() == TechItems.FLUID_BOWL;
     }
 
     public boolean isValidBase(ItemStack base)
     {
-        return base.getItem() == ModItems.BOWL_MOUNT;
+        return base.getItem() == TechItems.IRON_BOWL_MOUNT;
     }
 
     public boolean addPot(ItemStack stack)
@@ -155,7 +155,7 @@ public class TELatexExtractor extends TEBase implements ITickable
                 FluidStack fluidStack = cap.drain(MAX_FLUID, false);
                 if (fluidStack != null)
                 {
-                    if (fluidStack.getFluid() != ModFluids.LATEX.get())
+                    if (fluidStack.getFluid() != TechFluids.LATEX.get())
                     {
                         return false;
                     }
@@ -183,11 +183,11 @@ public class TELatexExtractor extends TEBase implements ITickable
 
     public ItemStack removePot()
     {
-        ItemStack stack = new ItemStack(ModItems.FLUID_BOWL);
+        ItemStack stack = new ItemStack(TechItems.FLUID_BOWL);
         IFluidHandler cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
         if (cap != null && hasFluid())
         {
-            cap.fill(new FluidStack(ModFluids.LATEX.get(), fluid), true);
+            cap.fill(new FluidStack(TechFluids.LATEX.get(), fluid), true);
         }
         if (flowTicks > -1)
         {
@@ -203,7 +203,7 @@ public class TELatexExtractor extends TEBase implements ITickable
         if (!hasPot())
         {
             base = false;
-            return new ItemStack(ModItems.BOWL_MOUNT);
+            return new ItemStack(TechItems.IRON_BOWL_MOUNT);
         }
         return ItemStack.EMPTY;
     }

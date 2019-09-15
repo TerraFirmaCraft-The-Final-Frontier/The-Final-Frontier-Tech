@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import mcp.MethodsReturnNonnullByDefault;
 import net.dries007.tfc.objects.blocks.wood.BlockLogTFC;
 import net.dries007.tfc.util.Helpers;
-import tfctech.client.ModSounds;
+import tfctech.client.TechSounds;
 import tfctech.objects.tileentities.TELatexExtractor;
 
 import static net.minecraft.block.BlockHorizontal.FACING;
@@ -181,32 +181,32 @@ public class BlockLatexExtractor extends Block
             {
                 if (te.makeCut())
                 {
-                    world.playSound(null, pos, ModSounds.RUBBER_TRUNK_SCRATH, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.playSound(null, pos, TechSounds.RUBBER_TRUNK_SCRATH, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     return true;
                 }
             }
             else if (!te.hasPot() && te.isValidPot(stack) && te.addPot(stack))
             {
                 stack.shrink(1);
-                world.playSound(null, pos, ModSounds.RUBBER_BOWL_FIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.playSound(null, pos, TechSounds.RUBBER_BOWL_FIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 return true;
             }
             else if (!te.hasBase() && te.isValidBase(stack) && te.addBase(stack))
             {
                 stack.shrink(1);
-                world.playSound(null, pos, ModSounds.RUBBER_MOUNT_FIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.playSound(null, pos, TechSounds.RUBBER_MOUNT_FIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 return true;
             }
             else if (stack.isEmpty() && te.hasPot())
             {
                 player.setHeldItem(hand, te.removePot());
-                world.playSound(null, pos, ModSounds.RUBBER_BOWL_GRAB, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.playSound(null, pos, TechSounds.RUBBER_BOWL_GRAB, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 return true;
             }
             else if (stack.isEmpty() && te.hasBase())
             {
                 player.setHeldItem(hand, te.removeBase());
-                world.playSound(null, pos, ModSounds.RUBBER_GROOVE_FIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.playSound(null, pos, TechSounds.RUBBER_GROOVE_FIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 return true;
             }
         }

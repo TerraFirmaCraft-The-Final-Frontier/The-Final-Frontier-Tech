@@ -13,28 +13,47 @@ tile.tfc.wood.fence.hevea.name=Hevea Fence
 tile.tfc.wood.button.hevea.name=Hevea Button
 tile.tfc.wood.fence_gate.hevea.name=Hevea Fence Gate
 tile.tfc.wood.sapling.hevea.name=Hevea Sapling
-tile.tfc.wood.door.hevea.name=Hevea Door
 tile.tfc.wood.trapdoor.hevea.name=Hevea Trapdoor
 tile.tfc.wood.barrel.hevea.name=Hevea Barrel
 tile.tfc.wood.log.hevea.name=Hevea Log
-tile.tfc.wood.lumber.hevea.name=Hevea Lumber
 tile.tfc.slab.wood.hevea.name=Hevea Slab
+item.tfc.wood.lumber.hevea.name=Hevea Lumber
+item.tfc.wood.door.hevea.name=Hevea Door
 
 #Devices
 tile.tfctech.electric_forge.name=Electric Forge
 tile.tfctech.induction_crucible.name=Induction Crucible
 
-#Items
-item.tfctech.tools.groove.name=Groove
-item.tfctech.tools.bowl_mount.name=Bowl mount
-item.tfctech.tools.draw_plate.name=Draw Plate
-item.tfctech.tools.fluid_bowl.name=Empty Bowl
-item.tfctech.tools.fluid_bowl.filled=%s Bowl
-item.tfctech.rubber_ball.name=Rubber Ball
-item.tfctech.rubber.name=Rubber
+##Items
+#Ceramics
+item.tfctech.ceramics.fluid_bowl.name=Empty Bowl
+item.tfctech.ceramics.fluid_bowl.filled=%s Bowl
+
+#Latex
+item.tfctech.latex.vulcanizing_agents.name=Vulcanizing Agents
+item.tfctech.latex.rubber_mix.name=Rubber Mix
+item.tfctech.latex.rubber.name=Rubber
+
+#Wiredraw
+item.tfctech.wiredraw.leather_belt.name=Leather Belt
+item.tfctech.wiredraw.winch.name=Winch
+
+#Metal
+item.tfctech.metalitem.bowl_mount.name=%s Bowl Mount
+item.tfctech.metalitem.draw_plate.name=%s Draw Plate
+item.tfctech.metalitem.groove.name=%s Groove
+item.tfctech.metalitem.inductor.name=%s Inductor
+item.tfctech.metalitem.tongs.name=%s Tongs
+item.tfctech.metalitem.strip.name=%s Strip
+item.tfctech.metalitem.sleeve.name=%s Sleeve
+item.tfctech.metalitem.rackwheel_piece.name=%s Rackwheel Piece
+item.tfctech.metalitem.rackwheel.name=%s Rackwheel
+item.tfctech.metalitem.gear.name=%s Gear
+item.tfctech.metalitem.wire.name=%s Wire
 
 #Fluids
 fluid.latex=Latex
 
 #Tooltip
-tooltip.tfctech.tools.fluid_bowl.fluid=Contains %smB of %s
+tooltip.tfctech.ceramics.fluid_bowl.fluid=Contains %smB of %s
+tooltip.tfctech.metalitem.wire.stage=Stage %s

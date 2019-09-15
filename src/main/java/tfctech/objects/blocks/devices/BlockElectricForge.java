@@ -29,7 +29,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.dries007.tfc.api.capability.size.IItemSize;
 import net.dries007.tfc.api.capability.size.Size;
 import net.dries007.tfc.api.capability.size.Weight;
-import tfctech.client.ModGuiHandler;
+import tfctech.client.TechGuiHandler;
 import tfctech.objects.tileentities.TEElectricForge;
 
 import static net.minecraft.block.BlockHorizontal.FACING;
@@ -57,7 +57,7 @@ public class BlockElectricForge extends Block implements IItemSize
         {
             if (!world.isRemote)
             {
-                ModGuiHandler.openGui(world, pos, player, ModGuiHandler.Type.ELECTRIC_FORGE);
+                TechGuiHandler.openGui(world, pos, player, TechGuiHandler.Type.ELECTRIC_FORGE);
             }
             return true;
         }

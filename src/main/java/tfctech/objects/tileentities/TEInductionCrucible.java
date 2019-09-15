@@ -14,8 +14,8 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
 import net.dries007.tfc.api.capability.heat.IItemHeat;
 import net.dries007.tfc.objects.te.TECrucible;
-import tfctech.ModConfig;
 import tfctech.TFCTech;
+import tfctech.TechConfig;
 import tfctech.objects.blocks.devices.BlockElectricForge;
 import tfctech.objects.storage.MachineEnergyContainer;
 
@@ -31,7 +31,7 @@ public class TEInductionCrucible extends TECrucible
     public TEInductionCrucible()
     {
         super();
-        energyContainer = new MachineEnergyContainer(ModConfig.DEVICES.inductionCrucibleEnergyCapacity, ModConfig.DEVICES.inductionCrucibleEnergyCapacity, 0);
+        energyContainer = new MachineEnergyContainer(TechConfig.DEVICES.inductionCrucibleEnergyCapacity, TechConfig.DEVICES.inductionCrucibleEnergyCapacity, 0);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class TEInductionCrucible extends TECrucible
         boolean isLit = state.getValue(BlockElectricForge.LIT);
         ItemStack stack = inventory.getStackInSlot(SLOT_INPUT);
         IItemHeat cap = stack.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);
-        int energyUsage = ModConfig.DEVICES.inductionCrucibleEnergyConsumption;
+        int energyUsage = TechConfig.DEVICES.inductionCrucibleEnergyConsumption;
         if ((cap != null || this.getAlloy().removeAlloy(1, true) > 0) && energyContainer.consumeEnergy(energyUsage, false))
         {
             this.acceptHeat(MAX_TEMPERATURE);

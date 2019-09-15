@@ -16,7 +16,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fluids.Fluid;
 
 import net.dries007.tfc.client.FluidSpriteCache;
-import tfctech.objects.fluids.ModFluids;
+import tfctech.objects.fluids.TechFluids;
 import tfctech.objects.tileentities.TELatexExtractor;
 
 import static net.minecraft.block.BlockHorizontal.FACING;
@@ -32,7 +32,7 @@ public class TESRLatexExtractor extends TileEntitySpecialRenderer<TELatexExtract
         if (te.hasWorld())
         {
             IBlockState state = te.getBlockState();
-            Fluid flowing = ModFluids.LATEX.get(); //todo change this to latex fluid
+            Fluid flowing = TechFluids.LATEX.get(); //todo change this to latex fluid
 
             //Update state values according to TE
 

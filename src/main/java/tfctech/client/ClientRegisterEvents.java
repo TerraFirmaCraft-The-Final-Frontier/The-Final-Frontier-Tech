@@ -3,8 +3,11 @@ package tfctech.client;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.BlockFluidBase;
@@ -15,8 +18,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import tfctech.client.render.TESRLatexExtractor;
-import tfctech.objects.blocks.ModBlocks;
-import tfctech.objects.items.ModItems;
+import tfctech.objects.blocks.TechBlocks;
+import tfctech.objects.items.TechItems;
+import tfctech.objects.items.metal.ItemTechMetal;
 import tfctech.objects.tileentities.TELatexExtractor;
 
 import static tfctech.TFCTech.MODID;
@@ -32,23 +36,49 @@ public final class ClientRegisterEvents
         // ITEMS //
 
         //Fluid containers
-        ModelLoader.setCustomModelResourceLocation(ModItems.FLUID_BOWL, 0, new ModelResourceLocation(ModItems.FLUID_BOWL.getRegistryName(), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(TechItems.FLUID_BOWL, 0, new ModelResourceLocation(TechItems.FLUID_BOWL.getRegistryName(), "inventory"));
 
 
         // Simple Items
-        for (Item item : ModItems.getAllSimpleItems())
+        for (Item item : TechItems.getAllSimpleItems())
             ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString()));
 
-        for (Block block : ModBlocks.getAllFluidBlocks())
+        for (Block block : TechBlocks.getAllFluidBlocks())
             ModelLoader.setCustomStateMapper(block, new StateMap.Builder().ignore(BlockFluidBase.LEVEL).build());
 
 
         // Item Blocks
-        for (ItemBlock item : ModBlocks.getAllInventoryItemBlocks())
+        for (ItemBlock item : TechBlocks.getAllInventoryItemBlocks())
             ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+
+        // Metals
+        for (Item item : TechItems.getAllMetalItems())
+        {
+            ItemTechMetal metalItem = (ItemTechMetal) item;
+            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(new ResourceLocation(MODID, "metal/" + metalItem.getType().name().toLowerCase()), "inventory"));
+            if (((ItemTechMetal) item).getType() == ItemTechMetal.ItemType.WIRE)
+            {
+                for (int i = 1; i <= 4; i++)
+                    ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(new ResourceLocation(MODID, "metal/" + metalItem.getType().name().toLowerCase()), "inventory"));
+
+            }
+        }
 
         // TESRs //
 
         ClientRegistry.bindTileEntitySpecialRenderer(TELatexExtractor.class, new TESRLatexExtractor());
+    }
+
+    @SubscribeEvent
+    public static void registerItemColourHandlers(final ColorHandlerEvent.Item event)
+    {
+        final ItemColors itemColors = event.getItemColors();
+
+        for (Item item : TechItems.getAllMetalItems())
+        {
+            itemColors.registerItemColorHandler(
+                    (stack, tintIndex) -> ((ItemTechMetal) stack.getItem()).getMetal(stack).getColor(),
+                    item);
+        }
     }
 }
