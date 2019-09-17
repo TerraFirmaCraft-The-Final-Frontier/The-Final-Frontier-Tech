@@ -1,6 +1,7 @@
 package tfctech.client;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.color.ItemColors;
@@ -17,11 +18,16 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import tfctech.client.render.TESRLatexExtractor;
+import tfctech.client.render.teisr.TEISRWireDrawBench;
+import tfctech.client.render.tesr.TESRLatexExtractor;
+import tfctech.client.render.tesr.TESRWireDrawBench;
 import tfctech.objects.blocks.TechBlocks;
+import tfctech.objects.blocks.devices.BlockWireDrawBench;
 import tfctech.objects.items.TechItems;
+import tfctech.objects.items.itemblocks.ItemBlockWireDrawBench;
 import tfctech.objects.items.metal.ItemTechMetal;
 import tfctech.objects.tileentities.TELatexExtractor;
+import tfctech.objects.tileentities.TEWireDrawBench;
 
 import static tfctech.TFCTech.MODID;
 
@@ -31,7 +37,7 @@ public final class ClientRegisterEvents
 {
     @SubscribeEvent
     @SuppressWarnings("ConstantConditions")
-    public static void registerModels(ModelRegistryEvent event)
+    public static void registerModels(final ModelRegistryEvent event)
     {
         // ITEMS //
 
@@ -49,7 +55,14 @@ public final class ClientRegisterEvents
 
         // Item Blocks
         for (ItemBlock item : TechBlocks.getAllInventoryItemBlocks())
+        {
             ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+            if (item instanceof ItemBlockWireDrawBench)
+            {
+                item.setTileEntityItemStackRenderer(new TEISRWireDrawBench());
+            }
+        }
+
 
         // Metals
         for (Item item : TechItems.getAllMetalItems())
@@ -64,9 +77,14 @@ public final class ClientRegisterEvents
             }
         }
 
+        // Ignored states
+        ModelLoader.setCustomStateMapper(TechBlocks.WIRE_DRAW_BENCH, new StateMap.Builder().ignore(BlockWireDrawBench.UPPER).ignore(BlockHorizontal.FACING).build());
+
+
         // TESRs //
 
         ClientRegistry.bindTileEntitySpecialRenderer(TELatexExtractor.class, new TESRLatexExtractor());
+        ClientRegistry.bindTileEntitySpecialRenderer(TEWireDrawBench.class, new TESRWireDrawBench());
     }
 
     @SubscribeEvent

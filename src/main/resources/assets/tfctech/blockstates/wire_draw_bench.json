@@ -10,19 +10,12 @@
 	"model": "tfctech:wire_draw_bench"
   },
   "variants": {
-    "facing": {
-      "south": {
-        "y": 180
-      },
-      "east": {
-        "y": 90
-      },
-      "north": {},
-      "west": {
-        "y": 270
+    "inventory": [
+      {
+        "transform": "forge:default-block"
       }
-    },
-     "normal": [
+    ],
+    "normal": [
       {}
     ]
   }

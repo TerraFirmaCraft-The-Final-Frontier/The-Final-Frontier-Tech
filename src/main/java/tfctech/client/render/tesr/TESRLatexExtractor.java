@@ -1,4 +1,4 @@
-package tfctech.client.render;
+package tfctech.client.render.tesr;
 
 import org.lwjgl.opengl.GL11;
 import net.minecraft.block.state.IBlockState;

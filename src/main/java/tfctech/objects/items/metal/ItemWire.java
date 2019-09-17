@@ -1,6 +1,7 @@
 package tfctech.objects.items.metal;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -29,5 +30,18 @@ public class ItemWire extends ItemTechMetal
             tooltip.add(stage);
         }
         super.addInformation(stack, worldIn, tooltip, flagIn);
+    }
+
+    @Nonnull
+    @Override
+    public String getItemStackDisplayName(@Nonnull ItemStack stack)
+    {
+        if (stack.getMetadata() > 0)
+        {
+            //noinspection ConstantConditions
+            String metalName = (new TextComponentTranslation("tfc.types.metal." + metal.getRegistryName().getPath().toLowerCase())).getFormattedText();
+            return (new TextComponentTranslation("item.tfctech.metalitem.wire.unfinished", metalName)).getFormattedText();
+        }
+        return super.getItemStackDisplayName(stack);
     }
 }

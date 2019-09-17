@@ -23,6 +23,7 @@ item.tfc.wood.door.hevea.name=Hevea Door
 #Devices
 tile.tfctech.electric_forge.name=Electric Forge
 tile.tfctech.induction_crucible.name=Induction Crucible
+tile.tfctech.wire_draw_bench.name=Wire Drawing Bench
 
 ##Items
 #Ceramics
@@ -50,6 +51,7 @@ item.tfctech.metalitem.rackwheel_piece.name=%s Rackwheel Piece
 item.tfctech.metalitem.rackwheel.name=%s Rackwheel
 item.tfctech.metalitem.gear.name=%s Gear
 item.tfctech.metalitem.wire.name=%s Wire
+item.tfctech.metalitem.wire.unfinished=Unfinished %s Wire
 
 #Fluids
 fluid.latex=Latex

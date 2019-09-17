@@ -18,10 +18,13 @@ import net.dries007.tfc.objects.items.itemblock.ItemBlockTFC;
 import tfctech.objects.blocks.devices.BlockElectricForge;
 import tfctech.objects.blocks.devices.BlockInductionCrucible;
 import tfctech.objects.blocks.devices.BlockLatexExtractor;
+import tfctech.objects.blocks.devices.BlockWireDrawBench;
 import tfctech.objects.fluids.TechFluids;
+import tfctech.objects.items.itemblocks.ItemBlockWireDrawBench;
 import tfctech.objects.tileentities.TEElectricForge;
 import tfctech.objects.tileentities.TEInductionCrucible;
 import tfctech.objects.tileentities.TELatexExtractor;
+import tfctech.objects.tileentities.TEWireDrawBench;
 
 import static net.dries007.tfc.objects.CreativeTabsTFC.CT_MISC;
 import static net.dries007.tfc.util.Helpers.getNull;
@@ -35,6 +38,7 @@ public final class TechBlocks
     public static final BlockElectricForge ELECTRIC_FORGE = getNull();
     public static final BlockInductionCrucible INDUCTION_CRUCIBLE = getNull();
     public static final BlockLatexExtractor LATEX_EXTRACTOR = getNull();
+    public static final BlockWireDrawBench WIRE_DRAW_BENCH = getNull();
 
     private static ImmutableList<ItemBlock> allInventoryItemBlocks;
     private static ImmutableList<BlockFluidBase> allFluidBlocks;
@@ -70,6 +74,7 @@ public final class TechBlocks
 
         inventoryItemBlocks.add(new ItemBlockTFC(register(r, "electric_forge", new BlockElectricForge(), CT_MISC)));
         inventoryItemBlocks.add(new ItemBlockTFC(register(r, "induction_crucible", new BlockInductionCrucible(), CT_MISC)));
+        inventoryItemBlocks.add(new ItemBlockWireDrawBench(register(r, "wire_draw_bench", new BlockWireDrawBench(), CT_MISC)));
 
         allInventoryItemBlocks = inventoryItemBlocks.build();
 
@@ -80,6 +85,7 @@ public final class TechBlocks
         register(TEElectricForge.class, "electric_forge");
         register(TEInductionCrucible.class, "induction_crucible");
         register(TELatexExtractor.class, "latex_extractor");
+        register(TEWireDrawBench.class, "wire_draw_bench");
     }
 
     private static <T extends Block> T register(IForgeRegistry<Block> r, String name, T block, CreativeTabs ct)
