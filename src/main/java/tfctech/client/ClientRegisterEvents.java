@@ -1,8 +1,14 @@
 package tfctech.client;
 
+import java.awt.*;
+import java.util.Collections;
+import java.util.Map;
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
@@ -22,9 +28,9 @@ import tfctech.client.render.teisr.TEISRWireDrawBench;
 import tfctech.client.render.tesr.TESRLatexExtractor;
 import tfctech.client.render.tesr.TESRWireDrawBench;
 import tfctech.objects.blocks.TechBlocks;
-import tfctech.objects.blocks.devices.BlockWireDrawBench;
 import tfctech.objects.items.TechItems;
 import tfctech.objects.items.itemblocks.ItemBlockWireDrawBench;
+import tfctech.objects.items.metal.ItemGear;
 import tfctech.objects.items.metal.ItemTechMetal;
 import tfctech.objects.tileentities.TELatexExtractor;
 import tfctech.objects.tileentities.TEWireDrawBench;
@@ -61,6 +67,10 @@ public final class ClientRegisterEvents
             {
                 item.setTileEntityItemStackRenderer(new TEISRWireDrawBench());
             }
+            else
+            {
+                //ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+            }
         }
 
 
@@ -78,7 +88,15 @@ public final class ClientRegisterEvents
         }
 
         // Ignored states
-        ModelLoader.setCustomStateMapper(TechBlocks.WIRE_DRAW_BENCH, new StateMap.Builder().ignore(BlockWireDrawBench.UPPER).ignore(BlockHorizontal.FACING).build());
+        ModelLoader.setCustomStateMapper(TechBlocks.WIRE_DRAW_BENCH, new IStateMapper()
+        {
+            @Override
+            @Nonnull
+            public Map<IBlockState, ModelResourceLocation> putStateModelLocations(@Nonnull Block blockIn)
+            {
+                return Collections.emptyMap();
+            }
+        });
 
 
         // TESRs //
@@ -95,7 +113,13 @@ public final class ClientRegisterEvents
         for (Item item : TechItems.getAllMetalItems())
         {
             itemColors.registerItemColorHandler(
-                    (stack, tintIndex) -> ((ItemTechMetal) stack.getItem()).getMetal(stack).getColor(),
+                    (stack, tintIndex) -> {
+                        if (tintIndex == 1 && stack.getItem() instanceof ItemGear)
+                        {
+                            return (new Color(((ItemGear) stack.getItem()).getSleeveMetal().getColor())).brighter().getRGB();
+                        }
+                        return (new Color(((ItemTechMetal) stack.getItem()).getMetal(stack).getColor())).brighter().getRGB();
+                    },
                     item);
         }
     }

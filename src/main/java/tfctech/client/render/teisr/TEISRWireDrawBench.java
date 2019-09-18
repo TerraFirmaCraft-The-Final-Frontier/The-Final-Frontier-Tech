@@ -18,6 +18,6 @@ public class TEISRWireDrawBench extends TileEntityItemStackRenderer
     @Override
     public void renderByItem(ItemStack itemStackIn, float partialTicks)
     {
-        TileEntityRendererDispatcher.instance.render(te, 0.0D, 0.0D, 0.0D, 0.0F);
+        TileEntityRendererDispatcher.instance.render(te, 0.0D, 0.0D, 0.0D, partialTicks);
     }
 }

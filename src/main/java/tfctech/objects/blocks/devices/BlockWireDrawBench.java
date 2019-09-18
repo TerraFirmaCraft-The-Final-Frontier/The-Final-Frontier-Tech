@@ -39,10 +39,10 @@ public class BlockWireDrawBench extends BlockHorizontal
 
     public BlockWireDrawBench()
     {
-        super(Material.IRON);
+        super(Material.WOOD);
         setDefaultState(blockState.getBaseState().withProperty(UPPER, false));
-        setHardness(8.0f);
-        setHarvestLevel("pickaxe", 0);
+        setHardness(2.0f);
+        setHarvestLevel("axe", 0);
     }
 
     @SuppressWarnings("deprecation")

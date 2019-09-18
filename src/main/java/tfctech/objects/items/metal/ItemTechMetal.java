@@ -128,7 +128,7 @@ public class ItemTechMetal extends ItemTFC implements IMetalItem
         SLEEVE(100),
         RACKWHEEL_PIECE(100),
         RACKWHEEL(400),
-        GEAR(400),
+        GEAR(400, ItemGear::new),
         WIRE(50, ItemWire::new);
 
         public static Item create(Metal metal, ItemType type)
