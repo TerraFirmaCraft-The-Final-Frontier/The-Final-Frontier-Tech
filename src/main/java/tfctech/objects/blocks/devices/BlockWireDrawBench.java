@@ -189,7 +189,7 @@ public class BlockWireDrawBench extends BlockHorizontal
                 }
                 else
                 {
-                    return te.startWork();
+                    return te.startWork(player);
                 }
             }
         }

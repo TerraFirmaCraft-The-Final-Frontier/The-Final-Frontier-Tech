@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -53,22 +54,27 @@ public class TEWireDrawBench extends TEInventory implements ITickable
         return inventory.getStackInSlot(1) != ItemStack.EMPTY;
     }
 
-    public boolean startWork()
+    public boolean startWork(EntityPlayer player)
     {
         if (canWork())
         {
             ItemTechMetal drawPlate = (ItemTechMetal) inventory.getStackInSlot(0).getItem();
             ItemTechMetal wire = (ItemTechMetal) inventory.getStackInSlot(1).getItem();
+            world.playSound(null, pos, TechSounds.WIREDRAW_DRAWING, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            working = true;
+            /*
             if (wire.getMetal(inventory.getStackInSlot(1)).getTier().isAtLeast(drawPlate.getMetal(inventory.getStackInSlot(0)).getTier()))
             {
                 world.playSound(null, pos, TechSounds.WIREDRAW_DRAWING, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 working = true;
-            }
+            }*/
+            /*
             else
             {
                 //todo play sound can't turn wire
                 //todo show status message couldn't work becuase low tier
-            }
+                player.sendStatusMessage(new TextComponentTranslation("tile.tfctech.wiredraw.low_tier"), true);
+            }*/
             return true;
         }
         return false;

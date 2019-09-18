@@ -59,3 +59,6 @@ fluid.latex=Latex
 #Tooltip
 tooltip.tfctech.ceramics.fluid_bowl.fluid=Contains %smB of %s
 tooltip.tfctech.metalitem.wire.stage=Stage %s
+
+#Status
+status.tfctech.wiredraw.low_tier=Drawplate is low tier
