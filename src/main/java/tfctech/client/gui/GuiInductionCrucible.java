@@ -12,7 +12,7 @@ import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.client.gui.GuiContainerTE;
 import net.dries007.tfc.objects.te.TECrucible;
 import net.dries007.tfc.util.Alloy;
-import tfctech.client.ModGuiHandler;
+import tfctech.client.TechGuiHandler;
 import tfctech.objects.tileentities.TEInductionCrucible;
 
 import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MAX_TEMPERATURE;
@@ -53,7 +53,7 @@ public class GuiInductionCrucible extends GuiContainerTE<TEInductionCrucible>
 
         //137, 27 start of energy bar, 160, 31 start of heat bar
         //Draw the temperature bar
-        mc.getTextureManager().bindTexture(ModGuiHandler.GUI_ELEMENTS);
+        mc.getTextureManager().bindTexture(TechGuiHandler.GUI_ELEMENTS);
         drawTexturedModalRect(this.guiLeft + 140, this.guiTop + 31, 39, 1, 9, 52);
 
         // Draw the temperature indicator

@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
 import net.dries007.tfc.api.util.TFCConstants;
-import tfctech.client.ModGuiHandler;
+import tfctech.client.TechGuiHandler;
 import tfctech.network.PacketLatexUpdate;
 
 //todo add required dependency TFC-Metallum
@@ -54,7 +54,7 @@ public class TFCTech
     public void preInit(FMLPreInitializationEvent event)
     {
         logger = event.getModLog();
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, new ModGuiHandler());
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new TechGuiHandler());
         network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
         int id = 0;
         network.registerMessage(new PacketLatexUpdate.Handler(), PacketLatexUpdate.class, ++id, Side.CLIENT);

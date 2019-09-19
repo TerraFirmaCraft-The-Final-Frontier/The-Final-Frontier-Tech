@@ -13,10 +13,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -25,7 +22,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import mcp.MethodsReturnNonnullByDefault;
+import net.dries007.tfc.objects.blocks.wood.BlockLogTFC;
 import net.dries007.tfc.util.Helpers;
+import tfctech.client.TechSounds;
 import tfctech.objects.tileentities.TELatexExtractor;
 
 import static net.minecraft.block.BlockHorizontal.FACING;
@@ -53,6 +52,8 @@ public class BlockLatexExtractor extends Block
                 .withProperty(BASE, false)
                 .withProperty(POT, false)
                 .withProperty(CUT, 0));
+        setHardness(2.0F);
+        setHarvestLevel("pickaxe", 0);
     }
 
     @SuppressWarnings("deprecation")
@@ -137,10 +138,29 @@ public class BlockLatexExtractor extends Block
         return false;
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+    {
+        if (!(worldIn.getBlockState(pos.offset(state.getValue(FACING).getOpposite())).getBlock() instanceof BlockLogTFC))
+        {
+            worldIn.destroyBlock(pos, false);
+        }
+    }
+
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
-        //todo dump items in world
+        TELatexExtractor te = Helpers.getTE(worldIn, pos, TELatexExtractor.class);
+        if (te != null)
+        {
+            if (te.cutState() > 0 && worldIn.getBlockState(pos.offset(state.getValue(FACING).getOpposite())).getBlock() instanceof BlockLogTFC)
+            {
+                worldIn.destroyBlock(pos.offset(state.getValue(FACING).getOpposite()), true);
+            }
+            te.onBreakBlock();
+        }
+
     }
 
     @SideOnly(Side.CLIENT)
@@ -154,28 +174,39 @@ public class BlockLatexExtractor extends Block
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
         TELatexExtractor te = Helpers.getTE(world, pos, TELatexExtractor.class);
-        if (te != null)
+        if (te != null && hand == EnumHand.MAIN_HAND)
         {
             ItemStack stack = player.getHeldItem(hand);
-            //todo shift clicking must place/remove pot
             if (stack.getItem().getHarvestLevel(stack, "knife", player, state) != -1)
             {
-                te.makeCut();
+                if (te.makeCut())
+                {
+                    world.playSound(null, pos, TechSounds.RUBBER_TRUNK_SCRATH, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    return true;
+                }
+            }
+            else if (!te.hasPot() && te.isValidPot(stack) && te.addPot(stack))
+            {
+                stack.shrink(1);
+                world.playSound(null, pos, TechSounds.RUBBER_BOWL_FIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 return true;
             }
-            else if (!te.hasPot() && te.isValidPot(stack))
+            else if (!te.hasBase() && te.isValidBase(stack) && te.addBase(stack))
             {
-                te.addPot(stack.splitStack(1));
+                stack.shrink(1);
+                world.playSound(null, pos, TechSounds.RUBBER_MOUNT_FIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 return true;
             }
-            else if (!te.hasBase() && te.isValidBase(stack))
+            else if (stack.isEmpty() && te.hasPot())
             {
-                te.addBase(stack.splitStack(1));
+                player.setHeldItem(hand, te.removePot());
+                world.playSound(null, pos, TechSounds.RUBBER_BOWL_GRAB, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 return true;
             }
-            else if (stack.isEmpty() && te.hasFluid())
+            else if (stack.isEmpty() && te.hasBase())
             {
-                //todo get fluid;
+                player.setHeldItem(hand, te.removeBase());
+                world.playSound(null, pos, TechSounds.RUBBER_GROOVE_FIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 return true;
             }
         }

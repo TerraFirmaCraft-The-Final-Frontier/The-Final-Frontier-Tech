@@ -16,18 +16,16 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import net.dries007.tfc.ConfigTFC;
-import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
 import net.dries007.tfc.api.capability.heat.IItemHeat;
 import net.dries007.tfc.api.capability.metal.IMetalItem;
 import net.dries007.tfc.api.recipes.heat.HeatRecipe;
 import net.dries007.tfc.objects.te.ITileFields;
 import net.dries007.tfc.objects.te.TEInventory;
-import tfctech.ModConfig;
 import tfctech.TFCTech;
+import tfctech.TechConfig;
 import tfctech.objects.storage.MachineEnergyContainer;
 
-import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MAX_TEMPERATURE;
 import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MIN_TEMPERATURE;
 import static tfctech.objects.blocks.devices.BlockElectricForge.LIT;
 
@@ -47,7 +45,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     public TEElectricForge()
     {
         super(12);
-        energyContainer = new MachineEnergyContainer(ModConfig.DEVICES.electricForgeEnergyCapacity, ModConfig.DEVICES.electricForgeEnergyCapacity, 0);
+        energyContainer = new MachineEnergyContainer(TechConfig.DEVICES.electricForgeEnergyCapacity, TechConfig.DEVICES.electricForgeEnergyCapacity, 0);
         for (int i = 0; i < cachedRecipes.length; i++)
         {
             cachedRecipes[i] = null;
@@ -57,7 +55,8 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     public void addTargetTemperature(int value)
     {
         targetTemperature += value;
-        if (targetTemperature > (float) ModConfig.DEVICES.electricForgeMaxTemperature) targetTemperature = (float) ModConfig.DEVICES.electricForgeMaxTemperature;
+        if (targetTemperature > (float) TechConfig.DEVICES.electricForgeMaxTemperature)
+            targetTemperature = (float) TechConfig.DEVICES.electricForgeMaxTemperature;
         if (targetTemperature < MIN_TEMPERATURE) targetTemperature = MIN_TEMPERATURE;
     }
 
@@ -67,7 +66,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
         if (world.isRemote) return;
         IBlockState state = world.getBlockState(pos);
         boolean isLit = state.getValue(LIT);
-        int energyUsage = (int) ((float) ModConfig.DEVICES.electricForgeEnergyConsumption * targetTemperature / 100);
+        int energyUsage = (int) ((float) TechConfig.DEVICES.electricForgeEnergyConsumption * targetTemperature / 100);
         if(energyUsage < 1)energyUsage = 1;
         for (int i = SLOT_INPUT_MIN; i <= SLOT_INPUT_MAX; i++)
         {
@@ -81,7 +80,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
                 int energy = (int) (energyUsage * modifier);
                 if (targetTemperature > itemTemp && energyContainer.consumeEnergy(energy, false))
                 {
-                    float heatSpeed = (float)ModConfig.DEVICES.electricForgeSpeed * 15.0F;
+                    float heatSpeed = (float) TechConfig.DEVICES.electricForgeSpeed * 15.0F;
                     float temp = cap.getTemperature() + heatSpeed * cap.getHeatCapacity() * (float) ConfigTFC.GENERAL.temperatureModifierGlobal;
                     cap.setTemperature(temp > targetTemperature ? targetTemperature : temp);
                     litTime = 15;

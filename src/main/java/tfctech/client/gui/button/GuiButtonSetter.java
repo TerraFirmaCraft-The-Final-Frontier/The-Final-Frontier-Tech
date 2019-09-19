@@ -5,11 +5,8 @@ import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
 
-import tfctech.client.ModGuiHandler;
-
-import static tfctech.TFCTech.MODID;
+import tfctech.client.TechGuiHandler;
 
 public class GuiButtonSetter extends GuiButton
 {
@@ -25,7 +22,7 @@ public class GuiButtonSetter extends GuiButton
     {
         if (this.visible)
         {
-            mc.getTextureManager().bindTexture(ModGuiHandler.GUI_ELEMENTS);
+            mc.getTextureManager().bindTexture(TechGuiHandler.GUI_ELEMENTS);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             int i = this.getHoverState(this.hovered);

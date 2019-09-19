@@ -5,7 +5,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -18,6 +17,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -31,7 +31,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.dries007.tfc.api.capability.size.IItemSize;
 import net.dries007.tfc.api.capability.size.Size;
 import net.dries007.tfc.api.capability.size.Weight;
-import tfctech.client.ModGuiHandler;
+import tfctech.client.TechGuiHandler;
 import tfctech.objects.tileentities.TEInductionCrucible;
 
 import static net.minecraft.block.BlockHorizontal.FACING;
@@ -167,7 +167,7 @@ public class BlockInductionCrucible extends Block implements IItemSize
         {
             if (!world.isRemote)
             {
-                ModGuiHandler.openGui(world, pos, player, ModGuiHandler.Type.INDUCTION_CRUCIBLE);
+                TechGuiHandler.openGui(world, pos, player, TechGuiHandler.Type.INDUCTION_CRUCIBLE);
             }
             return true;
         }

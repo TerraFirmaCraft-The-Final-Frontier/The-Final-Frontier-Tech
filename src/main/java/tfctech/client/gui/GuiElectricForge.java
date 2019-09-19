@@ -1,12 +1,8 @@
 package tfctech.client.gui;
 
 import java.io.IOException;
-import javax.annotation.Nonnull;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.gui.GuiContainerTE;
 import net.dries007.tfc.network.PacketGuiButton;
-import tfctech.client.ModGuiHandler;
+import tfctech.client.TechGuiHandler;
 import tfctech.client.gui.button.GuiButtonSetter;
 import tfctech.objects.tileentities.TEElectricForge;
 
@@ -65,7 +61,7 @@ public class GuiElectricForge extends GuiContainerTE<TEElectricForge>
         super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 
         //Draw the temperature bar
-        mc.getTextureManager().bindTexture(ModGuiHandler.GUI_ELEMENTS);
+        mc.getTextureManager().bindTexture(TechGuiHandler.GUI_ELEMENTS);
         drawTexturedModalRect(this.guiLeft + 11, this.guiTop + 17, 39, 1, 9, 52);
 
         // Draw the temperature indicator
@@ -74,7 +70,7 @@ public class GuiElectricForge extends GuiContainerTE<TEElectricForge>
         drawTexturedModalRect(guiLeft + 8, guiTop + 66 - temperaturePixels, 36, 54, 15, 5);
 
         // Draw the energy bar
-        int energyPixels = (int) (59 * tile.getField(1) / tile.getEnergyCapacity());
+        int energyPixels = 59 * tile.getField(1) / tile.getEnergyCapacity();
         int emptyPixels = 59 - energyPixels;
         drawTexturedModalRect(guiLeft + 153, guiTop + 6, 0, 0, 18, emptyPixels);
         drawTexturedModalRect(guiLeft + 153, guiTop + 6 + emptyPixels, 18, emptyPixels, 18, energyPixels);

@@ -1,0 +1,65 @@
+#Hevea
+tile.tfc.wood.bookshelf.hevea.name=Hevea Bookshelf
+tile.tfc.wood.workbench.hevea.name=Hevea Workbench
+tile.tfc.wood.planks.hevea.name=Hevea Planks
+tile.tfc.wood.leaves.hevea.name=Hevea Leaves
+tile.tfc.wood.chest.hevea.name=Hevea Chest
+tile.tfc.wood.chest_trap.hevea.name=Trapped Hevea Chest
+tile.tfc.wood.tool_rack.hevea.name=Hevea Tool Rack
+tile.tfc.wood.loom.hevea.name=Hevea Loom
+tile.tfc.wood.support.hevea.name=Hevea Support beam
+tile.tfc.stairs.wood.hevea.name=Hevea Stairs
+tile.tfc.wood.fence.hevea.name=Hevea Fence
+tile.tfc.wood.button.hevea.name=Hevea Button
+tile.tfc.wood.fence_gate.hevea.name=Hevea Fence Gate
+tile.tfc.wood.sapling.hevea.name=Hevea Sapling
+tile.tfc.wood.trapdoor.hevea.name=Hevea Trapdoor
+tile.tfc.wood.barrel.hevea.name=Hevea Barrel
+tile.tfc.wood.log.hevea.name=Hevea Log
+tile.tfc.slab.wood.hevea.name=Hevea Slab
+item.tfc.wood.lumber.hevea.name=Hevea Lumber
+item.tfc.wood.door.hevea.name=Hevea Door
+
+#Devices
+tile.tfctech.electric_forge.name=Electric Forge
+tile.tfctech.induction_crucible.name=Induction Crucible
+tile.tfctech.wire_draw_bench.name=Wire Drawing Bench
+
+##Items
+#Ceramics
+item.tfctech.ceramics.fluid_bowl.name=Empty Bowl
+item.tfctech.ceramics.fluid_bowl.filled=%s Bowl
+
+#Latex
+item.tfctech.latex.vulcanizing_agents.name=Vulcanizing Agents
+item.tfctech.latex.rubber_mix.name=Rubber Mix
+item.tfctech.latex.rubber.name=Rubber
+
+#Wiredraw
+item.tfctech.wiredraw.leather_belt.name=Leather Belt
+item.tfctech.wiredraw.winch.name=Winch
+
+#Metal
+item.tfctech.metalitem.bowl_mount.name=%s Bowl Mount
+item.tfctech.metalitem.draw_plate.name=%s Draw Plate
+item.tfctech.metalitem.groove.name=%s Groove
+item.tfctech.metalitem.inductor.name=%s Inductor
+item.tfctech.metalitem.tongs.name=%s Tongs
+item.tfctech.metalitem.strip.name=%s Strip
+item.tfctech.metalitem.sleeve.name=%s Sleeve
+item.tfctech.metalitem.rackwheel_piece.name=%s Rackwheel Piece
+item.tfctech.metalitem.rackwheel.name=%s Rackwheel
+item.tfctech.metalitem.gear.name=%s Gear
+item.tfctech.metalitem.wire.name=%s Wire
+item.tfctech.metalitem.wire.unfinished=Unfinished %s Wire
+
+#Fluids
+fluid.latex=Latex
+
+##Tooltips
+#Itemstack Info
+tooltip.tfctech.ceramics.fluid_bowl.fluid=Contains %smB of %s
+tooltip.tfctech.metalitem.wire.stage=Stage %s
+
+#Status
+tooltip.tfctech.wiredraw.low_tier=Drawing Plate is too low tier!
