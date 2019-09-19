@@ -28,6 +28,7 @@ import net.dries007.tfc.objects.inventory.ingredient.IIngredient;
 import net.dries007.tfc.objects.items.metal.ItemMetal;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.forge.ForgeRule;
+import tfctech.api.recipes.WireDrawingRecipe;
 import tfctech.objects.fluids.TechFluids;
 import tfctech.objects.items.TechItems;
 import tfctech.objects.items.metal.ItemTechMetal;
@@ -76,6 +77,30 @@ public final class TechRecipes
             {
                 //noinspection ConstantConditions
                 r.register(new AnvilRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_wire"), ingredient, output, metal.getTier(), ForgeRule.DRAW_LAST, ForgeRule.DRAW_NOT_LAST));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRegisterWireDrawingRecipeEvent(RegistryEvent.Register<WireDrawingRecipe> event)
+    {
+        IForgeRegistry<WireDrawingRecipe> r = event.getRegistry();
+        //Register all wires
+        for (Metal metal : TFCRegistries.METALS.getValuesCollection())
+        {
+            if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
+                continue;
+            for (int i = 4; i > 0; i--)
+            {
+                IIngredient<ItemStack> ingredient = IIngredient.of(new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.WIRE), 1, i));
+                ItemStack output = new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.WIRE), 1, i - 1);
+                Metal.Tier tier = metal.getTier();
+                int color = metal.getColor();
+                if (!output.isEmpty())
+                {
+                    //noinspection ConstantConditions
+                    r.register(new WireDrawingRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_wire_" + i), ingredient, tier, output, color));
+                }
             }
         }
     }

@@ -180,13 +180,14 @@ public class BlockWireDrawBench extends BlockHorizontal
             {
                 if (player.isSneaking())
                 {
-                    if (te.hasWire())
+                    for (int i = 1; i >= 0; i--)
                     {
-                        player.setHeldItem(hand, te.extractWire());
-                    }
-                    else if (te.hasDrawPlate())
-                    {
-                        player.setHeldItem(hand, te.extractDrawPlate());
+                        ItemStack grab = te.extractItem(i);
+                        if (grab != ItemStack.EMPTY)
+                        {
+                            player.setHeldItem(hand, grab);
+                            return true;
+                        }
                     }
                 }
                 else
