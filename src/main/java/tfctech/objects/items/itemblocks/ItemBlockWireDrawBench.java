@@ -50,11 +50,7 @@ public class ItemBlockWireDrawBench extends ItemBlockTFC
 
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        if (worldIn.isRemote)
-        {
-            return EnumActionResult.SUCCESS;
-        }
-        else if (facing != EnumFacing.UP)
+        if (facing != EnumFacing.UP)
         {
             return EnumActionResult.FAIL;
         }
@@ -66,17 +62,20 @@ public class ItemBlockWireDrawBench extends ItemBlockTFC
             }
             if (!worldIn.getBlockState(pos).getMaterial().isReplaceable() || !worldIn.getBlockState(pos.offset(player.getHorizontalFacing())).getMaterial().isReplaceable())
             {
-                return EnumActionResult.FAIL;
+                return EnumActionResult.PASS;
             }
             ItemStack stack = player.getHeldItem(hand);
             BlockPos upperPos = pos.offset(player.getHorizontalFacing());
             if (player.canPlayerEdit(upperPos, facing, stack) && player.canPlayerEdit(pos, facing, stack))
             {
-                stack.shrink(1);
-                IBlockState lowerState = this.block.getDefaultState().withProperty(BlockWireDrawBench.FACING, player.getHorizontalFacing()).withProperty(BlockWireDrawBench.UPPER, false);
-                IBlockState upperState = this.block.getDefaultState().withProperty(BlockWireDrawBench.FACING, player.getHorizontalFacing()).withProperty(BlockWireDrawBench.UPPER, true);
-                worldIn.setBlockState(pos, lowerState);
-                worldIn.setBlockState(upperPos, upperState);
+                if(worldIn.isRemote)
+                {
+                    stack.shrink(1);
+                    IBlockState lowerState = this.block.getDefaultState().withProperty(BlockWireDrawBench.FACING, player.getHorizontalFacing()).withProperty(BlockWireDrawBench.UPPER, false);
+                    IBlockState upperState = this.block.getDefaultState().withProperty(BlockWireDrawBench.FACING, player.getHorizontalFacing()).withProperty(BlockWireDrawBench.UPPER, true);
+                    worldIn.setBlockState(pos, lowerState);
+                    worldIn.setBlockState(upperPos, upperState);
+                }
                 return EnumActionResult.SUCCESS;
             }
         }
