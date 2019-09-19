@@ -39,8 +39,7 @@ public class TEWireDrawBench extends TEInventory implements ITickable
         switch (slot)
         {
             case 0:
-                return stack.getItem() instanceof ItemTechMetal
-                        && ((ItemTechMetal) stack.getItem()).getType() == ItemTechMetal.ItemType.DRAW_PLATE;
+                return stack.getItem() instanceof ItemTechMetal && ((ItemTechMetal) stack.getItem()).getType() == ItemTechMetal.ItemType.DRAW_PLATE;
             case 1:
                 WireDrawingRecipe recipe = TechRegistries.WIRE_DRAWING.getValuesCollection().stream()
                         .filter(x -> x.matches(stack)).findFirst().orElse(null);
@@ -51,8 +50,7 @@ public class TEWireDrawBench extends TEInventory implements ITickable
 
     public boolean hasDrawPlate()
     {
-        return inventory.getStackInSlot(0).getItem() instanceof ItemTechMetal
-                && ((ItemTechMetal) inventory.getStackInSlot(0).getItem()).getType() == ItemTechMetal.ItemType.DRAW_PLATE;
+        return inventory.getStackInSlot(0) != ItemStack.EMPTY;
     }
 
     public boolean hasWire()

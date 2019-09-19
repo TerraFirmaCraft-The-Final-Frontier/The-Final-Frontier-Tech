@@ -10,6 +10,11 @@ import net.minecraft.util.EnumFacing;
 
 import net.dries007.tfc.api.types.Metal;
 
+/**
+ * ModelWireDrawBench - TFCTech
+ * Created using Tabula 7.0.0
+ */
+
 public class ModelWireDrawBench extends ModelBase
 {
     private static final float P = 0.0625F;
@@ -17,11 +22,7 @@ public class ModelWireDrawBench extends ModelBase
 
     private ModelRenderer Leg1;
     private ModelRenderer Leg2;
-    private ModelRenderer Leg3;
-    private ModelRenderer Leg4;
     private ModelRenderer Tabletop;
-    private ModelRenderer Stiffener1;
-    private ModelRenderer Stiffener2;
     private ModelRenderer Support1;
     private ModelRenderer Support2;
     private ModelRenderer Stop1;
@@ -61,103 +62,89 @@ public class ModelWireDrawBench extends ModelBase
         this.textureWidth = 128;
         this.textureHeight = 64;
 
-        // Static parts
-        this.Leg1 = new ModelRenderer(this, 0, 0);
-        this.Leg1.setRotationPoint(-6.0F, 18.0F, -6.0F);
-        this.Leg1.addBox(0.0F, 0.0F, 0.0F, 2, 12, 2, 0.0F);
-        this.Leg2 = new ModelRenderer(this, 0, 0);
-        this.Leg2.setRotationPoint(1.0F, 18.0F, -6.0F);
-        this.Leg2.addBox(0.0F, 0.0F, 0.0F, 2, 12, 2, 0.0F);
-        this.Leg3 = new ModelRenderer(this, 0, 0);
-        this.Leg3.setRotationPoint(1.0F, 18.0F, 20.0F);
-        this.Leg3.addBox(0.0F, 0.0F, 0.0F, 2, 12, 2, 0.0F);
-        this.Leg4 = new ModelRenderer(this, 0, 0);
-        this.Leg4.setRotationPoint(-6.0F, 18.0F, 20.0F);
-        this.Leg4.addBox(0.0F, 0.0F, 0.0F, 2, 12, 2, 0.0F);
-        this.Tabletop = new ModelRenderer(this, 0, 0);
-        this.Tabletop.setRotationPoint(-7.0F, 17.0F, -7.0F);
-        this.Tabletop.addBox(0.0F, 0.0F, 0.0F, 11, 1, 30, 0.0F);
-        this.Stiffener1 = new ModelRenderer(this, 0, 0);
-        this.Stiffener1.setRotationPoint(-6.0F, 19.0F, -4.0F);
-        this.Stiffener1.addBox(0.0F, 0.0F, 0.0F, 9, 2, 1, 0.0F);
-        this.Stiffener2 = new ModelRenderer(this, 0, 0);
-        this.Stiffener2.setRotationPoint(-6.0F, 19.0F, 19.0F);
-        this.Stiffener2.addBox(0.0F, 0.0F, 0.0F, 9, 2, 1, 0.0F);
-        this.Support1 = new ModelRenderer(this, 0, 0);
-        this.Support1.setRotationPoint(1.0F, 13.0F, -5.0F);
-        this.Support1.addBox(0.0F, 0.0F, 0.0F, 1, 4, 3, 0.0F);
-        this.Support2 = new ModelRenderer(this, 0, 0);
-        this.Support2.setRotationPoint(-5.0F, 13.0F, -5.0F);
-        this.Support2.addBox(0.0F, 0.0F, 0.0F, 1, 4, 3, 0.0F);
-        this.Stop1 = new ModelRenderer(this, 0, 0);
-        this.Stop1.setRotationPoint(-5.0F, 14.0F, 14.0F);
-        this.Stop1.addBox(0.0F, 0.0F, 0.0F, 2, 3, 2, 0.0F);
-        this.Stop2 = new ModelRenderer(this, 0, 0);
-        this.Stop2.setRotationPoint(0.0F, 14.0F, 14.0F);
-        this.Stop2.addBox(0.0F, 0.0F, 0.0F, 2, 3, 2, 0.0F);
-
-        // Winch parts
-        this.Barrel = new ModelRenderer(this, 83, 14);
-        this.Barrel.setRotationPoint(-4.0F, 14.466666221618652F, -3.5F);
-        this.Barrel.addBox(0.0F, -1.0F, -1.0F, 5, 2, 2, 0.0F);
-        this.Shaft = new ModelRenderer(this, 0, 0);
-        this.Shaft.setRotationPoint(-4.0F, 14.5F, -3.5F);
-        this.Shaft.addBox(-2.0F, -0.5F, -0.5F, 13, 1, 1, 0.0F);
-        this.Holder = new ModelRenderer(this, 0, 0);
-        this.Holder.setRotationPoint(4.5F, 14.5F, -3.5F);
-        this.Holder.addBox(0.0F, -1.0F, -1.0F, 2, 2, 2, 0.0F);
-        this.Handle1 = new ModelRenderer(this, 0, 0);
-        this.Handle1.setRotationPoint(5.0F, 14.5F, -3.5F);
-        this.Handle1.addBox(0.0F, -6.5F, -0.5F, 1, 13, 1, 0.0F);
-        this.setRotateAngle(Handle1, 0.7853981852531433F, -0.0F, 0.0F);
-        this.Handle2 = new ModelRenderer(this, 0, 0);
-        this.Handle2.setRotationPoint(5.0F, 14.5F, -3.5F);
-        this.Handle2.addBox(0.0F, -0.5F, -6.5F, 1, 1, 13, 0.0F);
-        this.setRotateAngle(Handle2, 0.7853981852531433F, -0.0F, 0.0F);
-
-        // Belt
-        this.Belt = new ModelRenderer(this, 100, 0);
-        this.Belt.setRotationPoint(-3.0F, 15.0F, 5.0F);
-        this.Belt.addBox(0.0F, 0.0F, 0.0F, 3, 1, 3, 0.0F);
-        this.Belt0 = new ModelRenderer(this, 83, 0);
-        this.Belt0.setRotationPoint(-3.0F, 15.0F, -3.0F);
-        this.Belt0.addBox(0.0F, 0.0F, 0.0F, 3, 1, 2, 0.0F);
-        this.Belt1 = new ModelRenderer(this, 83, 3);
-        this.Belt1.setRotationPoint(-3.0F, 15.0F, -1.0F);
+        this.Tongs1 = new ModelRenderer(this, 100, 14);
+        this.Tongs1.setRotationPoint(-1.0F, 13.5F, 13.0F);
+        this.Tongs1.addBox(-1.0F, 0.0F, 0.0F, 2, 1, 2, 0.0F);
+        this.Belt1 = new ModelRenderer(this, 90, 4);
+        this.Belt1.setRotationPoint(-2.5F, 13.5F, -1.0F);
         this.Belt1.addBox(0.0F, 0.0F, 0.0F, 3, 1, 2, 0.0F);
-        this.Belt2 = new ModelRenderer(this, 83, 6);
-        this.Belt2.setRotationPoint(-3.0F, 15.0F, 1.0F);
-        this.Belt2.addBox(0.0F, 0.0F, 0.0F, 3, 1, 2, 0.0F);
-        this.Belt3 = new ModelRenderer(this, 83, 9);
-        this.Belt3.setRotationPoint(-3.0F, 15.0F, 3.0F);
-        this.Belt3.addBox(0.0F, 0.0F, 0.0F, 3, 1, 2, 0.0F);
-
-        // Tongs
+        this.Holder = new ModelRenderer(this, 54, 11);
+        this.Holder.setRotationPoint(5.5F, 13.5F, -3.5F);
+        this.Holder.addBox(0.0F, -1.0F, -1.0F, 2, 2, 2, 0.0F);
+        this.setRotateAngle(Holder, -5.235987755982989F, 0.0F, 0.0F);
+        this.Support1 = new ModelRenderer(this, 0, 5);
+        this.Support1.setRotationPoint(2.5F, 11.5F, -5.0F);
+        this.Support1.addBox(0.0F, 0.0F, 0.0F, 1, 4, 3, 0.0F);
+        this.Support2 = new ModelRenderer(this, 0, 5);
+        this.Support2.setRotationPoint(-5.5F, 11.5F, -5.0F);
+        this.Support2.addBox(0.0F, 0.0F, 0.0F, 1, 4, 3, 0.0F);
+        this.Belt = new ModelRenderer(this, 100, 0);
+        this.Belt.setRotationPoint(-2.5F, 13.5F, 5.0F);
+        this.Belt.addBox(0.0F, 0.0F, 0.0F, 3, 1, 3, 0.0F);
+        this.setRotateAngle(Belt, -0.2617993950843811F, 0.0F, 0.0F);
+        this.Leg2 = new ModelRenderer(this, 0, 12);
+        this.Leg2.setRotationPoint(-5.0F, 15.5F, 1.5F);
+        this.Leg2.addBox(0.0F, 0.0F, 0.0F, 8, 16, 2, 0.0F);
+        this.setRotateAngle(Leg2, -0.39269908169872414F, 0.0F, 0.0F);
+        this.Tongs2 = new ModelRenderer(this, 100, 18);
+        this.Tongs2.setRotationPoint(-2.5F, 13.5F, 10.0F);
+        this.Tongs2.addBox(0.0F, 0.0F, 0.0F, 1, 1, 3, 0.0F);
         this.Ring1 = new ModelRenderer(this, 83, 20);
-        this.Ring1.setRotationPoint(-2.0F, 15.0F, 11.0F);
+        this.Ring1.setRotationPoint(-1.5F, 13.5F, 11.0F);
         this.Ring1.addBox(0.0F, 0.0F, 0.0F, 1, 1, 1, 0.0F);
         this.Ring2 = new ModelRenderer(this, 83, 26);
-        this.Ring2.setRotationPoint(0.0F, 15.0F, 8.0F);
+        this.Ring2.setRotationPoint(0.5F, 13.5F, 8.0F);
         this.Ring2.addBox(0.0F, 0.0F, 0.0F, 1, 1, 4, 0.0F);
-        this.Ring3 = new ModelRenderer(this, 83, 26);
-        this.Ring3.setRotationPoint(-4.0F, 15.0F, 8.0F);
-        this.Ring3.addBox(0.0F, 0.0F, 0.0F, 1, 1, 4, 0.0F);
-        this.Ring4 = new ModelRenderer(this, 83, 8);
-        this.Ring4.setRotationPoint(-3.0F, 15.0F, 8.0F);
+        this.Handle2 = new ModelRenderer(this, 54, 16);
+        this.Handle2.setRotationPoint(6.0F, 13.5F, -3.5F);
+        this.Handle2.addBox(0.0F, -0.5F, -6.5F, 1, 1, 13, 0.0F);
+        this.setRotateAngle(Handle2, -5.235987755982989F, 0.0F, 0.0F);
+        this.Belt0 = new ModelRenderer(this, 90, 1);
+        this.Belt0.setRotationPoint(-2.5F, 13.5F, -3.0F);
+        this.Belt0.addBox(0.0F, 0.0F, 0.0F, 3, 1, 2, 0.0F);
+        this.Leg1 = new ModelRenderer(this, 0, 12);
+        this.Leg1.setRotationPoint(-5.0F, 16.5F, 13.0F);
+        this.Leg1.addBox(0.0F, 0.0F, 0.0F, 8, 16, 2, 0.0F);
+        this.setRotateAngle(Leg1, 0.39269908169872414F, 0.0F, 0.0F);
+        this.Stop1 = new ModelRenderer(this, 0, 0);
+        this.Stop1.setRotationPoint(-4.5F, 12.5F, 14.0F);
+        this.Stop1.addBox(0.0F, 0.0F, 0.0F, 2, 3, 2, 0.0F);
+        this.Belt3 = new ModelRenderer(this, 90, 10);
+        this.Belt3.setRotationPoint(-2.5F, 13.5F, 3.0F);
+        this.Belt3.addBox(0.0F, 0.0F, 0.0F, 3, 1, 2, 0.0F);
+        this.Tabletop = new ModelRenderer(this, 0, 0);
+        this.Tabletop.setRotationPoint(-7.0F, 15.5F, -7.0F);
+        this.Tabletop.addBox(0.0F, 0.0F, 0.0F, 12, 2, 30, 0.0F);
+        this.Ring4 = new ModelRenderer(this, 84, 12);
+        this.Ring4.setRotationPoint(-2.5F, 13.5F, 8.0F);
         this.Ring4.addBox(0.0F, 0.0F, 0.0F, 3, 1, 1, 0.0F);
-        this.Tongs1 = new ModelRenderer(this, 100, 14);
-        this.Tongs1.setRotationPoint(-1.5F, 15.0F, 13.0F);
-        this.Tongs1.addBox(-1.0F, 0.0F, 0.0F, 2, 1, 2, 0.0F);
-        this.Tongs2 = new ModelRenderer(this, 100, 18);
-        this.Tongs2.setRotationPoint(-3.0F, 15.0F, 10.0F);
-        this.Tongs2.addBox(0.0F, 0.0F, 0.0F, 1, 1, 3, 0.0F);
+        this.Shaft = new ModelRenderer(this, 54, 0);
+        this.Shaft.setRotationPoint(-5.0F, 13.5F, -3.5F);
+        this.Shaft.addBox(-2.0F, -0.5F, -0.5F, 15, 1, 1, 0.0F);
+        this.setRotateAngle(Shaft, -5.235987755982989F, 0.0F, 0.0F);
         this.Tongs3 = new ModelRenderer(this, 110, 18);
-        this.Tongs3.setRotationPoint(-1.0F, 15.0F, 10.0F);
+        this.Tongs3.setRotationPoint(-0.5F, 13.5F, 10.0F);
         this.Tongs3.addBox(0.0F, 0.0F, 0.0F, 1, 1, 3, 0.0F);
-
+        this.Ring3 = new ModelRenderer(this, 84, 26);
+        this.Ring3.setRotationPoint(-3.5F, 13.5F, 8.0F);
+        this.Ring3.addBox(0.0F, 0.0F, 0.0F, 1, 1, 4, 0.0F);
+        this.Barrel = new ModelRenderer(this, 100, 10);
+        this.Barrel.setRotationPoint(-4.5F, 13.5F, -3.5F);
+        this.Barrel.addBox(0.0F, -1.0F, -1.0F, 7, 2, 2, 0.0F);
+        this.setRotateAngle(Barrel, -5.235987755982989F, 0.0F, 0.0F);
+        this.Stop2 = new ModelRenderer(this, 0, 0);
+        this.Stop2.setRotationPoint(0.5F, 12.5F, 14.0F);
+        this.Stop2.addBox(0.0F, 0.0F, 0.0F, 2, 3, 2, 0.0F);
+        this.Handle1 = new ModelRenderer(this, 54, 15);
+        this.Handle1.setRotationPoint(6.0F, 13.5F, -3.5F);
+        this.Handle1.addBox(0.0F, -6.5F, -0.5F, 1, 13, 1, 0.0F);
+        this.setRotateAngle(Handle1, -5.235987755982989F, 0.0F, 0.0F);
         this.wire = new ModelRenderer(this, 0, 34);
-        this.wire.setRotationPoint(-1.5F, 15.0F, 13.0F);
-        this.wire.addBox(-0.5F, 0.0F, 2.0F, 1, 1, 8);
+        this.wire.setRotationPoint(-1.0F, 13.5F, 13.0F);
+        this.wire.addBox(-0.5F, 0.0F, 2.0F, 1, 1, 8, 0.0F);
+        this.Belt2 = new ModelRenderer(this, 90, 7);
+        this.Belt2.setRotationPoint(-2.5F, 13.5F, 1.0F);
+        this.Belt2.addBox(0.0F, 0.0F, 0.0F, 3, 1, 2, 0.0F);
 
         // Drawplates
         DRAW_PLATES[0] = getDrawplateModel(23);
@@ -214,11 +201,7 @@ public class ModelWireDrawBench extends ModelBase
 
         this.Leg1.render(f5);
         this.Leg2.render(f5);
-        this.Leg3.render(f5);
-        this.Leg4.render(f5);
         this.Tabletop.render(f5);
-        this.Stiffener1.render(f5);
-        this.Stiffener2.render(f5);
         this.Support1.render(f5);
         this.Support2.render(f5);
         this.Stop1.render(f5);
@@ -340,7 +323,7 @@ public class ModelWireDrawBench extends ModelBase
     private ModelRenderer getDrawplateModel(int offsetY)
     {
         ModelRenderer result = new ModelRenderer(this, 95, offsetY);
-        result.setRotationPoint(-5.0F, 14.5F, 16.0F);
+        result.setRotationPoint(-4.5F, 13.5F, 16.0F);
         result.addBox(0.0F, 0.0F, 0.0F, 7, 2, 1, 0.0F);
         return result;
     }
