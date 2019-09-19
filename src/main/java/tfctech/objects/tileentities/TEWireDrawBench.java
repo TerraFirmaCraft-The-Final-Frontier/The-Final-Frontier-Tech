@@ -10,6 +10,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -18,6 +19,7 @@ import net.dries007.tfc.objects.te.TEInventory;
 import net.dries007.tfc.util.Helpers;
 import tfctech.client.TechSounds;
 import tfctech.objects.items.metal.ItemTechMetal;
+import tfctech.objects.items.metal.ItemWire;
 
 public class TEWireDrawBench extends TEInventory implements ITickable
 {
@@ -35,10 +37,10 @@ public class TEWireDrawBench extends TEInventory implements ITickable
         switch (slot)
         {
             case 0:
-                return stack.getItem() instanceof ItemTechMetal && ((ItemTechMetal) stack.getItem()).getType() == ItemTechMetal.ItemType.DRAW_PLATE;
-            case 1:
                 return stack.getItem() instanceof ItemTechMetal
-                        && ((ItemTechMetal) stack.getItem()).getType() == ItemTechMetal.ItemType.WIRE
+                        && ((ItemTechMetal) stack.getItem()).getType() == ItemTechMetal.ItemType.DRAW_PLATE;
+            case 1:
+                return stack.getItem() instanceof ItemWire
                         && stack.getMetadata() > 0;
         }
         return false;
@@ -46,12 +48,13 @@ public class TEWireDrawBench extends TEInventory implements ITickable
 
     public boolean hasDrawPlate()
     {
-        return inventory.getStackInSlot(0) != ItemStack.EMPTY;
+        return inventory.getStackInSlot(0).getItem() instanceof ItemTechMetal
+                && ((ItemTechMetal) inventory.getStackInSlot(0).getItem()).getType() == ItemTechMetal.ItemType.DRAW_PLATE;
     }
 
     public boolean hasWire()
     {
-        return inventory.getStackInSlot(1) != ItemStack.EMPTY;
+        return inventory.getStackInSlot(1).getItem() instanceof ItemWire;
     }
 
     public boolean startWork(EntityPlayer player)
@@ -60,21 +63,16 @@ public class TEWireDrawBench extends TEInventory implements ITickable
         {
             ItemTechMetal drawPlate = (ItemTechMetal) inventory.getStackInSlot(0).getItem();
             ItemTechMetal wire = (ItemTechMetal) inventory.getStackInSlot(1).getItem();
-            world.playSound(null, pos, TechSounds.WIREDRAW_DRAWING, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            working = true;
-            /*
-            if (wire.getMetal(inventory.getStackInSlot(1)).getTier().isAtLeast(drawPlate.getMetal(inventory.getStackInSlot(0)).getTier()))
+            if (wire.getMetal(inventory.getStackInSlot(1)).getTier().isAtMost(drawPlate.getMetal(inventory.getStackInSlot(0)).getTier()))
             {
                 world.playSound(null, pos, TechSounds.WIREDRAW_DRAWING, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 working = true;
-            }*/
-            /*
+            }
             else
             {
-                //todo play sound can't turn wire
-                //todo show status message couldn't work becuase low tier
-                player.sendStatusMessage(new TextComponentTranslation("tile.tfctech.wiredraw.low_tier"), true);
-            }*/
+                world.playSound(null, pos, TechSounds.WIREDRAW_TONGS_FALL, SoundCategory.BLOCKS, 1.0F, 2.0F);
+                player.sendStatusMessage(new TextComponentTranslation("tooltip.tfctech.wiredraw.low_tier"), true);
+            }
             return true;
         }
         return false;
