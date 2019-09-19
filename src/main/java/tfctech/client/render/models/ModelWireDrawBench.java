@@ -140,7 +140,7 @@ public class ModelWireDrawBench extends ModelBase
         this.Handle1.addBox(0.0F, -6.5F, -0.5F, 1, 13, 1, 0.0F);
         this.setRotateAngle(Handle1, -5.235987755982989F, 0.0F, 0.0F);
         this.wire = new ModelRenderer(this, 0, 34);
-        this.wire.setRotationPoint(-1.0F, 13.5F, 13.0F);
+        this.wire.setRotationPoint(-1.0F, 13.65F, 13.0F);
         this.wire.addBox(-0.5F, 0.0F, 2.0F, 1, 1, 8, 0.0F);
         this.Belt2 = new ModelRenderer(this, 90, 7);
         this.Belt2.setRotationPoint(-2.5F, 13.5F, 1.0F);
