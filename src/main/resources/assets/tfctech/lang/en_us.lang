@@ -56,10 +56,9 @@ item.tfctech.metalitem.wire.unfinished=Unfinished %s Wire
 #Fluids
 fluid.latex=Latex
 
-##Tooltips
-#Itemstack Info
+#Tooltip
 tooltip.tfctech.ceramics.fluid_bowl.fluid=Contains %smB of %s
 tooltip.tfctech.metalitem.wire.stage=Stage %s
 
 #Status
-tooltip.tfctech.wiredraw.low_tier=Drawing Plate is too low tier!
+status.tfctech.wiredraw.low_tier=Drawplate is low tier

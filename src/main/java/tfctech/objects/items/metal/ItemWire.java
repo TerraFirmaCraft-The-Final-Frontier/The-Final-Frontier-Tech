@@ -5,9 +5,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,15 +43,5 @@ public class ItemWire extends ItemTechMetal
             return (new TextComponentTranslation("item.tfctech.metalitem.wire.unfinished", metalName)).getFormattedText();
         }
         return super.getItemStackDisplayName(stack);
-    }
-
-    @Override
-    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items)
-    {
-        if (this.isInCreativeTab(tab))
-        {
-            items.add(new ItemStack(this));
-            items.add(new ItemStack(this, 1, 4));
-        }
     }
 }
