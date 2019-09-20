@@ -1,14 +1,15 @@
 package tfctech.client.render.tesr;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 
 import tfctech.client.render.models.ModelFridge;
-import tfctech.client.render.models.ModelWireDrawBench;
 import tfctech.objects.tileentities.TEFridge;
-import tfctech.objects.tileentities.TEWireDrawBench;
 
 import static tfctech.TFCTech.MODID;
 
@@ -22,8 +23,45 @@ public class TESRFridge extends TileEntitySpecialRenderer<TEFridge>
     {
         if (te.hasWorld())
         {
+            if (!te.isMainBlock()) return;
             GlStateManager.pushMatrix(); // start
-            GlStateManager.translate(x + 0.5F, y + 0.5F, z + 0.5F); // position
+            GlStateManager.translate(x, y - 1, z); // position
+
+
+            //Render itemstacks
+            Vec3d[] items = te.getItems();
+            for (int i = 0; i < 8; i++)
+            {
+                ItemStack stack = te.getSlot(i);
+                if (!stack.isEmpty())
+                {
+                    GlStateManager.pushMatrix();
+                    //noinspection ConstantConditions
+                    Vec3d item = items[i];
+                    GlStateManager.translate(item.x, item.y, item.z); // position
+                    switch (te.getRotation())
+                    {
+                        case NORTH:
+                            break;
+                        case SOUTH:
+                            GlStateManager.rotate(-180, 0, 1, 0);
+                            break;
+                        case EAST:
+                            GlStateManager.rotate(-90, 0, 1, 0);
+                            break;
+                        case WEST:
+                            GlStateManager.rotate(-270, 0, 1, 0);
+                            break;
+                    }
+                    GlStateManager.rotate(90, 1, 0, 0);
+                    GlStateManager.scale(0.25F, 0.25F, 0.25F);
+                    Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
+                    GlStateManager.popMatrix();
+                }
+            }
+
+
+            GlStateManager.translate(0.5F, 1.5F, 0.5F);
 
             bindTexture(FRIDGE_TEXTURES); // texture
 
@@ -54,9 +92,10 @@ public class TESRFridge extends TileEntitySpecialRenderer<TEFridge>
             //For itemstacks rendering
 
             GlStateManager.pushMatrix(); // start
-            GlStateManager.translate(0.5F, 0.5F, 0.5F);
+            GlStateManager.translate(0.75F, 0.5F, 0.5F);
             GlStateManager.rotate(180, 1, 0, 0);
             GlStateManager.rotate(180, 0, 1, 0);
+            GlStateManager.scale(0.8F, 0.8F, 0.8F);
 
             bindTexture(FRIDGE_TEXTURES); // texture
 

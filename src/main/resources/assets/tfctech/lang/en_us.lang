@@ -24,6 +24,7 @@ item.tfc.wood.door.hevea.name=Hevea Door
 tile.tfctech.electric_forge.name=Electric Forge
 tile.tfctech.induction_crucible.name=Induction Crucible
 tile.tfctech.wire_draw_bench.name=Wire Drawing Bench
+tile.tfctech.fridge.name=Fridge
 
 ##Items
 #Ceramics
