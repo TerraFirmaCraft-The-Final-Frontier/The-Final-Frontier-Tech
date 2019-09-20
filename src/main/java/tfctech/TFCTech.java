@@ -15,8 +15,6 @@ import tfctech.network.PacketLatexUpdate;
 import tfctech.network.PacketTileEntityUpdate;
 import tfctech.registry.TechFoodTraits;
 
-//todo add required dependency TFC-Metallum
-
 @SuppressWarnings("WeakerAccess")
 @Mod(modid = TFCTech.MODID, name = TFCTech.NAME, version = TFCTech.VERSION, dependencies = "required-after:" + TFCConstants.MOD_ID)
 public class TFCTech

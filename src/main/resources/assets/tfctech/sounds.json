@@ -45,6 +45,18 @@
       "tfctech:drawing5"
     ]
   },
+  "fridge.open": {
+    "category": "block",
+    "sounds": [
+      "tfctech:fridge_open"
+    ]
+  },
+  "fridge.close": {
+    "category": "block",
+    "sounds": [
+      "tfctech:fridge_close"
+    ]
+  },
   "induction_smelter.work": {
     "category": "block",
     "sounds": [

@@ -81,7 +81,7 @@ public class TESRFridge extends TileEntitySpecialRenderer<TEFridge>
                     break;
             }
 
-            model.setOpen(te.getOpen());
+            model.setOpen(te.getOpen(), te.getLastOpen(), partialTicks);
 
             model.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 
@@ -99,7 +99,7 @@ public class TESRFridge extends TileEntitySpecialRenderer<TEFridge>
 
             bindTexture(FRIDGE_TEXTURES); // texture
 
-            model.setOpen(0);
+            model.setOpen(0, 0, 1.0F);
 
             model.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 

@@ -130,7 +130,6 @@ public final class TechItems
 
         register(r, "ceramics/fluid_bowl", new ItemFluidBowl(), CT_POTTERY);
 
-        //todo ceramic molds for glass
         TechBlocks.getAllInventoryItemBlocks().forEach(x -> registerItemBlock(r, x));
         TechBlocks.getAllTEISRBlocks().forEach(x -> registerItemBlock(r, x));
     }

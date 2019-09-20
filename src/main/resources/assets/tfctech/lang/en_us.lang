@@ -1,4 +1,4 @@
-#Hevea
+## Hevea
 tile.tfc.wood.bookshelf.hevea.name=Hevea Bookshelf
 tile.tfc.wood.workbench.hevea.name=Hevea Workbench
 tile.tfc.wood.planks.hevea.name=Hevea Planks
@@ -20,27 +20,27 @@ tile.tfc.slab.wood.hevea.name=Hevea Slab
 item.tfc.wood.lumber.hevea.name=Hevea Lumber
 item.tfc.wood.door.hevea.name=Hevea Door
 
-#Devices
+## Devices
 tile.tfctech.electric_forge.name=Electric Forge
 tile.tfctech.induction_crucible.name=Induction Crucible
 tile.tfctech.wire_draw_bench.name=Wire Drawing Bench
 tile.tfctech.fridge.name=Fridge
 
-##Items
-#Ceramics
+# Items
+## Ceramics
 item.tfctech.ceramics.fluid_bowl.name=Empty Bowl
 item.tfctech.ceramics.fluid_bowl.filled=%s Bowl
 
-#Latex
+## Latex
 item.tfctech.latex.vulcanizing_agents.name=Vulcanizing Agents
 item.tfctech.latex.rubber_mix.name=Rubber Mix
 item.tfctech.latex.rubber.name=Rubber
 
-#Wiredraw
+## Wiredraw
 item.tfctech.wiredraw.leather_belt.name=Leather Belt
 item.tfctech.wiredraw.winch.name=Winch
 
-#Metal
+## Metal
 item.tfctech.metalitem.bowl_mount.name=%s Bowl Mount
 item.tfctech.metalitem.draw_plate.name=%s Draw Plate
 item.tfctech.metalitem.groove.name=%s Groove
@@ -54,13 +54,56 @@ item.tfctech.metalitem.gear.name=%s Gear
 item.tfctech.metalitem.wire.name=%s Wire
 item.tfctech.metalitem.wire.unfinished=Unfinished %s Wire
 
-#Fluids
+## Fluids
 fluid.latex=Latex
 
-##Tooltips
-#Itemstack Info
+# Tooltips
+## Itemstack Info
 tooltip.tfctech.ceramics.fluid_bowl.fluid=Contains %smB of %s
 tooltip.tfctech.metalitem.wire.stage=Stage %s
 
-#Status
+## Status
 tooltip.tfctech.wiredraw.low_tier=Drawing Plate is too low tier!
+
+#Config
+config.tfctech=TFCTech
+config.tfctech.tooltip=Settings for TFCTech
+
+## General
+config.tfctech.devices=Devices Configuration
+config.tfctech.devices.tooltip=General device configuration.
+
+### Electric Forge
+config.tfctech.devices.electricForgeSpeed=Electric Forge Speed
+config.tfctech.devices.electricForgeSpeed.tooltip=Modifier for how quickly electric forge heats items. Smaller number = slower temperature changes. Note: This is affected by TFC global modifier.
+
+config.tfctech.devices.electricForgeMaxTemperature=Electric Forge Max Temperature
+config.tfctech.devices.electricForgeMaxTemperature.tooltip=The maximum heat obtainable by electric forge.
+
+config.tfctech.devices.electricForgeEnergyConsumption=Electric Forge Energy Consumption
+config.tfctech.devices.electricForgeEnergyConsumption.tooltip=Electric forge energy consumption modifier.
+
+config.tfctech.devices.electricForgeEnergyCapacity=Electric Forge Energy Capacity
+config.tfctech.devices.electricForgeEnergyCapacity.tooltip=Electric forge energy capacity.
+
+
+### Induction Crucible
+config.tfctech.devices.inductionCrucibleEnergyConsumption=Induction Crucible Energy Consumption
+config.tfctech.devices.inductionCrucibleEnergyConsumption.tooltip=Induction crucible energy consumption, in RF/t.
+
+config.tfctech.devices.inductionCrucibleEnergyCapacity=Induction Crucible Energy Capacity
+config.tfctech.devices.inductionCrucibleEnergyCapacity.tooltip=Induction crucible energy capacity.
+
+
+### Fridge
+config.tfctech.devices.fridgeEnergyConsumption=Fridge Energy Consumption
+config.tfctech.devices.fridgeEnergyConsumption.tooltip=Fridge energy consumption modifier.
+
+config.tfctech.devices.fridgeEnergyCapacity=Fridge Energy Capacity
+config.tfctech.devices.fridgeEnergyCapacity.tooltip=Fridge energy capacity.
+
+config.tfctech.devices.fridgeEfficiency=Fridge Efficiency
+config.tfctech.devices.fridgeEfficiency.tooltip=How fast fridges reach frozen state.
+
+config.tfctech.devices.fridgeLoseEfficiency=Fridge Lose Efficiency
+config.tfctech.devices.fridgeLoseEfficiency.tooltip=How fast fridges lose efficiency when the door is open.

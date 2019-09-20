@@ -25,14 +25,13 @@ import static tfctech.objects.tileentities.TELatexExtractor.MAX_FLUID;
 
 public class TESRLatexExtractor extends TileEntitySpecialRenderer<TELatexExtractor>
 {
-    //todo draw flowing latex fluid here
      @Override
     public void render(TELatexExtractor te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
     {
         if (te.hasWorld())
         {
             IBlockState state = te.getBlockState();
-            Fluid flowing = TechFluids.LATEX.get(); //todo change this to latex fluid
+            Fluid flowing = TechFluids.LATEX.get();
 
             //Update state values according to TE
 

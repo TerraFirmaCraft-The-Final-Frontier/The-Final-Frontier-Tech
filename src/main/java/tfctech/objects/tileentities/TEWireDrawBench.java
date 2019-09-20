@@ -16,9 +16,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import net.dries007.tfc.Constants;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.objects.te.TEInventory;
-import net.dries007.tfc.util.Helpers;
 import tfctech.TFCTech;
 import tfctech.api.recipes.WireDrawingRecipe;
 import tfctech.client.TechSounds;
@@ -26,9 +26,11 @@ import tfctech.network.PacketTileEntityUpdate;
 import tfctech.objects.items.metal.ItemTechMetal;
 import tfctech.registry.TechRegistries;
 
+@SuppressWarnings("WeakerAccess")
 public class TEWireDrawBench extends TEInventory implements ITickable
 {
     private int progress = 0;
+    private int lastProgress = 0;
     private boolean working = false;
 
     public TEWireDrawBench()
@@ -154,6 +156,7 @@ public class TEWireDrawBench extends TEInventory implements ITickable
     {
         working = nbt.getBoolean("working");
         progress = nbt.getInteger("progress");
+        lastProgress = progress;
         super.readFromNBT(nbt);
     }
 
@@ -182,6 +185,11 @@ public class TEWireDrawBench extends TEInventory implements ITickable
         return this.progress;
     }
 
+    public int getLastProgress()
+    {
+        return lastProgress;
+    }
+
     @Nullable
     public Metal getWireMetal()
     {
@@ -201,6 +209,7 @@ public class TEWireDrawBench extends TEInventory implements ITickable
     @Override
     public void update()
     {
+        lastProgress = progress;
         if (working)
         {
             if (++progress % 25 == 0)
@@ -209,13 +218,13 @@ public class TEWireDrawBench extends TEInventory implements ITickable
                 if (progress >= 100 && !world.isRemote)
                 {
                     world.playSound(null, pos, TechSounds.WIREDRAW_TONGS_FALL, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                    Helpers.damageItem(inventory.getStackInSlot(0), 32);
-                    WireDrawingRecipe recipe = TechRegistries.WIRE_DRAWING.getValuesCollection().stream()
-                            .filter(x -> x.matches(inventory.getStackInSlot(1))).findFirst().orElse(null);
-                    if (recipe != null)
+                    if (inventory.getStackInSlot(0).attemptDamageItem(32, Constants.RNG, null))
                     {
-                        inventory.setStackInSlot(1, recipe.getOutput());
+                        inventory.setStackInSlot(0, ItemStack.EMPTY);
                     }
+                    TechRegistries.WIRE_DRAWING.getValuesCollection().stream()
+                            .filter(x -> x.matches(inventory.getStackInSlot(1)))
+                            .findFirst().ifPresent(recipe -> inventory.setStackInSlot(1, recipe.getOutput()));
                     setAndUpdateSlots(1);
                 }
             }

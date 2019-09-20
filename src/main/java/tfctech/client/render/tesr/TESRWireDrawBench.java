@@ -29,7 +29,14 @@ public class TESRWireDrawBench extends TileEntitySpecialRenderer<TEWireDrawBench
             model.setRotation(te.getRotation());
             model.setWire(te.getWireMetal());
             model.setDrawplateMetal(te.getDrawPlateMetal());
-            model.setProgress(te.hasWire() ? te.getProgress() : 100);
+            if (te.hasWire())
+            {
+                model.setProgress(te.getProgress(), te.getLastProgress(), partialTicks);
+            }
+            else
+            {
+                model.setProgress(100, 100, 1.0F);
+            }
 
             model.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 
@@ -48,7 +55,7 @@ public class TESRWireDrawBench extends TileEntitySpecialRenderer<TEWireDrawBench
             model.setRotation(EnumFacing.EAST);
             model.setWire(null);
             model.setDrawplateMetal(null);
-            model.setProgress(100);
+            model.setProgress(100, 100, 1.0F);
 
             model.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 

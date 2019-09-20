@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -32,11 +32,9 @@ import net.dries007.tfc.api.capability.size.Weight;
 import tfctech.client.TechGuiHandler;
 import tfctech.objects.tileentities.TEElectricForge;
 
-import static net.minecraft.block.BlockHorizontal.FACING;
-
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BlockElectricForge extends Block implements IItemSize
+public class BlockElectricForge extends BlockHorizontal implements IItemSize
 {
     public static final PropertyBool LIT = PropertyBool.create("lit");
     private static final AxisAlignedBB AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 1.0D, 0.9375D);

@@ -49,7 +49,7 @@ public class ModelWireDrawBench extends ModelBase
 
     private ModelRenderer wire;
 
-    private int progress;
+    private float progress;
 
     private boolean isDrawplateInstalled = false;
     private int drawplateMetal;
@@ -167,9 +167,16 @@ public class ModelWireDrawBench extends ModelBase
         }
     }
 
-    public void setProgress(int progress)
+    public void setProgress(float value, float lastValue, float partialTicks)
     {
-        this.progress = progress;
+        if (value == lastValue)
+        {
+            progress = value;
+        }
+        else
+        {
+            progress = lastValue + (value - lastValue) * partialTicks;
+        }
     }
 
     @Override
@@ -207,7 +214,7 @@ public class ModelWireDrawBench extends ModelBase
         this.Stop1.render(f5);
         this.Stop2.render(f5);
 
-        float angle = -360 / 100 * this.progress;
+        float angle = -360.0F / 100.0F * this.progress;
         setRotateAngleInDegrees(this.Barrel, angle, 0, 0);
         setRotateAngleInDegrees(this.Shaft, angle, 0, 0);
         setRotateAngleInDegrees(this.Holder, angle, 0, 0);

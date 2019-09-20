@@ -24,6 +24,7 @@ import net.dries007.tfc.objects.te.ITileFields;
 import net.dries007.tfc.objects.te.TEInventory;
 import tfctech.TFCTech;
 import tfctech.TechConfig;
+import tfctech.objects.blocks.devices.BlockElectricForge;
 import tfctech.objects.storage.MachineEnergyContainer;
 
 import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MIN_TEMPERATURE;
@@ -251,14 +252,14 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     @Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
     {
-        return (capability == CapabilityEnergy.ENERGY && facing == EnumFacing.UP) || super.hasCapability(capability, facing);
+        return (capability == CapabilityEnergy.ENERGY && (facing == EnumFacing.UP || facing == EnumFacing.DOWN || facing == world.getBlockState(pos).getValue(BlockElectricForge.FACING).getOpposite())) || super.hasCapability(capability, facing);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
     {
-        return capability == CapabilityEnergy.ENERGY && facing == EnumFacing.UP ? (T) this.energyContainer : super.getCapability(capability, facing);
+        return capability == CapabilityEnergy.ENERGY && (facing == EnumFacing.UP || facing == EnumFacing.DOWN || facing == world.getBlockState(pos).getValue(BlockElectricForge.FACING).getOpposite()) ? (T) this.energyContainer : super.getCapability(capability, facing);
     }
 
     private void updateCachedRecipes()

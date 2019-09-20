@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.capabilities.Capability;
@@ -24,6 +25,7 @@ import net.dries007.tfc.objects.te.TEInventory;
 import net.dries007.tfc.util.Helpers;
 import tfctech.TFCTech;
 import tfctech.TechConfig;
+import tfctech.client.TechSounds;
 import tfctech.network.PacketTileEntityUpdate;
 import tfctech.objects.blocks.devices.BlockFridge;
 import tfctech.objects.storage.MachineEnergyContainer;
@@ -35,7 +37,11 @@ import static tfctech.objects.blocks.devices.BlockFridge.UPPER;
 @MethodsReturnNonnullByDefault
 public class TEFridge extends TEInventory implements ITickable
 {
+    private static final float MAX_DEGREE = 90F;
+    private static final float DOOR_SPEED = 6F;
+
     private float open = 0.0F;
+    private float lastOpen = 0.0F;
     private int openingState = 0;
 
     private float efficiency = 0.0F;
@@ -49,6 +55,7 @@ public class TEFridge extends TEInventory implements ITickable
         energyContainer = new MachineEnergyContainer(TechConfig.DEVICES.fridgeEnergyCapacity, TechConfig.DEVICES.fridgeEnergyCapacity, 0);
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isMainBlock()
     {
         if (!hasWorld())
@@ -89,6 +96,7 @@ public class TEFridge extends TEInventory implements ITickable
     public void readFromNBT(NBTTagCompound nbt)
     {
         open = nbt.getFloat("open");
+        lastOpen = open;
         openingState = nbt.getInteger("openingState");
         efficiency = nbt.getFloat("efficiency");
         energyContainer.deserializeNBT(nbt.getCompoundTag("energyContainer"));
@@ -153,9 +161,14 @@ public class TEFridge extends TEInventory implements ITickable
         return open;
     }
 
+    public float getLastOpen()
+    {
+        return lastOpen;
+    }
+
     public boolean isOpen()
     {
-        return open >= 114F;
+        return open >= MAX_DEGREE;
     }
 
     public boolean hasStack(int slot)
@@ -198,12 +211,13 @@ public class TEFridge extends TEInventory implements ITickable
         {
             if (value)
             {
+                world.playSound(null, pos, TechSounds.FRIDGE_OPEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 open = 0F;
                 openingState = 1;
             }
             else
             {
-                open = 114F;
+                open = MAX_DEGREE;
                 openingState = -1;
             }
             setAndUpdateSlots(0);
@@ -215,24 +229,26 @@ public class TEFridge extends TEInventory implements ITickable
     public void update()
     {
         if (!isMainBlock()) return;
+        lastOpen = open;
         if (openingState == 1)
         {
             //opening
-            open += 6F;
-            if (open >= 114F)
+            open += DOOR_SPEED;
+            if (open >= MAX_DEGREE)
             {
-                open = 114F;
+                open = MAX_DEGREE;
                 openingState = 0;
             }
         }
         if (openingState == -1)
         {
-            //opening
-            open -= 6F;
+            //closing
+            open -= DOOR_SPEED;
             if (open <= 0F)
             {
                 open = 0F;
                 openingState = 0;
+                world.playSound(null, pos, TechSounds.FRIDGE_CLOSE, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
         }
         if (!world.isRemote)
@@ -242,13 +258,12 @@ public class TEFridge extends TEInventory implements ITickable
             {
                 consumption = (int) Math.max(1.0D, consumption / 4.0D);
             }
-            boolean updateEfficiency = energyContainer.consumeEnergy(consumption, true);
-            if (this.isOpen())
+            if (this.isOpen() || !energyContainer.consumeEnergy(consumption, false))
             {
                 efficiency -= (100.0F / (TechConfig.DEVICES.fridgeLoseEfficiency * 6000.0F)); //5 Minutes to 0 default
                 if (efficiency <= 0) efficiency = 0;
             }
-            else if (updateEfficiency)
+            else
             {
                 efficiency += (100.0F / (TechConfig.DEVICES.fridgeEfficiency * 36000.0F)); //30 Minutes to 100 default
                 if (efficiency >= 100) efficiency = 100;
