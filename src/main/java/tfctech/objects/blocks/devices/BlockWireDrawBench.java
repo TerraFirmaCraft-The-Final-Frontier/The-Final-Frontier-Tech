@@ -169,14 +169,20 @@ public class BlockWireDrawBench extends BlockHorizontal
             ItemStack stack = player.getHeldItem(hand);
             if (!stack.isEmpty())
             {
-                if (te.isItemValid(0, stack) && te.insertDrawPlate(stack))
+                if (te.isItemValid(0, stack) && !te.insertDrawPlate(stack, true).equals(stack))
                 {
-                    player.setHeldItem(hand, stack);
+                    if (!world.isRemote)
+                    {
+                        player.setHeldItem(hand, te.insertDrawPlate(stack, false));
+                    }
                     return true;
                 }
-                else if (te.isItemValid(1, stack) && te.insertWire(stack))
+                else if (te.isItemValid(1, stack) && !te.insertWire(stack, true).equals(stack))
                 {
-                    player.setHeldItem(hand, stack);
+                    if (!world.isRemote)
+                    {
+                        player.setHeldItem(hand, te.insertWire(stack, false));
+                    }
                     return true;
                 }
                 return false;
@@ -187,10 +193,12 @@ public class BlockWireDrawBench extends BlockHorizontal
                 {
                     for (int i = 1; i >= 0; i--)
                     {
-                        ItemStack grab = te.extractItem(i);
-                        if (grab != ItemStack.EMPTY)
+                        if (te.extractItem(i, true) != ItemStack.EMPTY)
                         {
-                            player.setHeldItem(hand, grab);
+                            if (!world.isRemote)
+                            {
+                                player.setHeldItem(hand, te.extractItem(i, false));
+                            }
                             return true;
                         }
                     }

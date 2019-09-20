@@ -12,6 +12,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.dries007.tfc.api.util.TFCConstants;
 import tfctech.client.TechGuiHandler;
 import tfctech.network.PacketLatexUpdate;
+import tfctech.network.PacketTileEntityUpdate;
+import tfctech.registry.TechFoodTraits;
 
 //todo add required dependency TFC-Metallum
 
@@ -58,5 +60,7 @@ public class TFCTech
         network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
         int id = 0;
         network.registerMessage(new PacketLatexUpdate.Handler(), PacketLatexUpdate.class, ++id, Side.CLIENT);
+        network.registerMessage(new PacketTileEntityUpdate.Handler(), PacketTileEntityUpdate.class, ++id, Side.CLIENT);
+        TechFoodTraits.preInit();
     }
 }

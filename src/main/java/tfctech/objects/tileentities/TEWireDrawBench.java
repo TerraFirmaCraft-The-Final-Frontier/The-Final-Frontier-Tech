@@ -12,14 +12,17 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.objects.te.TEInventory;
 import net.dries007.tfc.util.Helpers;
+import tfctech.TFCTech;
 import tfctech.api.recipes.WireDrawingRecipe;
 import tfctech.client.TechSounds;
+import tfctech.network.PacketTileEntityUpdate;
 import tfctech.objects.items.metal.ItemTechMetal;
 import tfctech.registry.TechRegistries;
 
@@ -81,48 +84,69 @@ public class TEWireDrawBench extends TEInventory implements ITickable
                     return true;
                 }
             }
-            world.playSound(null, pos, TechSounds.WIREDRAW_DRAWING, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            working = true;
+            if (!world.isRemote)
+            {
+                world.playSound(null, pos, TechSounds.WIREDRAW_DRAWING, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                working = true;
+                setAndUpdateSlots(0);
+            }
             return true;
         }
         return false;
     }
 
-    public boolean insertWire(@Nonnull ItemStack stack)
+    public ItemStack insertWire(@Nonnull ItemStack stack, boolean simulate)
     {
         if (!hasWire() && hasDrawPlate() && isItemValid(1, stack))
         {
-            inventory.insertItem(1, stack.splitStack(1), false);
-            setAndUpdateSlots(1);
-            return true;
+            ItemStack output = inventory.insertItem(1, stack, simulate);
+            if (!simulate)
+            {
+                setAndUpdateSlots(0);
+            }
+            return output;
         }
-        return false;
+        return stack;
     }
 
-    public boolean insertDrawPlate(@Nonnull ItemStack stack)
+    public ItemStack insertDrawPlate(@Nonnull ItemStack stack, boolean simulate)
     {
         if (!hasDrawPlate() && isItemValid(0, stack))
         {
-            inventory.insertItem(0, stack.splitStack(1), false);
-            setAndUpdateSlots(0);
-            return true;
+            ItemStack output = inventory.insertItem(0, stack, simulate);
+            if (!simulate)
+            {
+                setAndUpdateSlots(0);
+            }
+            return output;
         }
-        return false;
+        return stack;
+    }
+
+    @Override
+    public void setAndUpdateSlots(int slot)
+    {
+        TFCTech.getNetwork().sendToAllTracking(new PacketTileEntityUpdate(this), new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 64));
+        super.setAndUpdateSlots(slot);
     }
 
     @Nonnull
-    public ItemStack extractItem(int slot)
+    public ItemStack extractItem(int slot, boolean simulate)
     {
         if (slot < 0 || slot > 1 || (progress > 0 && progress < 100))
         {
             return ItemStack.EMPTY;
         }
-        if (slot == 1)
+        if (slot == 1 && !simulate)
         {
             progress = 0;
         }
-        setAndUpdateSlots(slot);
-        return inventory.extractItem(slot, 64, false);
+        ItemStack output = inventory.extractItem(slot, 64, simulate);
+        if (!simulate)
+        {
+            setAndUpdateSlots(slot);
+        }
+        return output;
     }
 
     @Override
@@ -182,7 +206,7 @@ public class TEWireDrawBench extends TEInventory implements ITickable
             if (++progress % 25 == 0)
             {
                 working = false;
-                if (progress >= 100)
+                if (progress >= 100 && !world.isRemote)
                 {
                     world.playSound(null, pos, TechSounds.WIREDRAW_TONGS_FALL, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     Helpers.damageItem(inventory.getStackInSlot(0), 32);
@@ -191,8 +215,8 @@ public class TEWireDrawBench extends TEInventory implements ITickable
                     if (recipe != null)
                     {
                         inventory.setStackInSlot(1, recipe.getOutput());
-                        setAndUpdateSlots(1);
                     }
+                    setAndUpdateSlots(1);
                 }
             }
         }

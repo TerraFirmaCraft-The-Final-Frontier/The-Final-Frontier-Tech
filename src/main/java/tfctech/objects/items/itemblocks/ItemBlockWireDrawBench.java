@@ -68,7 +68,7 @@ public class ItemBlockWireDrawBench extends ItemBlockTFC
             BlockPos upperPos = pos.offset(player.getHorizontalFacing());
             if (player.canPlayerEdit(upperPos, facing, stack) && player.canPlayerEdit(pos, facing, stack))
             {
-                if(worldIn.isRemote)
+                if (!worldIn.isRemote)
                 {
                     stack.shrink(1);
                     IBlockState lowerState = this.block.getDefaultState().withProperty(BlockWireDrawBench.FACING, player.getHorizontalFacing()).withProperty(BlockWireDrawBench.UPPER, false);

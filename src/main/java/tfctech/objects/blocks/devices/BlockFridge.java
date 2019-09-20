@@ -18,18 +18,19 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import mcp.MethodsReturnNonnullByDefault;
 import net.dries007.tfc.util.Helpers;
 import tfctech.objects.tileentities.TEFridge;
-import tfctech.objects.tileentities.TEWireDrawBench;
 
-import static net.minecraft.util.EnumFacing.*;
+import static net.minecraft.util.EnumFacing.NORTH;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -37,12 +38,51 @@ public class BlockFridge extends BlockHorizontal
 {
     public static final PropertyBool UPPER = PropertyBool.create("upper"); //true if this is the upper half
 
+
+    private static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0D, 0D, 0.125D, 1D, 1D, 1D);
+    private static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(0D, 0D, 0.0D, 1D, 1D, 0.875D);
+    private static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0D, 0D, 0.0D, 0.875D, 1D, 1D);
+    private static final AxisAlignedBB WEST_AABB = new AxisAlignedBB(0.125D, 0D, 0.0D, 1D, 1D, 1D);
+
+    private static final Vec3d[] ITEMS;
+
+    static
+    {
+        ITEMS = new Vec3d[8];
+        for (int y = 0; y < 4; y++)
+        {
+            for (int x = 0; x < 2; x++)
+            {
+                double xPos = 0.7D - 0.4D * x;
+                double yPos = 0.55D + y * 0.28125D;
+                double zPos = 0.5D;
+                ITEMS[x + y * 2] = new Vec3d(xPos, yPos, zPos);
+            }
+        }
+    }
+
     public BlockFridge()
     {
         super(Material.IRON);
         setHardness(2.0F);
         setHarvestLevel("pickaxe", 0);
         setDefaultState(blockState.getBaseState().withProperty(FACING, NORTH).withProperty(UPPER, false));
+    }
+
+    public static Vec3d[] getItems(EnumFacing facing)
+    {
+        Vec3d[] items = new Vec3d[8];
+        for (int i = 0; i < 8; i++)
+        {
+            Vec3d itemPos = ITEMS[i];
+            if (facing == EnumFacing.EAST || facing == EnumFacing.WEST)
+            {
+                itemPos = itemPos.rotateYaw((float) Math.toRadians(90D));
+                itemPos = itemPos.add(0, 0, 1);
+            }
+            items[i] = itemPos;
+        }
+        return items;
     }
 
     @SuppressWarnings("deprecation")
@@ -122,17 +162,41 @@ public class BlockFridge extends BlockHorizontal
         return new BlockStateContainer(this, FACING, UPPER);
     }
 
-    @Override
-    public boolean hasTileEntity(IBlockState state)
+    public static int getPlayerLookingItem(BlockPos bottomPos, EntityPlayer player, EnumFacing facing)
     {
-        return state.getValue(UPPER);
+        double length = Math.sqrt(bottomPos.distanceSqToCenter(player.posX, player.posY, player.posZ)) + 0.7D;
+        Vec3d startPos = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
+        Vec3d endPos = startPos.add(new Vec3d(player.getLookVec().x * length, player.getLookVec().y * length, player.getLookVec().z * length));
+        Vec3d[] items = getItems(facing);
+        for (int i = 0; i < 8; i++)
+        {
+            Vec3d itemPos = items[i];
+            AxisAlignedBB offsetAABB = new AxisAlignedBB(itemPos.x, itemPos.y, itemPos.z, itemPos.x, itemPos.y, itemPos.z).grow(0.1D)
+                    .offset(bottomPos).grow(0.002D);
+            if (offsetAABB.calculateIntercept(startPos, endPos) != null)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
-    @Nullable
+    @SuppressWarnings("deprecation")
     @Override
-    public TileEntity createTileEntity(World world, IBlockState state)
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        return state.getValue(UPPER) ? new TEFridge() : null;
+        switch (state.getValue(FACING))
+        {
+            case NORTH:
+                return state.getValue(UPPER) ? NORTH_AABB.setMaxY(0.75D) : NORTH_AABB;
+            case SOUTH:
+                return state.getValue(UPPER) ? SOUTH_AABB.setMaxY(0.75D) : SOUTH_AABB;
+            case EAST:
+                return state.getValue(UPPER) ? EAST_AABB.setMaxY(0.75D) : EAST_AABB;
+            case WEST:
+                return state.getValue(UPPER) ? WEST_AABB.setMaxY(0.75D) : WEST_AABB;
+        }
+        return NORTH_AABB;
     }
 
     @SuppressWarnings("deprecation")
@@ -155,14 +219,33 @@ public class BlockFridge extends BlockHorizontal
         {
             if(te.isOpen())
             {
+                int slot = getPlayerLookingItem(TEPos.down(), player, facing);
                 ItemStack stack = player.getHeldItem(hand);
                 if (!stack.isEmpty())
                 {
-                    //todo store food
+                    if (slot != -1)
+                    {
+                        if (!world.isRemote)
+                        {
+                            player.setHeldItem(hand, te.insertItem(slot, stack));
+                        }
+                        return true;
+                    }
                 }
                 else
                 {
-                    return te.setOpening(false);
+                    if (slot != -1 && te.hasStack(slot))
+                    {
+                        if (!world.isRemote)
+                        {
+                            player.setHeldItem(hand, te.extractItem(slot));
+                        }
+                        return true;
+                    }
+                    else
+                    {
+                        return te.setOpening(false);
+                    }
                 }
             }
             else
@@ -174,5 +257,18 @@ public class BlockFridge extends BlockHorizontal
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean hasTileEntity(IBlockState state)
+    {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state)
+    {
+        return new TEFridge();
     }
 }

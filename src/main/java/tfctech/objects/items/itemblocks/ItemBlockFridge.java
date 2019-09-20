@@ -6,7 +6,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -18,7 +17,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.dries007.tfc.api.capability.size.Size;
 import net.dries007.tfc.api.capability.size.Weight;
 import net.dries007.tfc.objects.items.itemblock.ItemBlockTFC;
-import tfctech.objects.blocks.devices.BlockWireDrawBench;
+import tfctech.objects.blocks.devices.BlockFridge;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -65,8 +64,8 @@ public class ItemBlockFridge extends ItemBlockTFC
             if(!worldIn.isRemote)
             {
                 stack.shrink(1);
-                IBlockState lowerState = this.block.getDefaultState().withProperty(BlockWireDrawBench.FACING, player.getHorizontalFacing().getOpposite()).withProperty(BlockWireDrawBench.UPPER, false);
-                IBlockState upperState = this.block.getDefaultState().withProperty(BlockWireDrawBench.FACING, player.getHorizontalFacing().getOpposite()).withProperty(BlockWireDrawBench.UPPER, true);
+                IBlockState lowerState = this.block.getDefaultState().withProperty(BlockFridge.FACING, player.getHorizontalFacing().getOpposite()).withProperty(BlockFridge.UPPER, false);
+                IBlockState upperState = this.block.getDefaultState().withProperty(BlockFridge.FACING, player.getHorizontalFacing().getOpposite()).withProperty(BlockFridge.UPPER, true);
                 worldIn.setBlockState(pos, lowerState);
                 worldIn.setBlockState(pos.up(), upperState);
             }

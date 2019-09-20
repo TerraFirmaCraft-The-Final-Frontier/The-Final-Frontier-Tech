@@ -60,5 +60,26 @@ public final class TechConfig
         @Config.RangeInt(min = 1000, max = 1_000_000_000)
         @Config.LangKey("config." + MODID + ".general.inductionCrucibleEnergyCapacity")
         public int inductionCrucibleEnergyCapacity = 10000;
+
+        @Config.Comment({"Fridge energy consumption modifier."})
+        @Config.RangeDouble(min = 0.01D, max = 1000.0D)
+        @Config.LangKey("config." + MODID + ".general.fridgeEnergyConsumption")
+        public double fridgeEnergyConsumption = 1;
+
+        @Config.RequiresWorldRestart
+        @Config.Comment({"Fridge energy capacity."})
+        @Config.RangeInt(min = 1000, max = 1_000_000_000)
+        @Config.LangKey("config." + MODID + ".general.fridgeEnergyCapacity")
+        public int fridgeEnergyCapacity = 10000;
+
+        @Config.Comment({"How fast fridges reach frozen state."})
+        @Config.RangeDouble(min = 0.01D, max = 1000.0D)
+        @Config.LangKey("config." + MODID + ".general.fridgeEfficiency")
+        public double fridgeEfficiency = 1;
+
+        @Config.Comment({"How fast fridges lose efficiency when the door is open."})
+        @Config.RangeDouble(min = 0.01D, max = 1000.0D)
+        @Config.LangKey("config." + MODID + ".general.fridgeLoseEfficiency")
+        public double fridgeLoseEfficiency = 1;
     }
 }
