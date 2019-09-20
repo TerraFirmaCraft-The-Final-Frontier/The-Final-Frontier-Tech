@@ -14,7 +14,7 @@ import net.dries007.tfc.api.types.Metal;
  * ModelWireDrawBench - TFCTech
  * Created using Tabula 7.0.0
  */
- 
+
 public class ModelWireDrawBench extends ModelBase
 {
     private static final float P = 0.0625F;
@@ -61,7 +61,7 @@ public class ModelWireDrawBench extends ModelBase
     {
         this.textureWidth = 128;
         this.textureHeight = 64;
-    
+
         this.Tongs1 = new ModelRenderer(this, 100, 14);
         this.Tongs1.setRotationPoint(-1.0F, 13.5F, 13.0F);
         this.Tongs1.addBox(-1.0F, 0.0F, 0.0F, 2, 1, 2, 0.0F);
@@ -140,13 +140,13 @@ public class ModelWireDrawBench extends ModelBase
         this.Handle1.addBox(0.0F, -6.5F, -0.5F, 1, 13, 1, 0.0F);
         this.setRotateAngle(Handle1, -5.235987755982989F, 0.0F, 0.0F);
         this.wire = new ModelRenderer(this, 0, 34);
-        this.wire.setRotationPoint(-1.0F, 13.5F, 13.0F);
+        this.wire.setRotationPoint(-1.0F, 13.65F, 13.0F);
         this.wire.addBox(-0.5F, 0.0F, 2.0F, 1, 1, 8, 0.0F);
         this.Belt2 = new ModelRenderer(this, 90, 7);
         this.Belt2.setRotationPoint(-2.5F, 13.5F, 1.0F);
         this.Belt2.addBox(0.0F, 0.0F, 0.0F, 3, 1, 2, 0.0F);
-		
-		// Drawplates
+
+        // Drawplates
         DRAW_PLATES[0] = getDrawplateModel(23);
         DRAW_PLATES[1] = getDrawplateModel(26);
         DRAW_PLATES[2] = getDrawplateModel(29);

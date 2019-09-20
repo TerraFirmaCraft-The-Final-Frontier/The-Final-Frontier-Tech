@@ -15,16 +15,11 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import net.dries007.tfc.objects.blocks.BlockFluidTFC;
 import net.dries007.tfc.objects.items.itemblock.ItemBlockTFC;
-import tfctech.objects.blocks.devices.BlockElectricForge;
-import tfctech.objects.blocks.devices.BlockInductionCrucible;
-import tfctech.objects.blocks.devices.BlockLatexExtractor;
-import tfctech.objects.blocks.devices.BlockWireDrawBench;
+import tfctech.objects.blocks.devices.*;
 import tfctech.objects.fluids.TechFluids;
+import tfctech.objects.items.itemblocks.ItemBlockFridge;
 import tfctech.objects.items.itemblocks.ItemBlockWireDrawBench;
-import tfctech.objects.tileentities.TEElectricForge;
-import tfctech.objects.tileentities.TEInductionCrucible;
-import tfctech.objects.tileentities.TELatexExtractor;
-import tfctech.objects.tileentities.TEWireDrawBench;
+import tfctech.objects.tileentities.*;
 
 import static net.dries007.tfc.objects.CreativeTabsTFC.CT_MISC;
 import static net.dries007.tfc.util.Helpers.getNull;
@@ -39,16 +34,19 @@ public final class TechBlocks
     public static final BlockInductionCrucible INDUCTION_CRUCIBLE = getNull();
     public static final BlockLatexExtractor LATEX_EXTRACTOR = getNull();
     public static final BlockWireDrawBench WIRE_DRAW_BENCH = getNull();
+    public static final BlockFridge FRIDGE = getNull();
 
-    private static ImmutableList<ItemBlock> allInventoryItemBlocks;
+    private static ImmutableList<ItemBlock> allInventoryItemBlocks, allTEISRBlocks;
     private static ImmutableList<BlockFluidBase> allFluidBlocks;
-
-    //todo latex
-    //todo recipe for rubber akin to vulcanization process(look for TFCTech)
 
     public static ImmutableList<ItemBlock> getAllInventoryItemBlocks()
     {
         return allInventoryItemBlocks;
+    }
+
+    public static ImmutableList<ItemBlock> getAllTEISRBlocks()
+    {
+        return allTEISRBlocks;
     }
 
     public static ImmutableList<BlockFluidBase> getAllFluidBlocks()
@@ -70,13 +68,22 @@ public final class TechBlocks
         }
         allFluidBlocks = b.build();
 
+        //Normal inventory Blocks
         ImmutableList.Builder<ItemBlock> inventoryItemBlocks = ImmutableList.builder();
 
         inventoryItemBlocks.add(new ItemBlockTFC(register(r, "electric_forge", new BlockElectricForge(), CT_MISC)));
         inventoryItemBlocks.add(new ItemBlockTFC(register(r, "induction_crucible", new BlockInductionCrucible(), CT_MISC)));
-        inventoryItemBlocks.add(new ItemBlockWireDrawBench(register(r, "wire_draw_bench", new BlockWireDrawBench(), CT_MISC)));
 
         allInventoryItemBlocks = inventoryItemBlocks.build();
+
+        //TEISR Blocks
+        ImmutableList.Builder<ItemBlock> teisrItemBlocks = ImmutableList.builder();
+
+        teisrItemBlocks.add(new ItemBlockWireDrawBench(register(r, "wire_draw_bench", new BlockWireDrawBench(), CT_MISC)));
+        teisrItemBlocks.add(new ItemBlockFridge(register(r, "fridge", new BlockFridge(), CT_MISC)));
+
+        allTEISRBlocks = teisrItemBlocks.build();
+
 
         //No itemblocks
         register(r, "latex_extractor", new BlockLatexExtractor());
@@ -86,6 +93,7 @@ public final class TechBlocks
         register(TEInductionCrucible.class, "induction_crucible");
         register(TELatexExtractor.class, "latex_extractor");
         register(TEWireDrawBench.class, "wire_draw_bench");
+        register(TEFridge.class, "fridge");
     }
 
     private static <T extends Block> T register(IForgeRegistry<Block> r, String name, T block, CreativeTabs ct)

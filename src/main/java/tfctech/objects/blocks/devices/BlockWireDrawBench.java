@@ -22,10 +22,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import mcp.MethodsReturnNonnullByDefault;
 import net.dries007.tfc.util.Helpers;
 import tfctech.objects.tileentities.TEWireDrawBench;
+
+import static net.minecraft.util.EnumFacing.NORTH;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -39,10 +43,10 @@ public class BlockWireDrawBench extends BlockHorizontal
 
     public BlockWireDrawBench()
     {
-        super(Material.WOOD);
-        setDefaultState(blockState.getBaseState().withProperty(UPPER, false));
+        super(Material.IRON);
+        setDefaultState(blockState.getBaseState().withProperty(FACING, NORTH).withProperty(UPPER, false));
         setHardness(2.0f);
-        setHarvestLevel("axe", 0);
+        setHarvestLevel("pickaxe", 0);
     }
 
     @SuppressWarnings("deprecation")
@@ -107,12 +111,14 @@ public class BlockWireDrawBench extends BlockHorizontal
     }
 
     @SuppressWarnings("deprecation")
+    @Override
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
 
     @SuppressWarnings("deprecation")
+    @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
     {
         EnumFacing enumfacing = state.getValue(FACING);
@@ -140,6 +146,7 @@ public class BlockWireDrawBench extends BlockHorizontal
         return state.getValue(UPPER) ? Item.getItemFromBlock(this) : Items.AIR;
     }
 
+    @Override
     public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
     {
         if (state.getValue(UPPER))
@@ -178,13 +185,14 @@ public class BlockWireDrawBench extends BlockHorizontal
             {
                 if (player.isSneaking())
                 {
-                    if (te.hasWire())
+                    for (int i = 1; i >= 0; i--)
                     {
-                        player.setHeldItem(hand, te.extractWire());
-                    }
-                    else if (te.hasDrawPlate())
-                    {
-                        player.setHeldItem(hand, te.extractDrawPlate());
+                        ItemStack grab = te.extractItem(i);
+                        if (grab != ItemStack.EMPTY)
+                        {
+                            player.setHeldItem(hand, grab);
+                            return true;
+                        }
                     }
                 }
                 else
@@ -194,6 +202,14 @@ public class BlockWireDrawBench extends BlockHorizontal
             }
         }
         return false;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean hasCustomBreakingProgress(IBlockState state)
+    {
+        return true;
     }
 
     @Override

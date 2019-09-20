@@ -24,14 +24,17 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import tfctech.client.render.teisr.TEISRWireDrawBench;
+import tfctech.client.render.teisr.TEISRTechDevices;
+import tfctech.client.render.tesr.TESRFridge;
 import tfctech.client.render.tesr.TESRLatexExtractor;
 import tfctech.client.render.tesr.TESRWireDrawBench;
 import tfctech.objects.blocks.TechBlocks;
 import tfctech.objects.items.TechItems;
+import tfctech.objects.items.itemblocks.ItemBlockFridge;
 import tfctech.objects.items.itemblocks.ItemBlockWireDrawBench;
 import tfctech.objects.items.metal.ItemGear;
 import tfctech.objects.items.metal.ItemTechMetal;
+import tfctech.objects.tileentities.TEFridge;
 import tfctech.objects.tileentities.TELatexExtractor;
 import tfctech.objects.tileentities.TEWireDrawBench;
 
@@ -63,14 +66,13 @@ public final class ClientRegisterEvents
         for (ItemBlock item : TechBlocks.getAllInventoryItemBlocks())
         {
             ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-            if (item instanceof ItemBlockWireDrawBench)
-            {
-                item.setTileEntityItemStackRenderer(new TEISRWireDrawBench());
-            }
-            else
-            {
-                //ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-            }
+        }
+
+        //TEISR item blocks
+        for (ItemBlock item : TechBlocks.getAllTEISRBlocks())
+        {
+            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+            item.setTileEntityItemStackRenderer(new TEISRTechDevices());
         }
 
 
@@ -97,12 +99,22 @@ public final class ClientRegisterEvents
                 return Collections.emptyMap();
             }
         });
+        ModelLoader.setCustomStateMapper(TechBlocks.FRIDGE, new IStateMapper()
+        {
+            @Override
+            @Nonnull
+            public Map<IBlockState, ModelResourceLocation> putStateModelLocations(@Nonnull Block blockIn)
+            {
+                return Collections.emptyMap();
+            }
+        });
 
 
         // TESRs //
 
         ClientRegistry.bindTileEntitySpecialRenderer(TELatexExtractor.class, new TESRLatexExtractor());
         ClientRegistry.bindTileEntitySpecialRenderer(TEWireDrawBench.class, new TESRWireDrawBench());
+        ClientRegistry.bindTileEntitySpecialRenderer(TEFridge.class, new TESRFridge());
     }
 
     @SubscribeEvent

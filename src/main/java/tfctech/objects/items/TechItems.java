@@ -132,6 +132,7 @@ public final class TechItems
 
         //todo ceramic molds for glass
         TechBlocks.getAllInventoryItemBlocks().forEach(x -> registerItemBlock(r, x));
+        TechBlocks.getAllTEISRBlocks().forEach(x -> registerItemBlock(r, x));
     }
 
     private static <T extends Block> ItemBlock createItemBlock(T block, Function<T, ItemBlock> producer)
