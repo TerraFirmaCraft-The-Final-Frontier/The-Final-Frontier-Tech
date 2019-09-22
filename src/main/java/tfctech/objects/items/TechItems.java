@@ -7,20 +7,25 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.dries007.tfc.api.registries.TFCRegistries;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.api.util.TFCConstants;
 import net.dries007.tfc.objects.ToolMaterialsTFC;
+import net.dries007.tfc.objects.items.ceramics.ItemPottery;
+import net.dries007.tfc.util.OreDictionaryHelper;
 import tfctech.objects.blocks.TechBlocks;
 import tfctech.objects.items.ceramics.ItemFluidBowl;
+import tfctech.objects.items.ceramics.ItemTechMold;
 import tfctech.objects.items.metal.ItemGroove;
 import tfctech.objects.items.metal.ItemTechMetal;
 
@@ -70,6 +75,12 @@ public final class TechItems
     @GameRegistry.ObjectHolder("metal/steel_sleeve")
     public static final ItemTechMetal STEEL_SLEEVE = getNull();
 
+    @GameRegistry.ObjectHolder("ceramics/unfired/rackwheel_piece")
+    public static final ItemPottery UNFIRED_RACKWHEEL_PIECE = getNull();
+    @GameRegistry.ObjectHolder("ceramics/mold/rackwheel_piece")
+    public static final ItemTechMold MOLD_RACKWHEEL_PIECE = getNull();
+
+
     private static ImmutableList<Item> allSimpleItems;
     public static ImmutableList<Item> getAllSimpleItems()
     {
@@ -77,10 +88,16 @@ public final class TechItems
     }
 
     private static ImmutableList<Item> allMetalItems;
-
     public static ImmutableList<Item> getAllMetalItems()
     {
         return allMetalItems;
+    }
+
+    private static ImmutableList<Item> allCeramicMoldItems;
+
+    public static ImmutableList<Item> getAllCeramicMoldItems()
+    {
+        return allCeramicMoldItems;
     }
 
     @SubscribeEvent
@@ -96,7 +113,14 @@ public final class TechItems
         simpleItems.add(register(r, "wiredraw/leather_belt", new Item(), CT_MISC));
         simpleItems.add(register(r, "wiredraw/winch", new Item(), CT_MISC));
 
+        //Unfired is simple
+        simpleItems.add(register(r, "ceramics/unfired/rackwheel_piece", new ItemPottery(), CT_MISC));
+
         allSimpleItems = simpleItems.build();
+
+        ImmutableList.Builder<Item> ceramicItems = ImmutableList.builder();
+        ceramicItems.add(register(r, "ceramics/mold/rackwheel_piece", new ItemTechMold(ItemTechMetal.ItemType.RACKWHEEL_PIECE), CT_MISC));
+        allCeramicMoldItems = ceramicItems.build();
 
         ImmutableList.Builder<Item> metalItems = ImmutableList.builder();
 
@@ -124,6 +148,10 @@ public final class TechItems
             metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_rackwheel", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.RACKWHEEL), CT_METAL));
             metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_gear", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.GEAR), CT_METAL));
             metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_wire", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.WIRE), CT_METAL));
+            metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_long_rod", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.LONG_ROD), CT_METAL));
+            metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_rod", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.ROD), CT_METAL));
+            metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_bolt", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.BOLT), CT_METAL));
+            metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_screw", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.SCREW), CT_METAL));
         }
 
         allMetalItems = metalItems.build();
@@ -132,6 +160,13 @@ public final class TechItems
 
         TechBlocks.getAllInventoryItemBlocks().forEach(x -> registerItemBlock(r, x));
         TechBlocks.getAllTEISRBlocks().forEach(x -> registerItemBlock(r, x));
+
+        //Register oredict for metal item components
+        for (Item metalItem : allMetalItems)
+        {
+            ItemTechMetal techMetal = (ItemTechMetal) metalItem;
+            OreDictionary.registerOre(OreDictionaryHelper.toString(techMetal.getType(), techMetal.getMetal(ItemStack.EMPTY)), new ItemStack(metalItem, 1, 0));
+        }
     }
 
     private static <T extends Block> ItemBlock createItemBlock(T block, Function<T, ItemBlock> producer)

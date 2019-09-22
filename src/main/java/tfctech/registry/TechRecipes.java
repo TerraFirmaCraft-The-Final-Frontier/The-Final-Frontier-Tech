@@ -3,7 +3,6 @@ package tfctech.registry;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
@@ -14,6 +13,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.dries007.tfc.api.recipes.WeldingRecipe;
@@ -21,6 +21,8 @@ import net.dries007.tfc.api.recipes.anvil.AnvilRecipe;
 import net.dries007.tfc.api.recipes.barrel.BarrelRecipe;
 import net.dries007.tfc.api.recipes.heat.HeatRecipe;
 import net.dries007.tfc.api.recipes.heat.HeatRecipeSimple;
+import net.dries007.tfc.api.recipes.knapping.KnappingRecipe;
+import net.dries007.tfc.api.recipes.knapping.KnappingRecipeSimple;
 import net.dries007.tfc.api.registries.TFCRegistries;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.api.util.TFCConstants;
@@ -50,7 +52,8 @@ public final class TechRecipes
     public static void onRegisterHeatRecipeEvent(RegistryEvent.Register<HeatRecipe> event)
     {
         event.getRegistry().registerAll(
-                new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.RUBBER_MIX)), new ItemStack(TechItems.RUBBER), 600f, Metal.Tier.TIER_I).setRegistryName("rubber")
+                new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.RUBBER_MIX)), new ItemStack(TechItems.RUBBER), 600f, Metal.Tier.TIER_I).setRegistryName("rubber"),
+                new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE)), new ItemStack(TechItems.MOLD_RACKWHEEL_PIECE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_rackwheel")
         );
     }
 
@@ -66,11 +69,12 @@ public final class TechRecipes
         r.register(new AnvilRecipe(new ResourceLocation(MODID, "steel_draw_plate"), IIngredient.of(ItemMetal.get(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "steel")), Metal.ItemType.INGOT)), new ItemStack(TechItems.STEEL_DRAW_PLATE), Metal.Tier.TIER_III, ForgeRule.PUNCH_LAST, ForgeRule.PUNCH_SECOND_LAST, ForgeRule.HIT_ANY));
         r.register(new AnvilRecipe(new ResourceLocation(MODID, "black_steel_draw_plate"), IIngredient.of(ItemMetal.get(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "black_steel")), Metal.ItemType.INGOT)), new ItemStack(TechItems.BLACK_STEEL_DRAW_PLATE), Metal.Tier.TIER_III, ForgeRule.PUNCH_LAST, ForgeRule.PUNCH_SECOND_LAST, ForgeRule.HIT_ANY));
 
-        //Register all wires
+
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
             if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
                 continue;
+            //Register all wires
             IIngredient<ItemStack> ingredient = IIngredient.of(new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.STRIP)));
             ItemStack output = new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.WIRE), 1, 4); //using meta as stage selector
             if (!output.isEmpty())
@@ -78,7 +82,26 @@ public final class TechRecipes
                 //noinspection ConstantConditions
                 r.register(new AnvilRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_wire"), ingredient, output, metal.getTier(), ForgeRule.DRAW_LAST, ForgeRule.DRAW_NOT_LAST));
             }
+
+            //Register all long rods
+            ingredient = IIngredient.of(new ItemStack(ItemMetal.get(metal, Metal.ItemType.INGOT)));
+            output = new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.LONG_ROD));
+            if (!output.isEmpty())
+            {
+                //noinspection ConstantConditions
+                r.register(new AnvilRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_long_rod"), ingredient, output, metal.getTier(), ForgeRule.HIT_LAST, ForgeRule.HIT_SECOND_LAST, ForgeRule.HIT_THIRD_LAST));
+            }
         }
+    }
+
+    @SubscribeEvent
+    public static void onRegisterKnappingRecipeEvent(RegistryEvent.Register<KnappingRecipe> event)
+    {
+        IForgeRegistry<KnappingRecipe> r = event.getRegistry();
+
+        r.registerAll(
+                new KnappingRecipeSimple(KnappingRecipe.Type.CLAY, true, new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE), "XXXXX", "X XXX", "X  XX", "XX  X", "XXXXX").setRegistryName("clay_rackwheel_piece")
+        );
     }
 
     @SubscribeEvent
@@ -145,18 +168,22 @@ public final class TechRecipes
     {
         IForgeRegistry<IRecipe> r = event.getRegistry();
         //Register all strips
-        List<Item> allChisels = new ArrayList<>();
+        List<ItemStack> allChisels = new ArrayList<>();
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
             if (!metal.isToolMetal())
                 continue;
-            allChisels.add(ItemMetal.get(metal, Metal.ItemType.CHISEL));
+            allChisels.add(new ItemStack(ItemMetal.get(metal, Metal.ItemType.CHISEL), 1, OreDictionary.WILDCARD_VALUE));
         }
-        Ingredient chisel = Ingredient.fromItems(allChisels.toArray(new Item[0]));
+        Ingredient chisel = Ingredient.fromStacks(allChisels.toArray(new ItemStack[0]));
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
             if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
                 continue;
+
+            /*
+             * Strips
+             */
             Ingredient ingredient = Ingredient.fromStacks(new ItemStack(ItemMetal.get(metal, Metal.ItemType.SHEET)));
             ItemStack output = new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.STRIP), 4);
             if (!output.isEmpty())
@@ -168,6 +195,51 @@ public final class TechRecipes
                 r.register(new ShapedRecipes("strip", 2, 1, list, output).setRegistryName(MODID, metal.getRegistryName().getPath().toLowerCase() + "_strip"));
             }
 
+            /*
+             * Rods
+             */
+            ingredient = Ingredient.fromStacks(new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.LONG_ROD)));
+            output = new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.ROD), 2);
+            if (!output.isEmpty())
+            {
+                NonNullList<Ingredient> list = NonNullList.create();
+                list.add(chisel);
+                list.add(ingredient);
+                //noinspection ConstantConditions
+                r.register(new ShapedRecipes("rod", 2, 1, list, output).setRegistryName(MODID, metal.getRegistryName().getPath().toLowerCase() + "_rod"));
+            }
+
+            /*
+             * Bolts
+             */
+            ingredient = Ingredient.fromStacks(new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.ROD)));
+            output = new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.BOLT), 2);
+            if (!output.isEmpty())
+            {
+                NonNullList<Ingredient> list = NonNullList.create();
+                list.add(chisel);
+                list.add(ingredient);
+                //noinspection ConstantConditions
+                r.register(new ShapedRecipes("bolt", 2, 1, list, output).setRegistryName(MODID, metal.getRegistryName().getPath().toLowerCase() + "_bolt"));
+            }
+
+            /*
+             * Screws
+             */
+            ingredient = Ingredient.fromStacks(new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.BOLT)));
+            output = new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.SCREW));
+            if (!output.isEmpty())
+            {
+                NonNullList<Ingredient> list = NonNullList.create();
+                list.add(chisel);
+                list.add(ingredient);
+                //noinspection ConstantConditions
+                r.register(new ShapedRecipes("screw", 2, 1, list, output).setRegistryName(MODID, metal.getRegistryName().getPath().toLowerCase() + "_screw"));
+            }
+
+            /*
+             * Rackwheels
+             */
             ingredient = Ingredient.fromStacks(new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.RACKWHEEL_PIECE)));
             output = new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.RACKWHEEL));
             if (!output.isEmpty())

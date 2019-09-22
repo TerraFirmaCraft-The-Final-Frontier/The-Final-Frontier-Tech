@@ -30,6 +30,9 @@ tile.tfctech.fridge.name=Fridge
 ## Ceramics
 item.tfctech.ceramics.fluid_bowl.name=Empty Bowl
 item.tfctech.ceramics.fluid_bowl.filled=%s Bowl
+item.tfctech.ceramics.unfired.rackwheel_piece.name=Unfired Rackwheel Piece Mold
+item.tfctech.ceramics.mold.rackwheel_piece.name=Rackwheel Piece Mold
+item.tfctech.ceramics.mold.rackwheel_piece.filled=%s Rackwheel Piece Mold
 
 ## Latex
 item.tfctech.latex.vulcanizing_agents.name=Vulcanizing Agents
@@ -48,6 +51,10 @@ item.tfctech.metalitem.inductor.name=%s Inductor
 item.tfctech.metalitem.tongs.name=%s Tongs
 item.tfctech.metalitem.strip.name=%s Strip
 item.tfctech.metalitem.sleeve.name=%s Sleeve
+item.tfctech.metalitem.long_rod.name=Long %s Rod
+item.tfctech.metalitem.rod.name=%s Rod
+item.tfctech.metalitem.bolt.name=%s Bolt
+item.tfctech.metalitem.screw.name=%s Screw
 item.tfctech.metalitem.rackwheel_piece.name=%s Rackwheel Piece
 item.tfctech.metalitem.rackwheel.name=%s Rackwheel
 item.tfctech.metalitem.gear.name=%s Gear
@@ -107,3 +114,6 @@ config.tfctech.devices.fridgeEfficiency.tooltip=How fast fridges reach frozen st
 
 config.tfctech.devices.fridgeLoseEfficiency=Fridge Lose Efficiency
 config.tfctech.devices.fridgeLoseEfficiency.tooltip=How fast fridges lose efficiency when the door is open.
+
+#JEI
+jei.category.tfctech.wire_drawing=Wire Drawing
