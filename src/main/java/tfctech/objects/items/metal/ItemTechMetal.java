@@ -21,9 +21,8 @@ import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.objects.items.ItemTFC;
 
 /**
- * Since TFC has Metal.ItemType we can't reuse ItemMetal directly
+ * Since TFC has Metal.ItemType we can't reuse {@link net.dries007.tfc.objects.items.metal.ItemMetal} directly
  */
-@SuppressWarnings("WeakerAccess")
 public class ItemTechMetal extends ItemTFC implements IMetalItem
 {
     private static final Map<Metal, EnumMap<ItemType, ItemTechMetal>> TABLE = new HashMap<>();

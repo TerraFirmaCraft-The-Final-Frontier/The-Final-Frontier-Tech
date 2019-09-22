@@ -36,7 +36,7 @@ import tfctech.objects.items.metal.ItemTechMetal;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
 /**
- * Since TFC has Metal.ItemType we can't reuse ItemMold directly
+ * Since TFC has Metal.ItemType we can't reuse {@link ItemMold} directly
  */
 public class ItemTechMold extends ItemPottery
 {
@@ -71,34 +71,6 @@ public class ItemTechMold extends ItemPottery
             }
         }
         return super.getItemStackDisplayName(stack);
-    }
-
-    @Override
-    @Nonnull
-    public ItemStack getContainerItem(@Nonnull ItemStack stack)
-    {
-        IFluidHandler capFluidHandler = stack.getCapability(FLUID_HANDLER_CAPABILITY, null);
-        if (capFluidHandler instanceof IMoldHandler)
-        {
-            Metal metal = ((IMoldHandler) capFluidHandler).getMetal();
-            if (metal != null && ((IMoldHandler) capFluidHandler).getAmount() == 100)
-            {
-                return new ItemStack(ItemTechMetal.get(metal, type));
-            }
-        }
-        return stack.copy();
-    }
-
-    @Override
-    public boolean hasContainerItem(ItemStack stack)
-    {
-        IFluidHandler capFluidHandler = stack.getCapability(FLUID_HANDLER_CAPABILITY, null);
-        if (capFluidHandler instanceof IMoldHandler)
-        {
-            Metal metal = ((IMoldHandler) capFluidHandler).getMetal();
-            return metal != null && ((IMoldHandler) capFluidHandler).getAmount() == 100;
-        }
-        return false;
     }
 
     @Nullable

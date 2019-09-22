@@ -28,6 +28,7 @@ import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.api.util.TFCConstants;
 import net.dries007.tfc.objects.inventory.ingredient.IIngredient;
 import net.dries007.tfc.objects.items.metal.ItemMetal;
+import net.dries007.tfc.objects.recipes.ShapelessDamageRecipe;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.forge.ForgeRule;
 import tfctech.api.recipes.WireDrawingRecipe;
@@ -176,6 +177,11 @@ public final class TechRecipes
             allChisels.add(new ItemStack(ItemMetal.get(metal, Metal.ItemType.CHISEL), 1, OreDictionary.WILDCARD_VALUE));
         }
         Ingredient chisel = Ingredient.fromStacks(allChisels.toArray(new ItemStack[0]));
+
+        ResourceLocation groupStrip = new ResourceLocation(MODID, "strip");
+        ResourceLocation groupRod = new ResourceLocation(MODID, "rod");
+        ResourceLocation groupBolt = new ResourceLocation(MODID, "bolt");
+        ResourceLocation groupScrew = new ResourceLocation(MODID, "screw");
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
             if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
@@ -192,7 +198,7 @@ public final class TechRecipes
                 list.add(chisel);
                 list.add(ingredient);
                 //noinspection ConstantConditions
-                r.register(new ShapedRecipes("strip", 2, 1, list, output).setRegistryName(MODID, metal.getRegistryName().getPath().toLowerCase() + "_strip"));
+                r.register(new ShapelessDamageRecipe(groupStrip, list, output).setRegistryName(MODID, metal.getRegistryName().getPath().toLowerCase() + "_strip"));
             }
 
             /*
@@ -206,7 +212,7 @@ public final class TechRecipes
                 list.add(chisel);
                 list.add(ingredient);
                 //noinspection ConstantConditions
-                r.register(new ShapedRecipes("rod", 2, 1, list, output).setRegistryName(MODID, metal.getRegistryName().getPath().toLowerCase() + "_rod"));
+                r.register(new ShapelessDamageRecipe(groupRod, list, output).setRegistryName(MODID, metal.getRegistryName().getPath().toLowerCase() + "_rod"));
             }
 
             /*
@@ -220,7 +226,7 @@ public final class TechRecipes
                 list.add(chisel);
                 list.add(ingredient);
                 //noinspection ConstantConditions
-                r.register(new ShapedRecipes("bolt", 2, 1, list, output).setRegistryName(MODID, metal.getRegistryName().getPath().toLowerCase() + "_bolt"));
+                r.register(new ShapelessDamageRecipe(groupBolt, list, output).setRegistryName(MODID, metal.getRegistryName().getPath().toLowerCase() + "_bolt"));
             }
 
             /*
@@ -234,7 +240,7 @@ public final class TechRecipes
                 list.add(chisel);
                 list.add(ingredient);
                 //noinspection ConstantConditions
-                r.register(new ShapedRecipes("screw", 2, 1, list, output).setRegistryName(MODID, metal.getRegistryName().getPath().toLowerCase() + "_screw"));
+                r.register(new ShapelessDamageRecipe(groupScrew, list, output).setRegistryName(MODID, metal.getRegistryName().getPath().toLowerCase() + "_screw"));
             }
 
             /*

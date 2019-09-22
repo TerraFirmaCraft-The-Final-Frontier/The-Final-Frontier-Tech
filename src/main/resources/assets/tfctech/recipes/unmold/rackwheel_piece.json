@@ -1,12 +1,9 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "tfctech:unmold_recipe",
   "ingredients": [
     {
       "item": "tfctech:ceramics/mold/rackwheel_piece"
     }
   ],
-  "result": {
-    "item": "tfctech:ceramics/mold/rackwheel_piece",
-    "count": 1
-  }
+  "result": "rackwheel_piece"
 }
