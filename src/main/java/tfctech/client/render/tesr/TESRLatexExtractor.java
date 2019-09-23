@@ -98,14 +98,17 @@ public class TESRLatexExtractor extends TileEntitySpecialRenderer<TELatexExtract
             //From bark
             if(te.cutState() > 1)
             {
-                buffer.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION_TEX_NORMAL);
+                for (double zPos = 1.075D; zPos <= 1.375D; zPos += 0.075D)
+                {
+                    buffer.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION_TEX_NORMAL);
 
-                buffer.pos(0.46625D, 0.57125D, 1D).tex(sprite.getMinU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
-                buffer.pos(0.46625D, 0.57125D, 1.375D).tex(sprite.getMinU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
-                buffer.pos(0.54375D, 0.57125D, 1.375D).tex(sprite.getMaxU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
-                buffer.pos(0.54375D, 0.57125D, 1D).tex(sprite.getMaxU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
+                    buffer.pos(0.46625D, 0.57125D, zPos - 0.075D).tex(sprite.getMinU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
+                    buffer.pos(0.46625D, 0.57125D, zPos).tex(sprite.getMinU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
+                    buffer.pos(0.54375D, 0.57125D, zPos).tex(sprite.getMaxU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
+                    buffer.pos(0.54375D, 0.57125D, zPos - 0.075D).tex(sprite.getMaxU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
 
-                Tessellator.getInstance().draw();
+                    Tessellator.getInstance().draw();
+                }
 
                 //Corner
                 buffer.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION_TEX_NORMAL);
@@ -117,35 +120,63 @@ public class TESRLatexExtractor extends TileEntitySpecialRenderer<TELatexExtract
 
                 Tessellator.getInstance().draw();
 
-                //Corner, bellow facing
+                //Corner, back side
                 buffer.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION_TEX_NORMAL);
 
-                buffer.pos(0.46625D, 0.50125D, 1.4D).tex(sprite.getMinU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
-                buffer.pos(0.46625D, 0.57125D, 1.375D).tex(sprite.getMinU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
-                buffer.pos(0.54375D, 0.57125D, 1.375D).tex(sprite.getMaxU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
-                buffer.pos(0.54375D, 0.50125D, 1.4D).tex(sprite.getMaxU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
+                buffer.pos(0.46625D, 0.50125D, 1.4D).tex(sprite.getMinU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
+                buffer.pos(0.46625D, 0.57125D, 1.375D).tex(sprite.getMinU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
+                buffer.pos(0.54375D, 0.57125D, 1.375D).tex(sprite.getMaxU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
+                buffer.pos(0.54375D, 0.50125D, 1.4D).tex(sprite.getMaxU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
 
                 Tessellator.getInstance().draw();
 
+                double lastPos = 0D;
+                for (double yyPos = 0.42625D; yyPos > yPos; yyPos -= 0.075D)
+                {
+                    //To pot
+                    buffer.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION_TEX_NORMAL);
+
+                    buffer.pos(0.46625D, yyPos + 0.075D, 1.4D).tex(sprite.getMinU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
+                    buffer.pos(0.46625D, yyPos, 1.4D).tex(sprite.getMinU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
+                    buffer.pos(0.54375D, yyPos, 1.4D).tex(sprite.getMaxU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
+                    buffer.pos(0.54375D, yyPos + 0.075D, 1.4D).tex(sprite.getMaxU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
+
+                    Tessellator.getInstance().draw();
+
+                    //To pot, back side
+                    buffer.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION_TEX_NORMAL);
+
+                    buffer.pos(0.46625D, yyPos, 1.4D).tex(sprite.getMinU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
+                    buffer.pos(0.46625D, yyPos + 0.075D, 1.4D).tex(sprite.getMinU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
+                    buffer.pos(0.54375D, yyPos + 0.075D, 1.4D).tex(sprite.getMaxU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
+                    buffer.pos(0.54375D, yyPos, 1.4D).tex(sprite.getMaxU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
+
+                    Tessellator.getInstance().draw();
+                    lastPos = yyPos;
+                }
+
+
+                //Missing last quad
                 //To pot
                 buffer.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION_TEX_NORMAL);
 
-                buffer.pos(0.46625D, 0.50125D, 1.4D).tex(sprite.getMinU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
-                buffer.pos(0.46625D, 0.25D, 1.4D).tex(sprite.getMinU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
-                buffer.pos(0.54375D, 0.25D, 1.4D).tex(sprite.getMaxU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
-                buffer.pos(0.54375D, 0.50125D, 1.4D).tex(sprite.getMaxU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
+                buffer.pos(0.46625D, lastPos, 1.4D).tex(sprite.getMinU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
+                buffer.pos(0.46625D, yPos, 1.4D).tex(sprite.getMinU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
+                buffer.pos(0.54375D, yPos, 1.4D).tex(sprite.getMaxU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
+                buffer.pos(0.54375D, lastPos, 1.4D).tex(sprite.getMaxU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
 
                 Tessellator.getInstance().draw();
 
-                //To pot, bellow facing
+                //To pot, back side
                 buffer.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION_TEX_NORMAL);
 
-                buffer.pos(0.46625D, yPos, 1.4D).tex(sprite.getMinU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
-                buffer.pos(0.46625D, 0.50125D, 1.4D).tex(sprite.getMinU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
-                buffer.pos(0.54375D, 0.50125D, 1.4D).tex(sprite.getMaxU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
-                buffer.pos(0.54375D, yPos, 1.4D).tex(sprite.getMaxU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
+                buffer.pos(0.46625D, yPos, 1.4D).tex(sprite.getMinU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
+                buffer.pos(0.46625D, lastPos, 1.4D).tex(sprite.getMinU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
+                buffer.pos(0.54375D, lastPos, 1.4D).tex(sprite.getMaxU(), sprite.getMinV()).normal(0, 1, 0).endVertex();
+                buffer.pos(0.54375D, yPos, 1.4D).tex(sprite.getMaxU(), sprite.getMaxV()).normal(0, 1, 0).endVertex();
 
                 Tessellator.getInstance().draw();
+
             }
 
             //Draws pot contents

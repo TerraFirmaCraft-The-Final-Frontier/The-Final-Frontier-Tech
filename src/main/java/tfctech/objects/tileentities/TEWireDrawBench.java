@@ -32,6 +32,7 @@ public class TEWireDrawBench extends TEInventory implements ITickable
     private int progress = 0;
     private int lastProgress = 0;
     private boolean working = false;
+    private int cachedWireColor = 0x00000000;
 
     public TEWireDrawBench()
     {
@@ -104,6 +105,10 @@ public class TEWireDrawBench extends TEInventory implements ITickable
             ItemStack output = inventory.insertItem(1, stack, simulate);
             if (!simulate)
             {
+                cachedWireColor = 0x00000000;
+                TechRegistries.WIRE_DRAWING.getValuesCollection().stream()
+                        .filter(x -> x.matches(stack))
+                        .findFirst().ifPresent(x -> cachedWireColor = x.getWireColor());
                 setAndUpdateSlots(0);
             }
             return output;
@@ -141,6 +146,7 @@ public class TEWireDrawBench extends TEInventory implements ITickable
         }
         if (slot == 1 && !simulate)
         {
+            cachedWireColor = 0x00000000;
             progress = 0;
         }
         ItemStack output = inventory.extractItem(slot, 64, simulate);
@@ -154,6 +160,7 @@ public class TEWireDrawBench extends TEInventory implements ITickable
     @Override
     public void readFromNBT(NBTTagCompound nbt)
     {
+        cachedWireColor = nbt.getInteger("wireColor");
         working = nbt.getBoolean("working");
         progress = nbt.getInteger("progress");
         lastProgress = progress;
@@ -164,6 +171,7 @@ public class TEWireDrawBench extends TEInventory implements ITickable
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
+        nbt.setInteger("wireColor", cachedWireColor);
         nbt.setBoolean("working", working);
         nbt.setInteger("progress", progress);
         return super.writeToNBT(nbt);
@@ -190,15 +198,9 @@ public class TEWireDrawBench extends TEInventory implements ITickable
         return lastProgress;
     }
 
-    @Nullable
-    public Metal getWireMetal()
+    public int getWireColor()
     {
-        ItemStack stack = inventory.getStackInSlot(1);
-        if (stack.getItem() instanceof ItemTechMetal)
-        {
-            return ((ItemTechMetal) stack.getItem()).getMetal(stack);
-        }
-        return null;
+        return inventory.getStackInSlot(1) != ItemStack.EMPTY ? cachedWireColor : 0x00000000;
     }
 
     public EnumFacing getRotation()

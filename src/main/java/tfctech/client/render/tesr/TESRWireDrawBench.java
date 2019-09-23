@@ -27,7 +27,7 @@ public class TESRWireDrawBench extends TileEntitySpecialRenderer<TEWireDrawBench
             bindTexture(BENCH_TEXTURES); // texture
 
             model.setRotation(te.getRotation());
-            model.setWire(te.getWireMetal());
+            model.setWire(te.getWireColor());
             model.setDrawplateMetal(te.getDrawPlateMetal());
             if (te.hasWire())
             {
@@ -53,7 +53,7 @@ public class TESRWireDrawBench extends TileEntitySpecialRenderer<TEWireDrawBench
             bindTexture(BENCH_TEXTURES); // texture
 
             model.setRotation(EnumFacing.EAST);
-            model.setWire(null);
+            model.setWire(0x00000000);
             model.setDrawplateMetal(null);
             model.setProgress(100, 100, 1.0F);
 

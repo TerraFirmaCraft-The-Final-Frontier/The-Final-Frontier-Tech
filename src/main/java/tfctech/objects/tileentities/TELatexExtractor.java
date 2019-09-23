@@ -33,7 +33,7 @@ public class TELatexExtractor extends TEBase implements ITickable
 {
     public static final int MAX_FLUID = BUCKET_VOLUME;
 
-    private int flowTicks = -1; //-1 No cut, 0 stopped, >= 1 still flowing
+    private int flowTicks = -1, serverUpdate = 0; //-1 No cut, 0 stopped, >= 1 still flowing
     private int fluid = 0;
     private boolean pot = false;
     private boolean base = false;
@@ -211,17 +211,23 @@ public class TELatexExtractor extends TEBase implements ITickable
     @Override
     public void update()
     {
-        if (!world.isRemote && flowTicks > 0)
+        if (!world.isRemote)
         {
-            flowTicks--;
-            if (flowTicks % 40 == 0)
+            if (flowTicks > 0)
             {
-                fluid++;
-                if(fluid >= MAX_FLUID)
+                if (--flowTicks % 40 == 0)
                 {
-                    fluid = MAX_FLUID;
-                    flowTicks = 0;
+                    fluid++;
+                    if (fluid >= MAX_FLUID)
+                    {
+                        fluid = MAX_FLUID;
+                        flowTicks = 0;
+                    }
                 }
+            }
+            if (++serverUpdate % 40 == 0)
+            {
+                serverUpdate = 0;
                 TFCTech.getNetwork().sendToAllTracking(new PacketLatexUpdate(this), new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 64));
             }
         }

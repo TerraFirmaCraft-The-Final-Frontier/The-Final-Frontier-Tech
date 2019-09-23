@@ -158,13 +158,9 @@ public class ModelWireDrawBench extends ModelBase
         this.rotation = rotation;
     }
 
-    public void setWire(@Nullable Metal metal)
+    public void setWire(int color)
     {
-        wireColor = 0x00000000;
-        if (metal != null)
-        {
-            wireColor = metal.getColor();
-        }
+        wireColor = color;
     }
 
     public void setProgress(float value, float lastValue, float partialTicks)
