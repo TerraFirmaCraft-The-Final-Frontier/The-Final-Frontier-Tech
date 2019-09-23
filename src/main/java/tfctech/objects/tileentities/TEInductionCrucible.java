@@ -5,9 +5,11 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 
@@ -16,17 +18,21 @@ import net.dries007.tfc.api.capability.heat.IItemHeat;
 import net.dries007.tfc.objects.te.TECrucible;
 import tfctech.TFCTech;
 import tfctech.TechConfig;
+import tfctech.client.TechSounds;
+import tfctech.client.audio.IMachineSoundEffect;
+import tfctech.client.audio.MachineSound;
 import tfctech.objects.blocks.devices.BlockElectricForge;
 import tfctech.objects.storage.MachineEnergyContainer;
 
 import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MAX_TEMPERATURE;
 import static net.minecraft.block.BlockHorizontal.FACING;
+import static tfctech.objects.blocks.devices.BlockInductionCrucible.LIT;
 
 @ParametersAreNonnullByDefault
-public class TEInductionCrucible extends TECrucible
+public class TEInductionCrucible extends TECrucible implements IMachineSoundEffect
 {
     private MachineEnergyContainer energyContainer;
-    private int litTime = 0; //visual only
+    private int litTime = 0; //Client "effects" only
 
     public TEInductionCrucible()
     {
@@ -55,9 +61,21 @@ public class TEInductionCrucible extends TECrucible
     @Override
     public void update()
     {
-        if (world.isRemote) return;
+        if (world.isRemote)
+        {
+            if (isPlaying())
+            {
+                MachineSound sound = new MachineSound(this);
+                // Play sound on client side
+                if (!Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sound))
+                {
+                    Minecraft.getMinecraft().getSoundHandler().playSound(sound);
+                }
+            }
+            return;
+        }
         IBlockState state = world.getBlockState(pos);
-        boolean isLit = state.getValue(BlockElectricForge.LIT);
+        boolean isLit = state.getValue(LIT);
         ItemStack stack = inventory.getStackInSlot(SLOT_INPUT);
         IItemHeat cap = stack.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);
         int energyUsage = TechConfig.DEVICES.inductionCrucibleEnergyConsumption;
@@ -138,5 +156,17 @@ public class TEInductionCrucible extends TECrucible
             TFCTech.getLog().warn("Invalid field ID {} in TEElectricForge#setField", index);
             return 0;
         }
+    }
+
+    @Override
+    public SoundEvent getSoundEvent()
+    {
+        return TechSounds.INDUCTION_WORK;
+    }
+
+    @Override
+    public boolean isPlaying()
+    {
+        return !this.isInvalid() && this.hasWorld() && world.getBlockState(pos).getValue(LIT);
     }
 }
