@@ -9,7 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 import mcjty.theoneprobe.api.*;
 import net.dries007.tfc.util.Helpers;
@@ -20,11 +19,6 @@ import static tfctech.TFCTech.MODID;
 
 public final class TOPPlugin implements Function<ITheOneProbe, Void>, IProbeInfoProvider
 {
-    public static void init()
-    {
-        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "tfctech.compat.waila.TOPPlugin");
-    }
-
     @Override
     public String getID()
     {

@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Logger;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -11,8 +12,6 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import net.dries007.tfc.api.util.TFCConstants;
 import tfctech.client.TechGuiHandler;
-import tfctech.compat.waila.TOPPlugin;
-import tfctech.compat.waila.WailaPlugin;
 import tfctech.network.PacketLatexUpdate;
 import tfctech.network.PacketTileEntityUpdate;
 import tfctech.registry.TechFoodTraits;
@@ -50,8 +49,9 @@ public class TFCTech
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        WailaPlugin.init();
-        TOPPlugin.init();
+        //Waila/Hwyla/TOP initialization (if present)
+        FMLInterModComms.sendMessage("waila", "register", "tfctech.compat.waila.WailaPlugin.callbackRegister");
+        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "tfctech.compat.waila.TOPPlugin");
     }
 
     @EventHandler

@@ -6,11 +6,11 @@
     "version": "${version}",
     "mcversion": "${mcversion}",
     "logoFile": "/assets/tfc/textures/gui/logo.png",
+    "url": "https://github.com/TFC-Metallum/TFCTech",
     "authorList": [
       "DisasterMoo",
-      "UnlimatedStone9",
 	  "Abdyman"
     ],
-    "credits": "Shurgent for the original addon, DrFair for TFCEngineer and the TFC dev team."
+    "credits": "Shurgent for the original addon, DrFair for TFCEngineer and the TFC dev team for their extraordinary mod."
   }
 ]

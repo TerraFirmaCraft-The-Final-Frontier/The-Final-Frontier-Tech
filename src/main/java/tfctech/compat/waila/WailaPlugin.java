@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 import mcp.MethodsReturnNonnullByDefault;
 import mcp.mobius.waila.api.IWailaConfigHandler;
@@ -26,11 +25,6 @@ import tfctech.objects.tileentities.TEWireDrawBench;
 @MethodsReturnNonnullByDefault
 public final class WailaPlugin implements IWailaDataProvider
 {
-    public static void init()
-    {
-        FMLInterModComms.sendMessage("waila", "register", "tfctech.compat.waila.WailaPlugin.callbackRegister");
-    }
-
     public static void callbackRegister(IWailaRegistrar registrar)
     {
         WailaPlugin dataProvider = new WailaPlugin();
