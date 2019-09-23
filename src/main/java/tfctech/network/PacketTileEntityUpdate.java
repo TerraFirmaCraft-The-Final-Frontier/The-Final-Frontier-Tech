@@ -1,6 +1,5 @@
 package tfctech.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -12,6 +11,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import io.netty.buffer.ByteBuf;
+import net.dries007.tfc.TerraFirmaCraft;
 
 public class PacketTileEntityUpdate implements IMessage
 {
@@ -47,7 +47,7 @@ public class PacketTileEntityUpdate implements IMessage
         @Override
         public IMessage onMessage(PacketTileEntityUpdate message, MessageContext ctx)
         {
-            EntityPlayer player = Minecraft.getMinecraft().player;
+            EntityPlayer player = TerraFirmaCraft.getProxy().getPlayer(ctx);
             if (player != null)
             {
                 World world = player.getEntityWorld();
