@@ -91,7 +91,21 @@ public class TELatexExtractor extends TEBase implements ITickable
      */
     public int cutState()
     {
-        return flowTicks < 0 ? 0 : flowTicks > 0 ? 2 : 1;
+        if (flowTicks < 0)
+        {
+            return 0;
+        }
+        else
+        {
+            if (flowTicks > 0 && hasPot())
+            {
+                return 2;
+            }
+            else
+            {
+                return 1;
+            }
+        }
     }
 
     @Nullable
