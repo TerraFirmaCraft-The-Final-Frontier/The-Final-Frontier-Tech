@@ -169,4 +169,9 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     {
         return !this.isInvalid() && this.hasWorld() && world.getBlockState(pos).getValue(LIT);
     }
+
+    public int getEnergyStored()
+    {
+        return energyContainer.getEnergyStored();
+    }
 }

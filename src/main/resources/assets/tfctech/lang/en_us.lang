@@ -25,6 +25,7 @@ tile.tfctech.electric_forge.name=Electric Forge
 tile.tfctech.induction_crucible.name=Induction Crucible
 tile.tfctech.wire_draw_bench.name=Wire Drawing Bench
 tile.tfctech.fridge.name=Fridge
+tile.tfctech.latex_extractor.name=Latex Extractor
 
 # Items
 ## Ceramics
@@ -115,5 +116,10 @@ config.tfctech.devices.fridgeEfficiency.tooltip=How fast fridges reach frozen st
 config.tfctech.devices.fridgeLoseEfficiency=Fridge Lose Efficiency
 config.tfctech.devices.fridgeLoseEfficiency.tooltip=How fast fridges lose efficiency when the door is open.
 
-#JEI
+# JEI
 jei.category.tfctech.wire_drawing=Wire Drawing
+
+# Waila/Hwyla/TOP
+waila.tfctech.wiredraw.progress=Progress: %d%%
+waila.tfctech.fridge.efficiency=Efficiency: %d%%
+waila.tfctech.latex.quantity=Latex: %dmB

@@ -55,6 +55,21 @@ public class TEFridge extends TEInventory implements ITickable
         energyContainer = new MachineEnergyContainer(TechConfig.DEVICES.fridgeEnergyCapacity, TechConfig.DEVICES.fridgeEnergyCapacity, 0);
     }
 
+    public float getEfficiency()
+    {
+        return efficiency;
+    }
+
+    public int getEnergyCapacity()
+    {
+        return energyContainer.getMaxEnergyStored();
+    }
+
+    public int getEnergyStored()
+    {
+        return energyContainer.getEnergyStored();
+    }
+
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isMainBlock()
     {

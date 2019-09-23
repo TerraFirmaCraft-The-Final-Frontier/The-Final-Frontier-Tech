@@ -11,6 +11,8 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import net.dries007.tfc.api.util.TFCConstants;
 import tfctech.client.TechGuiHandler;
+import tfctech.compat.waila.TOPPlugin;
+import tfctech.compat.waila.WailaPlugin;
 import tfctech.network.PacketLatexUpdate;
 import tfctech.network.PacketTileEntityUpdate;
 import tfctech.registry.TechFoodTraits;
@@ -48,6 +50,8 @@ public class TFCTech
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
+        WailaPlugin.init();
+        TOPPlugin.init();
     }
 
     @EventHandler

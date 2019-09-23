@@ -36,6 +36,18 @@ repositories {
         url = "https://maven.blamejared.com/"
     }
     maven {
+        name = "Hwyla maven"
+        url "http://tehnut.info/maven"
+    }
+	maven { // TOP
+        name 'tterrag maven'
+        url "https://maven.tterrag.com/"
+    }
+	maven {
+        name = "CoFH Maven"
+        url = "https://maven.covers1624.net/"
+    }
+    maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
@@ -45,6 +57,8 @@ repositories {
 dependencies {
     deobfProvided "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.8.9"
     deobfProvided "mezz.jei:jei_1.12.2:4.13.1.222"
+	deobfProvided "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
+	deobfProvided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.12-6"
     compile files("libs/TerraFirmaCraft-MC1.12.2-0.23.8.75-deobf.jar")
 }
 

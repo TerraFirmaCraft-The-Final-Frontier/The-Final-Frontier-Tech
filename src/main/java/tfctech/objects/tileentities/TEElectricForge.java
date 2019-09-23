@@ -221,6 +221,11 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
         return !this.isInvalid() && this.hasWorld() && world.getBlockState(pos).getValue(LIT);
     }
 
+    public int getEnergyStored()
+    {
+        return energyContainer.getEnergyStored();
+    }
+
     private void handleInputMelting(ItemStack stack, int index)
     {
         HeatRecipe recipe = cachedRecipes[index];
