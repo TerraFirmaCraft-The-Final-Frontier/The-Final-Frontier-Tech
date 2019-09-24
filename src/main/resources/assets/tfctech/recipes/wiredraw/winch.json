@@ -8,11 +8,11 @@
   "key": {
     "X": {
       "type": "forge:ore_dict",
-      "ore": "lumber"
+      "ore": "rodWroughtIron"
     },
     "Y": {
       "type": "forge:ore_dict",
-      "ore": "plankWood"
+      "ore": "longRodWroughtIron"
     }
   },
   "result": {
