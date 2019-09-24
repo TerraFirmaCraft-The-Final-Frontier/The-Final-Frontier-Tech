@@ -21,7 +21,7 @@ import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.objects.items.ItemTFC;
 
 /**
- * Since TFC has Metal.ItemType we can't reuse ItemMetal directly
+ * Since TFC has Metal.ItemType we can't reuse {@link net.dries007.tfc.objects.items.metal.ItemMetal} directly
  */
 public class ItemTechMetal extends ItemTFC implements IMetalItem
 {
@@ -45,6 +45,7 @@ public class ItemTechMetal extends ItemTFC implements IMetalItem
         }
         TABLE.get(metal).put(type, this);
         setNoRepair();
+
     }
 
     public ItemType getType()
@@ -125,6 +126,10 @@ public class ItemTechMetal extends ItemTFC implements IMetalItem
         INDUCTOR(200),
         TONGS(200),
         STRIP(50),
+        LONG_ROD(100),
+        ROD(50),
+        BOLT(25),
+        SCREW(25),
         SLEEVE(100),
         RACKWHEEL_PIECE(100),
         RACKWHEEL(400),

@@ -16,9 +16,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import net.dries007.tfc.Constants;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.objects.te.TEInventory;
-import net.dries007.tfc.util.Helpers;
 import tfctech.TFCTech;
 import tfctech.api.recipes.WireDrawingRecipe;
 import tfctech.client.TechSounds;
@@ -26,10 +26,13 @@ import tfctech.network.PacketTileEntityUpdate;
 import tfctech.objects.items.metal.ItemTechMetal;
 import tfctech.registry.TechRegistries;
 
+@SuppressWarnings("WeakerAccess")
 public class TEWireDrawBench extends TEInventory implements ITickable
 {
     private int progress = 0;
+    private int lastProgress = 0;
     private boolean working = false;
+    private int cachedWireColor = 0x00000000;
 
     public TEWireDrawBench()
     {
@@ -102,6 +105,10 @@ public class TEWireDrawBench extends TEInventory implements ITickable
             ItemStack output = inventory.insertItem(1, stack, simulate);
             if (!simulate)
             {
+                cachedWireColor = 0x00000000;
+                TechRegistries.WIRE_DRAWING.getValuesCollection().stream()
+                        .filter(x -> x.matches(stack))
+                        .findFirst().ifPresent(x -> cachedWireColor = x.getWireColor());
                 setAndUpdateSlots(0);
             }
             return output;
@@ -139,6 +146,7 @@ public class TEWireDrawBench extends TEInventory implements ITickable
         }
         if (slot == 1 && !simulate)
         {
+            cachedWireColor = 0x00000000;
             progress = 0;
         }
         ItemStack output = inventory.extractItem(slot, 64, simulate);
@@ -152,8 +160,10 @@ public class TEWireDrawBench extends TEInventory implements ITickable
     @Override
     public void readFromNBT(NBTTagCompound nbt)
     {
+        cachedWireColor = nbt.getInteger("wireColor");
         working = nbt.getBoolean("working");
         progress = nbt.getInteger("progress");
+        lastProgress = progress;
         super.readFromNBT(nbt);
     }
 
@@ -161,6 +171,7 @@ public class TEWireDrawBench extends TEInventory implements ITickable
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
+        nbt.setInteger("wireColor", cachedWireColor);
         nbt.setBoolean("working", working);
         nbt.setInteger("progress", progress);
         return super.writeToNBT(nbt);
@@ -182,15 +193,14 @@ public class TEWireDrawBench extends TEInventory implements ITickable
         return this.progress;
     }
 
-    @Nullable
-    public Metal getWireMetal()
+    public int getLastProgress()
     {
-        ItemStack stack = inventory.getStackInSlot(1);
-        if (stack.getItem() instanceof ItemTechMetal)
-        {
-            return ((ItemTechMetal) stack.getItem()).getMetal(stack);
-        }
-        return null;
+        return lastProgress;
+    }
+
+    public int getWireColor()
+    {
+        return inventory.getStackInSlot(1) != ItemStack.EMPTY ? cachedWireColor : 0x00000000;
     }
 
     public EnumFacing getRotation()
@@ -201,6 +211,7 @@ public class TEWireDrawBench extends TEInventory implements ITickable
     @Override
     public void update()
     {
+        lastProgress = progress;
         if (working)
         {
             if (++progress % 25 == 0)
@@ -209,13 +220,13 @@ public class TEWireDrawBench extends TEInventory implements ITickable
                 if (progress >= 100 && !world.isRemote)
                 {
                     world.playSound(null, pos, TechSounds.WIREDRAW_TONGS_FALL, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                    Helpers.damageItem(inventory.getStackInSlot(0), 32);
-                    WireDrawingRecipe recipe = TechRegistries.WIRE_DRAWING.getValuesCollection().stream()
-                            .filter(x -> x.matches(inventory.getStackInSlot(1))).findFirst().orElse(null);
-                    if (recipe != null)
+                    if (inventory.getStackInSlot(0).attemptDamageItem(32, Constants.RNG, null))
                     {
-                        inventory.setStackInSlot(1, recipe.getOutput());
+                        inventory.setStackInSlot(0, ItemStack.EMPTY);
                     }
+                    TechRegistries.WIRE_DRAWING.getValuesCollection().stream()
+                            .filter(x -> x.matches(inventory.getStackInSlot(1)))
+                            .findFirst().ifPresent(recipe -> inventory.setStackInSlot(1, recipe.getOutput()));
                     setAndUpdateSlots(1);
                 }
             }

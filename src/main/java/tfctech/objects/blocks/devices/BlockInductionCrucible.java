@@ -76,15 +76,16 @@ public class BlockInductionCrucible extends Block implements IItemSize
 
     @Override
     @SuppressWarnings("deprecation")
+    @Nonnull
     public IBlockState getStateFromMeta(int meta)
     {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
+        return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta % 4)).withProperty(LIT, meta >= 4);
     }
 
     @Override
     public int getMetaFromState(IBlockState state)
     {
-        return state.getValue(FACING).getHorizontalIndex();
+        return state.getValue(FACING).getHorizontalIndex() + (state.getValue(LIT) ? 4 : 0);
     }
 
     @SuppressWarnings("deprecation")

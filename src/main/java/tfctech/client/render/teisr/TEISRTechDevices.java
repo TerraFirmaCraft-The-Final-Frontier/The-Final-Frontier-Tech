@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 
 import mcp.MethodsReturnNonnullByDefault;
-import tfctech.objects.blocks.devices.BlockWireDrawBench;
 import tfctech.objects.items.itemblocks.ItemBlockFridge;
 import tfctech.objects.items.itemblocks.ItemBlockWireDrawBench;
 import tfctech.objects.tileentities.TEFridge;
@@ -17,8 +16,8 @@ import tfctech.objects.tileentities.TEWireDrawBench;
 @MethodsReturnNonnullByDefault
 public class TEISRTechDevices extends TileEntityItemStackRenderer
 {
-    private final TEWireDrawBench teWireDrawBench = new TEWireDrawBench();
-    private final TEFridge teFridge = new TEFridge();
+    private static final TEWireDrawBench teWireDrawBench = new TEWireDrawBench();
+    private static final TEFridge teFridge = new TEFridge();
 
     @Override
     public void renderByItem(ItemStack itemStack, float partialTicks)

@@ -33,6 +33,7 @@ public class TechJEIPlugin implements IModPlugin
     {
         List<SimpleRecipeWrapper> wireList = TechRegistries.WIRE_DRAWING.getValuesCollection()
                 .stream()
+                .filter(x -> x.getIngredients().size() == 2) //Only shows recipes which have a wire drawing plate (so, it can be obtained)
                 .map(SimpleRecipeWrapper::new)
                 .collect(Collectors.toList());
 

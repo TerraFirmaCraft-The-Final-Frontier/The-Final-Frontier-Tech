@@ -114,8 +114,6 @@ public class BlockLatexExtractor extends Block
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        //todo return pot + holder bounding box
-        //if there's only the tap, return it's bounding box
         switch (state.getValue(FACING))
         {
             case NORTH:

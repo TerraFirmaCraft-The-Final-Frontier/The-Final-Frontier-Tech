@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Logger;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -14,8 +15,6 @@ import tfctech.client.TechGuiHandler;
 import tfctech.network.PacketLatexUpdate;
 import tfctech.network.PacketTileEntityUpdate;
 import tfctech.registry.TechFoodTraits;
-
-//todo add required dependency TFC-Metallum
 
 @SuppressWarnings("WeakerAccess")
 @Mod(modid = TFCTech.MODID, name = TFCTech.NAME, version = TFCTech.VERSION, dependencies = "required-after:" + TFCConstants.MOD_ID)
@@ -50,6 +49,9 @@ public class TFCTech
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
+        //Waila/Hwyla/TOP initialization (if present)
+        FMLInterModComms.sendMessage("waila", "register", "tfctech.compat.waila.WailaPlugin.callbackRegister");
+        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "tfctech.compat.waila.TOPPlugin");
     }
 
     @EventHandler

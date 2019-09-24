@@ -5,10 +5,12 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.FluidStack;
@@ -24,6 +26,10 @@ import net.dries007.tfc.objects.te.ITileFields;
 import net.dries007.tfc.objects.te.TEInventory;
 import tfctech.TFCTech;
 import tfctech.TechConfig;
+import tfctech.client.TechSounds;
+import tfctech.client.audio.IMachineSoundEffect;
+import tfctech.client.audio.MachineSound;
+import tfctech.objects.blocks.devices.BlockElectricForge;
 import tfctech.objects.storage.MachineEnergyContainer;
 
 import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MIN_TEMPERATURE;
@@ -31,7 +37,7 @@ import static tfctech.objects.blocks.devices.BlockElectricForge.LIT;
 
 @SuppressWarnings("WeakerAccess")
 @ParametersAreNonnullByDefault
-public class TEElectricForge extends TEInventory implements ITickable, ITileFields
+public class TEElectricForge extends TEInventory implements ITickable, ITileFields, IMachineSoundEffect
 {
     public static final int SLOT_INPUT_MIN = 0;
     public static final int SLOT_INPUT_MAX = 8;
@@ -40,7 +46,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     private HeatRecipe[] cachedRecipes = new HeatRecipe[9];
     private float targetTemperature = 0.0F;
     private MachineEnergyContainer energyContainer;
-    private int litTime = 0; //visual only
+    private int litTime = 0;
 
     public TEElectricForge()
     {
@@ -63,9 +69,20 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     @Override
     public void update()
     {
-        if (world.isRemote) return;
+        if (world.isRemote)
+        {
+            if (isPlaying())
+            {
+                MachineSound sound = new MachineSound(this);
+                // Play sound on client side
+                if (!Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sound))
+                {
+                    Minecraft.getMinecraft().getSoundHandler().playSound(sound);
+                }
+            }
+            return;
+        }
         IBlockState state = world.getBlockState(pos);
-        boolean isLit = state.getValue(LIT);
         int energyUsage = (int) ((float) TechConfig.DEVICES.electricForgeEnergyConsumption * targetTemperature / 100);
         if(energyUsage < 1)energyUsage = 1;
         for (int i = SLOT_INPUT_MIN; i <= SLOT_INPUT_MAX; i++)
@@ -84,12 +101,6 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
                     float temp = cap.getTemperature() + heatSpeed * cap.getHeatCapacity() * (float) ConfigTFC.GENERAL.temperatureModifierGlobal;
                     cap.setTemperature(temp > targetTemperature ? targetTemperature : temp);
                     litTime = 15;
-                    if (!isLit)
-                    {
-                        isLit = true;
-                        state = state.withProperty(LIT, true);
-                        world.setBlockState(pos, state, 2);
-                    }
                 }
                 handleInputMelting(stack, i);
             }
@@ -97,11 +108,13 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
         if (--litTime <= 0)
         {
             litTime = 0;
-            if (isLit)
-            {
-                state = state.withProperty(LIT, false);
-                world.setBlockState(pos, state, 2);
-            }
+            state = state.withProperty(LIT, false);
+            world.setBlockState(pos, state, 2);
+        }
+        else
+        {
+            state = state.withProperty(LIT, true);
+            world.setBlockState(pos, state, 2);
         }
     }
 
@@ -150,11 +163,6 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
         }
     }
 
-    public boolean isLit()
-    {
-        return litTime > 0;
-    }
-
     @Override
     public int getFieldCount()
     {
@@ -199,6 +207,23 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
             TFCTech.getLog().warn("Invalid field ID {} in TEElectricForge#setField", index);
             return 0;
         }
+    }
+
+    @Override
+    public SoundEvent getSoundEvent()
+    {
+        return TechSounds.INDUCTION_WORK;
+    }
+
+    @Override
+    public boolean isPlaying()
+    {
+        return !this.isInvalid() && this.hasWorld() && world.getBlockState(pos).getValue(LIT);
+    }
+
+    public int getEnergyStored()
+    {
+        return energyContainer.getEnergyStored();
     }
 
     private void handleInputMelting(ItemStack stack, int index)
@@ -251,14 +276,14 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     @Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
     {
-        return (capability == CapabilityEnergy.ENERGY && facing == EnumFacing.UP) || super.hasCapability(capability, facing);
+        return (capability == CapabilityEnergy.ENERGY && (facing == EnumFacing.UP || facing == EnumFacing.DOWN || facing == world.getBlockState(pos).getValue(BlockElectricForge.FACING).getOpposite())) || super.hasCapability(capability, facing);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
     {
-        return capability == CapabilityEnergy.ENERGY && facing == EnumFacing.UP ? (T) this.energyContainer : super.getCapability(capability, facing);
+        return capability == CapabilityEnergy.ENERGY && (facing == EnumFacing.UP || facing == EnumFacing.DOWN || facing == world.getBlockState(pos).getValue(BlockElectricForge.FACING).getOpposite()) ? (T) this.energyContainer : super.getCapability(capability, facing);
     }
 
     private void updateCachedRecipes()

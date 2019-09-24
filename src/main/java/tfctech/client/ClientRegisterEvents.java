@@ -18,26 +18,28 @@ import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import net.dries007.tfc.api.capability.IMoldHandler;
+import net.dries007.tfc.api.types.Metal;
 import tfctech.client.render.teisr.TEISRTechDevices;
 import tfctech.client.render.tesr.TESRFridge;
 import tfctech.client.render.tesr.TESRLatexExtractor;
 import tfctech.client.render.tesr.TESRWireDrawBench;
 import tfctech.objects.blocks.TechBlocks;
 import tfctech.objects.items.TechItems;
-import tfctech.objects.items.itemblocks.ItemBlockFridge;
-import tfctech.objects.items.itemblocks.ItemBlockWireDrawBench;
 import tfctech.objects.items.metal.ItemGear;
 import tfctech.objects.items.metal.ItemTechMetal;
 import tfctech.objects.tileentities.TEFridge;
 import tfctech.objects.tileentities.TELatexExtractor;
 import tfctech.objects.tileentities.TEWireDrawBench;
 
+import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 import static tfctech.TFCTech.MODID;
 
 @SideOnly(Side.CLIENT)
@@ -89,6 +91,10 @@ public final class ClientRegisterEvents
             }
         }
 
+        // Molds
+        for (Item item : TechItems.getAllCeramicMoldItems())
+            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString()));
+
         // Ignored states
         ModelLoader.setCustomStateMapper(TechBlocks.WIRE_DRAW_BENCH, new IStateMapper()
         {
@@ -131,6 +137,28 @@ public final class ClientRegisterEvents
                             return (new Color(((ItemGear) stack.getItem()).getSleeveMetal().getColor())).brighter().getRGB();
                         }
                         return (new Color(((ItemTechMetal) stack.getItem()).getMetal(stack).getColor())).brighter().getRGB();
+                    },
+                    item);
+        }
+
+        for (Item item : TechItems.getAllCeramicMoldItems())
+        {
+            itemColors.registerItemColorHandler(
+                    (stack, tintIndex) -> {
+                        if (tintIndex == 1)
+                        {
+                            IFluidHandler capFluidHandler = stack.getCapability(FLUID_HANDLER_CAPABILITY, null);
+                            if (capFluidHandler instanceof IMoldHandler)
+                            {
+                                Metal metal = ((IMoldHandler) capFluidHandler).getMetal();
+                                if (metal != null)
+                                {
+                                    return (new Color(metal.getColor())).brighter().getRGB();
+                                }
+                            }
+                            return 0xFF000000;
+                        }
+                        return -1;
                     },
                     item);
         }

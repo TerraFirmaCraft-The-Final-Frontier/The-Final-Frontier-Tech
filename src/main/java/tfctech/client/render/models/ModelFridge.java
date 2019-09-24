@@ -236,11 +236,17 @@ public class ModelFridge extends ModelBase
         stand3.render(f5);
         stand4.render(f5);
     }
-    public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z)
+
+    public void setOpen(float value, float lastValue, float partialTicks)
     {
-        modelRenderer.rotateAngleX = x;
-        modelRenderer.rotateAngleY = y;
-        modelRenderer.rotateAngleZ = z;
+        if (value == lastValue)
+        {
+            open = value;
+        }
+        else
+        {
+            open = lastValue + (value - lastValue) * partialTicks;
+        }
     }
 
     private void setRotateAngleInDegrees(ModelRenderer modelRenderer, float x, float y, float z)
@@ -250,8 +256,10 @@ public class ModelFridge extends ModelBase
         modelRenderer.rotateAngleZ = (float) (z * Math.PI / 180);
     }
 
-    public void setOpen(float value)
+    private void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z)
     {
-        open = value;
+        modelRenderer.rotateAngleX = x;
+        modelRenderer.rotateAngleY = y;
+        modelRenderer.rotateAngleZ = z;
     }
 }

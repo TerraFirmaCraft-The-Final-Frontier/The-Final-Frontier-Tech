@@ -34,6 +34,12 @@ public final class TechSounds
     @GameRegistry.ObjectHolder(MODID + ":wiredrawbench.drawing")
     public static final SoundEvent WIREDRAW_DRAWING = getNull();
 
+    @GameRegistry.ObjectHolder(MODID + ":fridge.open")
+    public static final SoundEvent FRIDGE_OPEN = getNull();
+
+    @GameRegistry.ObjectHolder(MODID + ":fridge.close")
+    public static final SoundEvent FRIDGE_CLOSE = getNull();
+
     @GameRegistry.ObjectHolder(MODID + ":induction_smelter.work")
     public static final SoundEvent INDUCTION_WORK = getNull();
 
@@ -48,6 +54,8 @@ public final class TechSounds
                 createSoundEvent("rubbertapping.trunk.scratch"),
                 createSoundEvent("wiredrawbench.tongs_fall"),
                 createSoundEvent("wiredrawbench.drawing"),
+                createSoundEvent("fridge.open"),
+                createSoundEvent("fridge.close"),
                 createSoundEvent("induction_smelter.work")
         );
     }

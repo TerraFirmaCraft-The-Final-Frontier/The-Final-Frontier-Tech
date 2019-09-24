@@ -2,9 +2,7 @@ package tfctech.network;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -12,6 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import io.netty.buffer.ByteBuf;
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.util.Helpers;
 import tfctech.objects.tileentities.TELatexExtractor;
 
@@ -64,7 +63,7 @@ public class PacketLatexUpdate implements IMessage
         @Override
         public IMessage onMessage(PacketLatexUpdate message, MessageContext ctx)
         {
-            EntityPlayer player = Minecraft.getMinecraft().player;
+            EntityPlayer player = TerraFirmaCraft.getProxy().getPlayer(ctx);
             if (player != null)
             {
                 World world = player.getEntityWorld();
