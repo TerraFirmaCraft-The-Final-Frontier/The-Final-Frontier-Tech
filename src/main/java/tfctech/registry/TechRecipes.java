@@ -62,13 +62,13 @@ public final class TechRecipes
     public static void onRegisterAnvilRecipeEvent(RegistryEvent.Register<AnvilRecipe> event)
     {
         IForgeRegistry<AnvilRecipe> r = event.getRegistry();
-        r.register(new AnvilRecipe(new ResourceLocation(MODID, "iron_groove"), IIngredient.of(ItemTechMetal.get(Metal.WROUGHT_IRON, ItemTechMetal.ItemType.STRIP)), new ItemStack(TechItems.IRON_GROOVE), Metal.Tier.TIER_III, ForgeRule.HIT_LAST, ForgeRule.BEND_SECOND_LAST, ForgeRule.BEND_THIRD_LAST));
-        r.register(new AnvilRecipe(new ResourceLocation(MODID, "iron_bowl_mount"), IIngredient.of(ItemMetal.get(Metal.WROUGHT_IRON, Metal.ItemType.INGOT)), new ItemStack(TechItems.IRON_BOWL_MOUNT), Metal.Tier.TIER_III, ForgeRule.BEND_LAST, ForgeRule.DRAW_SECOND_LAST, ForgeRule.BEND_NOT_LAST));
+        r.register(new AnvilRecipe(new ResourceLocation(MODID, "iron_groove"), IIngredient.of(ItemTechMetal.get(Metal.WROUGHT_IRON, ItemTechMetal.ItemType.STRIP)), new ItemStack(TechItems.IRON_GROOVE), Metal.Tier.TIER_III, null, ForgeRule.HIT_LAST, ForgeRule.BEND_SECOND_LAST, ForgeRule.BEND_THIRD_LAST));
+        r.register(new AnvilRecipe(new ResourceLocation(MODID, "iron_bowl_mount"), IIngredient.of(ItemMetal.get(Metal.WROUGHT_IRON, Metal.ItemType.INGOT)), new ItemStack(TechItems.IRON_BOWL_MOUNT), Metal.Tier.TIER_III, null, ForgeRule.BEND_LAST, ForgeRule.DRAW_SECOND_LAST, ForgeRule.BEND_NOT_LAST));
 
-        r.register(new AnvilRecipe(new ResourceLocation(MODID, "iron_tongs"), IIngredient.of(ItemMetal.get(Metal.WROUGHT_IRON, Metal.ItemType.INGOT)), new ItemStack(TechItems.IRON_TONGS), Metal.Tier.TIER_III, ForgeRule.HIT_LAST, ForgeRule.DRAW_SECOND_LAST, ForgeRule.BEND_THIRD_LAST));
-        r.register(new AnvilRecipe(new ResourceLocation(MODID, "iron_draw_plate"), IIngredient.of(ItemMetal.get(Metal.WROUGHT_IRON, Metal.ItemType.INGOT)), new ItemStack(TechItems.IRON_DRAW_PLATE), Metal.Tier.TIER_III, ForgeRule.PUNCH_LAST, ForgeRule.PUNCH_SECOND_LAST, ForgeRule.HIT_ANY));
-        r.register(new AnvilRecipe(new ResourceLocation(MODID, "steel_draw_plate"), IIngredient.of(ItemMetal.get(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "steel")), Metal.ItemType.INGOT)), new ItemStack(TechItems.STEEL_DRAW_PLATE), Metal.Tier.TIER_III, ForgeRule.PUNCH_LAST, ForgeRule.PUNCH_SECOND_LAST, ForgeRule.HIT_ANY));
-        r.register(new AnvilRecipe(new ResourceLocation(MODID, "black_steel_draw_plate"), IIngredient.of(ItemMetal.get(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "black_steel")), Metal.ItemType.INGOT)), new ItemStack(TechItems.BLACK_STEEL_DRAW_PLATE), Metal.Tier.TIER_III, ForgeRule.PUNCH_LAST, ForgeRule.PUNCH_SECOND_LAST, ForgeRule.HIT_ANY));
+        r.register(new AnvilRecipe(new ResourceLocation(MODID, "iron_tongs"), IIngredient.of(ItemMetal.get(Metal.WROUGHT_IRON, Metal.ItemType.INGOT)), new ItemStack(TechItems.IRON_TONGS), Metal.Tier.TIER_III, null, ForgeRule.HIT_LAST, ForgeRule.DRAW_SECOND_LAST, ForgeRule.BEND_THIRD_LAST));
+        r.register(new AnvilRecipe(new ResourceLocation(MODID, "iron_draw_plate"), IIngredient.of(ItemMetal.get(Metal.WROUGHT_IRON, Metal.ItemType.INGOT)), new ItemStack(TechItems.IRON_DRAW_PLATE), Metal.Tier.TIER_III, null, ForgeRule.PUNCH_LAST, ForgeRule.PUNCH_SECOND_LAST, ForgeRule.HIT_ANY));
+        r.register(new AnvilRecipe(new ResourceLocation(MODID, "steel_draw_plate"), IIngredient.of(ItemMetal.get(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "steel")), Metal.ItemType.INGOT)), new ItemStack(TechItems.STEEL_DRAW_PLATE), Metal.Tier.TIER_III, null, ForgeRule.PUNCH_LAST, ForgeRule.PUNCH_SECOND_LAST, ForgeRule.HIT_ANY));
+        r.register(new AnvilRecipe(new ResourceLocation(MODID, "black_steel_draw_plate"), IIngredient.of(ItemMetal.get(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "black_steel")), Metal.ItemType.INGOT)), new ItemStack(TechItems.BLACK_STEEL_DRAW_PLATE), Metal.Tier.TIER_III, null, ForgeRule.PUNCH_LAST, ForgeRule.PUNCH_SECOND_LAST, ForgeRule.HIT_ANY));
 
 
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
@@ -81,7 +81,7 @@ public final class TechRecipes
             if (!output.isEmpty())
             {
                 //noinspection ConstantConditions
-                r.register(new AnvilRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_wire"), ingredient, output, metal.getTier(), ForgeRule.DRAW_LAST, ForgeRule.DRAW_NOT_LAST));
+                r.register(new AnvilRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_wire"), ingredient, output, metal.getTier(), null, ForgeRule.DRAW_LAST, ForgeRule.DRAW_NOT_LAST));
             }
 
             //Register all long rods
@@ -90,7 +90,7 @@ public final class TechRecipes
             if (!output.isEmpty())
             {
                 //noinspection ConstantConditions
-                r.register(new AnvilRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_long_rod"), ingredient, output, metal.getTier(), ForgeRule.HIT_LAST, ForgeRule.HIT_SECOND_LAST, ForgeRule.HIT_THIRD_LAST));
+                r.register(new AnvilRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_long_rod"), ingredient, output, metal.getTier(), null, ForgeRule.HIT_LAST, ForgeRule.HIT_SECOND_LAST, ForgeRule.HIT_THIRD_LAST));
             }
         }
     }
