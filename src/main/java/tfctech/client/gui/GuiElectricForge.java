@@ -8,13 +8,13 @@ import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 
 import net.dries007.tfc.TerraFirmaCraft;
+import net.dries007.tfc.api.capability.heat.Heat;
 import net.dries007.tfc.client.gui.GuiContainerTE;
 import net.dries007.tfc.network.PacketGuiButton;
 import tfctech.client.TechGuiHandler;
 import tfctech.client.gui.button.GuiButtonSetter;
 import tfctech.objects.tileentities.TEElectricForge;
 
-import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MAX_TEMPERATURE;
 import static tfctech.TFCTech.MODID;
 
 public class GuiElectricForge extends GuiContainerTE<TEElectricForge>
@@ -66,7 +66,7 @@ public class GuiElectricForge extends GuiContainerTE<TEElectricForge>
 
         // Draw the temperature indicator
         int targetTemperature = tile.getField(0);
-        int temperaturePixels = (int) (51 * Math.min(MAX_TEMPERATURE, targetTemperature) / MAX_TEMPERATURE); //Max temperature is brilliant white in tfc
+        int temperaturePixels = (int) (51 * Math.min(Heat.maxVisibleTemperature(), targetTemperature) / Heat.maxVisibleTemperature()); //Max temperature is brilliant white in tfc
         drawTexturedModalRect(guiLeft + 8, guiTop + 66 - temperaturePixels, 36, 54, 15, 5);
 
         // Draw the energy bar

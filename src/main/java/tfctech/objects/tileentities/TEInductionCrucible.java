@@ -14,6 +14,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
+import net.dries007.tfc.api.capability.heat.Heat;
 import net.dries007.tfc.api.capability.heat.IItemHeat;
 import net.dries007.tfc.objects.te.TECrucible;
 import tfctech.TFCTech;
@@ -24,7 +25,6 @@ import tfctech.client.audio.MachineSound;
 import tfctech.objects.blocks.devices.BlockElectricForge;
 import tfctech.objects.storage.MachineEnergyContainer;
 
-import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MAX_TEMPERATURE;
 import static net.minecraft.block.BlockHorizontal.FACING;
 import static tfctech.objects.blocks.devices.BlockInductionCrucible.LIT;
 
@@ -81,7 +81,7 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
         int energyUsage = TechConfig.DEVICES.inductionCrucibleEnergyConsumption;
         if ((cap != null || this.getAlloy().removeAlloy(1, true) > 0) && energyContainer.consumeEnergy(energyUsage, false))
         {
-            this.acceptHeat(MAX_TEMPERATURE);
+            this.acceptHeat(Heat.maxVisibleTemperature());
             litTime = 15;
             if (!isLit)
             {

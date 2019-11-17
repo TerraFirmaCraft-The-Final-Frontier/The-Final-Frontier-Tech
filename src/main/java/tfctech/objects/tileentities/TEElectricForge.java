@@ -32,7 +32,6 @@ import tfctech.client.audio.MachineSound;
 import tfctech.objects.blocks.devices.BlockElectricForge;
 import tfctech.objects.storage.MachineEnergyContainer;
 
-import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MIN_TEMPERATURE;
 import static tfctech.objects.blocks.devices.BlockElectricForge.LIT;
 
 @SuppressWarnings("WeakerAccess")
@@ -63,7 +62,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
         targetTemperature += value;
         if (targetTemperature > (float) TechConfig.DEVICES.electricForgeMaxTemperature)
             targetTemperature = (float) TechConfig.DEVICES.electricForgeMaxTemperature;
-        if (targetTemperature < MIN_TEMPERATURE) targetTemperature = MIN_TEMPERATURE;
+        if (targetTemperature < 0) targetTemperature = 0;
     }
 
     @Override

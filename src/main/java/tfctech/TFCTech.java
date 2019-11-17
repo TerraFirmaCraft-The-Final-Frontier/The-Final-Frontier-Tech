@@ -63,6 +63,5 @@ public class TFCTech
         int id = 0;
         network.registerMessage(new PacketLatexUpdate.Handler(), PacketLatexUpdate.class, ++id, Side.CLIENT);
         network.registerMessage(new PacketTileEntityUpdate.Handler(), PacketTileEntityUpdate.class, ++id, Side.CLIENT);
-        TechFoodTraits.preInit();
     }
 }
