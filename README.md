@@ -5,8 +5,6 @@ TFCTech Unofficial - Addon for TerraFirmaCraft: The New Generation.
 
 Custom integration and additional items for TFC + Tech-mods fusion.
 
-**Work in progress.**
-
 ## Goal
 Add devices, machines and forms of obtaining pre-industrial resources in TFC:TNG
 
