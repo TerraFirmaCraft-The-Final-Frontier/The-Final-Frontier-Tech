@@ -3,6 +3,7 @@ package tfctech;
 import org.apache.logging.log4j.Logger;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -14,15 +15,15 @@ import net.dries007.tfc.api.util.TFCConstants;
 import tfctech.client.TechGuiHandler;
 import tfctech.network.PacketLatexUpdate;
 import tfctech.network.PacketTileEntityUpdate;
-import tfctech.registry.TechFoodTraits;
 
 @SuppressWarnings("WeakerAccess")
-@Mod(modid = TFCTech.MODID, name = TFCTech.NAME, version = TFCTech.VERSION, dependencies = "required-after:" + TFCConstants.MOD_ID)
+@Mod(modid = TFCTech.MODID, name = TFCTech.NAME, version = TFCTech.VERSION, dependencies = "required-after:" + TFCConstants.MOD_ID, certificateFingerprint = TFCTech.SIGNING_KEY)
 public class TFCTech
 {
     public static final String MODID = "tfctech";
     public static final String NAME = "TFCTech Unofficial";
     public static final String VERSION = "@VERSION@";
+    public static final String SIGNING_KEY = "@FINGERPRINT@";
 
     @Mod.Instance
     private static TFCTech instance = null;
@@ -45,6 +46,12 @@ public class TFCTech
     }
 
     private SimpleNetworkWrapper network;
+
+    @EventHandler
+    public void onFingerprintViolation(FMLFingerprintViolationEvent event)
+    {
+        logger.warn("Invalid fingerprint detected! This means this jar file has been modified externally and is not supported");
+    }
 
     @EventHandler
     public void init(FMLInitializationEvent event)
