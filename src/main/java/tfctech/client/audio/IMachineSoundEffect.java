@@ -9,5 +9,5 @@ public interface IMachineSoundEffect
 
     boolean isPlaying();
 
-    BlockPos getPos();
+    BlockPos getSoundPos();
 }

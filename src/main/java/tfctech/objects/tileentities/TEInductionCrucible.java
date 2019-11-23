@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 
@@ -59,9 +60,15 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     }
 
     @Override
+    public BlockPos getSoundPos()
+    {
+        return this.getPos();
+    }
+
+    @Override
     public void update()
     {
-        if (world.isRemote)
+        if (this.hasWorld() && world.isRemote)
         {
             if (isPlaying())
             {

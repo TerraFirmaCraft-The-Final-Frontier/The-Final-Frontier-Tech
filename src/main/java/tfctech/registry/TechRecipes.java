@@ -23,6 +23,7 @@ import net.dries007.tfc.api.recipes.heat.HeatRecipe;
 import net.dries007.tfc.api.recipes.heat.HeatRecipeSimple;
 import net.dries007.tfc.api.recipes.knapping.KnappingRecipe;
 import net.dries007.tfc.api.recipes.knapping.KnappingRecipeSimple;
+import net.dries007.tfc.api.recipes.knapping.KnappingType;
 import net.dries007.tfc.api.registries.TFCRegistries;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.api.util.TFCConstants;
@@ -101,7 +102,7 @@ public final class TechRecipes
         IForgeRegistry<KnappingRecipe> r = event.getRegistry();
 
         r.registerAll(
-                new KnappingRecipeSimple(KnappingRecipe.Type.CLAY, true, new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE), "XXXXX", "X XXX", "X  XX", "XX  X", "XXXXX").setRegistryName("clay_rackwheel_piece")
+                new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE), "XXXXX", "X XXX", "X  XX", "XX  X", "XXXXX").setRegistryName("clay_rackwheel_piece")
         );
     }
 

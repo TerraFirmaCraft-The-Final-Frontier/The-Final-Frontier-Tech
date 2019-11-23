@@ -34,6 +34,7 @@ public class TFCTech
     }
 
     private static Logger logger;
+    private static boolean signedBuild = true;
 
     public static Logger getLog()
     {
@@ -50,7 +51,10 @@ public class TFCTech
     @EventHandler
     public void onFingerprintViolation(FMLFingerprintViolationEvent event)
     {
-        logger.warn("Invalid fingerprint detected! This means this jar file has been modified externally and is not supported");
+        if (!event.isDirectory())
+        {
+            signedBuild = false;
+        }
     }
 
     @EventHandler
@@ -70,5 +74,9 @@ public class TFCTech
         int id = 0;
         network.registerMessage(new PacketLatexUpdate.Handler(), PacketLatexUpdate.class, ++id, Side.CLIENT);
         network.registerMessage(new PacketTileEntityUpdate.Handler(), PacketTileEntityUpdate.class, ++id, Side.CLIENT);
+        if (!signedBuild)
+        {
+            logger.error("INVALID FINGERPRINT DETECTED! This means this jar file has been compromised and are not supported.");
+        }
     }
 }

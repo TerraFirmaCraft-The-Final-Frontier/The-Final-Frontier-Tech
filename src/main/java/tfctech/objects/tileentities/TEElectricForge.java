@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.FluidStack;
@@ -68,7 +69,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     @Override
     public void update()
     {
-        if (world.isRemote)
+        if (this.hasWorld() && world.isRemote)
         {
             if (isPlaying())
             {
@@ -218,6 +219,12 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     public boolean isPlaying()
     {
         return !this.isInvalid() && this.hasWorld() && world.getBlockState(pos).getValue(LIT);
+    }
+
+    @Override
+    public BlockPos getSoundPos()
+    {
+        return this.getPos();
     }
 
     public int getEnergyStored()
