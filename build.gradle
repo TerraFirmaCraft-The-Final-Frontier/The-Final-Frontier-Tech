@@ -25,7 +25,7 @@ minecraft {
     mappings = "snapshot_20180814"
 	
 	replace("@VERSION@",project.version)
-	replace("@FINGERPRINT@", project.findProperty("signSHA1"))
+    replace("@FINGERPRINT@", project.findProperty("signSHA1"))
     replaceIn("TFCTech.java")
 }
 
@@ -56,11 +56,11 @@ repositories {
 }
 
 dependencies {
-    deobfProvided "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.8.9"
-    deobfProvided "mezz.jei:jei_1.12.2:4.13.1.222"
+    deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.8.9"
+    deobfCompile "mezz.jei:jei_1.12.2:4.13.1.222"
 	deobfProvided "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
-	deobfProvided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.12-6"
-	compile fileTree(include: ["*.jar"], dir: "libs")
+	deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.12-6"
+    compile fileTree(include: ["*.jar"], dir: "libs")
 }
 
 processResources {

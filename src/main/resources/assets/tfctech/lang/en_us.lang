@@ -19,6 +19,7 @@ tile.tfc.wood.log.hevea.name=Hevea Log
 tile.tfc.slab.wood.hevea.name=Hevea Slab
 item.tfc.wood.lumber.hevea.name=Hevea Lumber
 item.tfc.wood.door.hevea.name=Hevea Door
+item.tfc.wood.boat.hevea.name=Hevea Boat
 
 ## Devices
 tile.tfctech.electric_forge.name=Electric Forge

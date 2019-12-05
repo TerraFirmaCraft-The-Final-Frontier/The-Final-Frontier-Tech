@@ -1,8 +1,15 @@
 package tfctech.objects.items;
 
-import java.util.function.Function;
-
 import com.google.common.collect.ImmutableList;
+import net.dries007.tfc.api.capability.size.Size;
+import net.dries007.tfc.api.capability.size.Weight;
+import net.dries007.tfc.api.registries.TFCRegistries;
+import net.dries007.tfc.api.types.Metal;
+import net.dries007.tfc.api.util.TFCConstants;
+import net.dries007.tfc.objects.ToolMaterialsTFC;
+import net.dries007.tfc.objects.items.ItemMisc;
+import net.dries007.tfc.objects.items.ceramics.ItemPottery;
+import net.dries007.tfc.util.OreDictionaryHelper;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -16,18 +23,13 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
-
-import net.dries007.tfc.api.registries.TFCRegistries;
-import net.dries007.tfc.api.types.Metal;
-import net.dries007.tfc.api.util.TFCConstants;
-import net.dries007.tfc.objects.ToolMaterialsTFC;
-import net.dries007.tfc.objects.items.ceramics.ItemPottery;
-import net.dries007.tfc.util.OreDictionaryHelper;
 import tfctech.objects.blocks.TechBlocks;
 import tfctech.objects.items.ceramics.ItemFluidBowl;
 import tfctech.objects.items.ceramics.ItemTechMold;
 import tfctech.objects.items.metal.ItemGroove;
 import tfctech.objects.items.metal.ItemTechMetal;
+
+import java.util.function.Function;
 
 import static net.dries007.tfc.objects.CreativeTabsTFC.*;
 import static net.dries007.tfc.util.Helpers.getNull;
@@ -45,11 +47,11 @@ public final class TechItems
     @GameRegistry.ObjectHolder("ceramics/fluid_bowl")
     public static final ItemFluidBowl FLUID_BOWL = getNull();
     @GameRegistry.ObjectHolder("latex/vulcanizing_agents")
-    public static final Item VULCANIZING_AGENTS = getNull();
+    public static final ItemMisc VULCANIZING_AGENTS = getNull();
     @GameRegistry.ObjectHolder("latex/rubber_mix")
-    public static final Item RUBBER_MIX = getNull();
+    public static final ItemMiscHeatable RUBBER_MIX = getNull();
     @GameRegistry.ObjectHolder("latex/rubber")
-    public static final Item RUBBER = getNull();
+    public static final ItemMiscHeatable RUBBER = getNull();
 
 
     @GameRegistry.ObjectHolder("metal/iron_draw_plate")
@@ -61,9 +63,9 @@ public final class TechItems
     @GameRegistry.ObjectHolder("metal/iron_tongs")
     public static final ItemTechMetal IRON_TONGS = getNull();
     @GameRegistry.ObjectHolder("wiredraw/leather_belt")
-    public static final Item LEATHER_BELT = getNull();
+    public static final ItemMisc LEATHER_BELT = getNull();
     @GameRegistry.ObjectHolder("wiredraw/winch")
-    public static final Item WINCH = getNull();
+    public static final ItemMisc WINCH = getNull();
 
     @GameRegistry.ObjectHolder("metal/copper_inductor")
     public static final ItemTechMetal COPPER_INDUCTOR = getNull();
@@ -106,12 +108,12 @@ public final class TechItems
         IForgeRegistry<Item> r = event.getRegistry();
         ImmutableList.Builder<Item> simpleItems = ImmutableList.builder();
 
-        simpleItems.add(register(r, "latex/vulcanizing_agents", new Item(), CT_MISC));
-        simpleItems.add(register(r, "latex/rubber_mix", new Item(), CT_MISC));
-        simpleItems.add(register(r, "latex/rubber", new Item(), CT_MISC));
+        simpleItems.add(register(r, "latex/vulcanizing_agents", new ItemMisc(Size.SMALL, Weight.LIGHT), CT_MISC));
+        simpleItems.add(register(r, "latex/rubber_mix", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.8f, 800f), CT_MISC));
+        simpleItems.add(register(r, "latex/rubber", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.8f, 800f), CT_MISC));
 
-        simpleItems.add(register(r, "wiredraw/leather_belt", new Item(), CT_MISC));
-        simpleItems.add(register(r, "wiredraw/winch", new Item(), CT_MISC));
+        simpleItems.add(register(r, "wiredraw/leather_belt", new ItemMisc(Size.NORMAL, Weight.LIGHT), CT_MISC));
+        simpleItems.add(register(r, "wiredraw/winch", new ItemMisc(Size.NORMAL, Weight.MEDIUM), CT_MISC));
 
         //Unfired is simple
         simpleItems.add(register(r, "ceramics/unfired/rackwheel_piece", new ItemPottery(), CT_MISC));
