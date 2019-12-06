@@ -1,12 +1,13 @@
 package tfctech.registry;
 
-import net.dries007.tfc.api.registries.TFCRegistryEvent;
-import net.dries007.tfc.api.types.Tree;
-import net.dries007.tfc.api.util.TFCConstants;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import net.dries007.tfc.api.registries.TFCRegistryEvent;
+import net.dries007.tfc.api.types.Tree;
+import net.dries007.tfc.api.util.TFCConstants;
 
 import static net.dries007.tfc.types.DefaultTrees.GEN_TALL;
 import static net.dries007.tfc.util.Helpers.getNull;

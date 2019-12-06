@@ -66,14 +66,6 @@ public class BlockFridge extends BlockHorizontal
         }
     }
 
-    public BlockFridge()
-    {
-        super(Material.IRON);
-        setHardness(3.0F);
-        setHarvestLevel("pickaxe", 0);
-        setDefaultState(blockState.getBaseState().withProperty(FACING, NORTH).withProperty(UPPER, false));
-    }
-
     public static Vec3d[] getItems(EnumFacing facing)
     {
         Vec3d[] items = new Vec3d[8];
@@ -88,6 +80,33 @@ public class BlockFridge extends BlockHorizontal
             items[i] = itemPos;
         }
         return items;
+    }
+
+    public static int getPlayerLookingItem(BlockPos bottomPos, EntityPlayer player, EnumFacing facing)
+    {
+        double length = Math.sqrt(bottomPos.distanceSqToCenter(player.posX, player.posY, player.posZ)) + 0.7D;
+        Vec3d startPos = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
+        Vec3d endPos = startPos.add(new Vec3d(player.getLookVec().x * length, player.getLookVec().y * length, player.getLookVec().z * length));
+        Vec3d[] items = getItems(facing);
+        for (int i = 0; i < 8; i++)
+        {
+            Vec3d itemPos = items[i];
+            AxisAlignedBB offsetAABB = new AxisAlignedBB(itemPos.x, itemPos.y, itemPos.z, itemPos.x, itemPos.y, itemPos.z).grow(0.1D)
+                    .offset(bottomPos).grow(0.002D);
+            if (offsetAABB.calculateIntercept(startPos, endPos) != null)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public BlockFridge()
+    {
+        super(Material.IRON);
+        setHardness(3.0F);
+        setHarvestLevel("pickaxe", 0);
+        setDefaultState(blockState.getBaseState().withProperty(FACING, NORTH).withProperty(UPPER, false));
     }
 
     @SuppressWarnings("deprecation")
@@ -108,6 +127,39 @@ public class BlockFridge extends BlockHorizontal
     public boolean isFullCube(IBlockState state)
     {
         return false;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean hasCustomBreakingProgress(IBlockState state)
+    {
+        return true;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state)
+    {
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+        switch (state.getValue(FACING))
+        {
+            case NORTH:
+                return state.getValue(UPPER) ? NORTH_AABB.setMaxY(0.75D) : NORTH_AABB;
+            case SOUTH:
+                return state.getValue(UPPER) ? SOUTH_AABB.setMaxY(0.75D) : SOUTH_AABB;
+            case EAST:
+                return state.getValue(UPPER) ? EAST_AABB.setMaxY(0.75D) : EAST_AABB;
+            case WEST:
+                return state.getValue(UPPER) ? WEST_AABB.setMaxY(0.75D) : WEST_AABB;
+        }
+        return NORTH_AABB;
     }
 
     @SuppressWarnings("deprecation")
@@ -153,90 +205,6 @@ public class BlockFridge extends BlockHorizontal
         }
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean hasCustomBreakingProgress(IBlockState state)
-    {
-        return true;
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, FACING, UPPER);
-    }
-
-    public static int getPlayerLookingItem(BlockPos bottomPos, EntityPlayer player, EnumFacing facing)
-    {
-        double length = Math.sqrt(bottomPos.distanceSqToCenter(player.posX, player.posY, player.posZ)) + 0.7D;
-        Vec3d startPos = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
-        Vec3d endPos = startPos.add(new Vec3d(player.getLookVec().x * length, player.getLookVec().y * length, player.getLookVec().z * length));
-        Vec3d[] items = getItems(facing);
-        for (int i = 0; i < 8; i++)
-        {
-            Vec3d itemPos = items[i];
-            AxisAlignedBB offsetAABB = new AxisAlignedBB(itemPos.x, itemPos.y, itemPos.z, itemPos.x, itemPos.y, itemPos.z).grow(0.1D)
-                    .offset(bottomPos).grow(0.002D);
-            if (offsetAABB.calculateIntercept(startPos, endPos) != null)
-            {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
-        switch (state.getValue(FACING))
-        {
-            case NORTH:
-                return state.getValue(UPPER) ? NORTH_AABB.setMaxY(0.75D) : NORTH_AABB;
-            case SOUTH:
-                return state.getValue(UPPER) ? SOUTH_AABB.setMaxY(0.75D) : SOUTH_AABB;
-            case EAST:
-                return state.getValue(UPPER) ? EAST_AABB.setMaxY(0.75D) : EAST_AABB;
-            case WEST:
-                return state.getValue(UPPER) ? WEST_AABB.setMaxY(0.75D) : WEST_AABB;
-        }
-        return NORTH_AABB;
-    }
-
-    @Override
-    public boolean addLandingEffects(IBlockState state, WorldServer worldObj, BlockPos blockPosition, IBlockState iblockstate, EntityLivingBase entity, int numberOfParticles)
-    {
-        return true;
-    }
-
-    @Override
-    public boolean addRunningEffects(IBlockState state, World world, BlockPos pos, Entity entity)
-    {
-        return true;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager manager)
-    {
-        return true;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager)
-    {
-        return true;
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state)
-    {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
-    }
-
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
@@ -248,7 +216,7 @@ public class BlockFridge extends BlockHorizontal
         TEFridge te = Helpers.getTE(world, TEPos, TEFridge.class);
         if (te != null && !te.isAnimating() && hand == EnumHand.MAIN_HAND && facing == state.getValue(FACING))
         {
-            if(te.isOpen())
+            if (te.isOpen())
             {
                 int slot = getPlayerLookingItem(TEPos.down(), player, facing);
                 ItemStack stack = player.getHeldItem(hand);
@@ -281,13 +249,19 @@ public class BlockFridge extends BlockHorizontal
             }
             else
             {
-                if(!player.isSneaking())
+                if (!player.isSneaking())
                 {
                     return te.setOpening(true);
                 }
             }
         }
         return false;
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState()
+    {
+        return new BlockStateContainer(this, FACING, UPPER);
     }
 
     @Override
@@ -301,5 +275,31 @@ public class BlockFridge extends BlockHorizontal
     public TileEntity createTileEntity(World world, IBlockState state)
     {
         return new TEFridge();
+    }
+
+    @Override
+    public boolean addLandingEffects(IBlockState state, WorldServer worldObj, BlockPos blockPosition, IBlockState iblockstate, EntityLivingBase entity, int numberOfParticles)
+    {
+        return true;
+    }
+
+    @Override
+    public boolean addRunningEffects(IBlockState state, World world, BlockPos pos, Entity entity)
+    {
+        return true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager manager)
+    {
+        return true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager)
+    {
+        return true;
     }
 }

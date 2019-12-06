@@ -92,13 +92,6 @@ public class BlockLatexExtractor extends Block
 
     @SuppressWarnings("deprecation")
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
-    {
-        return BlockFaceShape.UNDEFINED;
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
     public boolean isFullCube(IBlockState state)
     {
         return false;
@@ -127,6 +120,13 @@ public class BlockLatexExtractor extends Block
             default:
                 return FULL_BLOCK_AABB;
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
+    {
+        return BlockFaceShape.UNDEFINED;
     }
 
     @SuppressWarnings("deprecation")

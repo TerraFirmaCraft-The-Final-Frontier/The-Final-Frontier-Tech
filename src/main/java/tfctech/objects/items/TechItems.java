@@ -1,15 +1,8 @@
 package tfctech.objects.items;
 
+import java.util.function.Function;
+
 import com.google.common.collect.ImmutableList;
-import net.dries007.tfc.api.capability.size.Size;
-import net.dries007.tfc.api.capability.size.Weight;
-import net.dries007.tfc.api.registries.TFCRegistries;
-import net.dries007.tfc.api.types.Metal;
-import net.dries007.tfc.api.util.TFCConstants;
-import net.dries007.tfc.objects.ToolMaterialsTFC;
-import net.dries007.tfc.objects.items.ItemMisc;
-import net.dries007.tfc.objects.items.ceramics.ItemPottery;
-import net.dries007.tfc.util.OreDictionaryHelper;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -23,13 +16,21 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import net.dries007.tfc.api.capability.size.Size;
+import net.dries007.tfc.api.capability.size.Weight;
+import net.dries007.tfc.api.registries.TFCRegistries;
+import net.dries007.tfc.api.types.Metal;
+import net.dries007.tfc.api.util.TFCConstants;
+import net.dries007.tfc.objects.ToolMaterialsTFC;
+import net.dries007.tfc.objects.items.ItemMisc;
+import net.dries007.tfc.objects.items.ceramics.ItemPottery;
+import net.dries007.tfc.util.OreDictionaryHelper;
 import tfctech.objects.blocks.TechBlocks;
 import tfctech.objects.items.ceramics.ItemFluidBowl;
 import tfctech.objects.items.ceramics.ItemTechMold;
 import tfctech.objects.items.metal.ItemGroove;
 import tfctech.objects.items.metal.ItemTechMetal;
-
-import java.util.function.Function;
 
 import static net.dries007.tfc.objects.CreativeTabsTFC.*;
 import static net.dries007.tfc.util.Helpers.getNull;
@@ -84,18 +85,18 @@ public final class TechItems
 
 
     private static ImmutableList<Item> allSimpleItems;
+    private static ImmutableList<Item> allMetalItems;
+    private static ImmutableList<Item> allCeramicMoldItems;
+
     public static ImmutableList<Item> getAllSimpleItems()
     {
         return allSimpleItems;
     }
 
-    private static ImmutableList<Item> allMetalItems;
     public static ImmutableList<Item> getAllMetalItems()
     {
         return allMetalItems;
     }
-
-    private static ImmutableList<Item> allCeramicMoldItems;
 
     public static ImmutableList<Item> getAllCeramicMoldItems()
     {

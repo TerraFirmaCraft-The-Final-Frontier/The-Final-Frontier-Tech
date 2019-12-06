@@ -29,6 +29,24 @@ public final class TechConfig
 
     public static class Devices
     {
+        @Config.Comment({"Should TFCTech machines accepts IC2 EU?"})
+        @Config.LangKey("config." + MODID + ".devices.acceptIc2EU")
+        public boolean acceptIc2EU = true;
+
+        @Config.Comment({"How much energy 1 IC2 EU unit gives to machines?"})
+        @Config.RangeInt(min = 1)
+        @Config.LangKey("config." + MODID + ".devices.ratioIc2")
+        public int ratioIc2 = 4;
+
+        @Config.Comment({"Should TFCTech machines accepts GTCE EU?"})
+        @Config.LangKey("config." + MODID + ".devices.acceptIc2EU")
+        public boolean acceptGTCEEU = true;
+
+        @Config.Comment({"How much energy 1 GTCE EU unit gives to machines?"})
+        @Config.RangeInt(min = 1)
+        @Config.LangKey("config." + MODID + ".devices.ratioGTCE")
+        public int ratioGTCE = 4;
+
         @Config.Comment({"Modifier for how quickly electric forge heats items. Smaller number = slower temperature changes. Note: This is affected by TFC global modifier."})
         @Config.RangeDouble(min = 0.01D, max = 1000.0D)
         @Config.LangKey("config." + MODID + ".devices.electricForgeSpeed")

@@ -98,6 +98,13 @@ public class ItemTechMetal extends ItemTFC implements IMetalItem
         return (new TextComponentTranslation("item.tfctech.metalitem." + type.name().toLowerCase() + ".name", metalName)).getFormattedText();
     }
 
+    @Nullable
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt)
+    {
+        return new ForgeableHandler(nbt, metal.getSpecificHeat(), metal.getMeltTemp());
+    }
+
     @Nonnull
     @Override
     public Metal getMetal(ItemStack itemStack)
@@ -109,13 +116,6 @@ public class ItemTechMetal extends ItemTFC implements IMetalItem
     public int getSmeltAmount(ItemStack itemStack)
     {
         return type.getSmeltAmount();
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt)
-    {
-        return new ForgeableHandler(nbt, metal.getSpecificHeat(), metal.getMeltTemp());
     }
 
     public enum ItemType

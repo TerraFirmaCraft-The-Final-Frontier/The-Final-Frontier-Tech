@@ -12,12 +12,18 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergyEmitter;
+import ic2.api.energy.tile.IEnergySink;
 import mcp.MethodsReturnNonnullByDefault;
 import net.dries007.tfc.api.capability.food.CapabilityFood;
 import net.dries007.tfc.api.capability.food.IFood;
@@ -35,7 +41,8 @@ import static tfctech.objects.blocks.devices.BlockFridge.UPPER;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TEFridge extends TEInventory implements ITickable
+@Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "ic2")
+public class TEFridge extends TEInventory implements ITickable, IEnergySink
 {
     private static final float MAX_DEGREE = 90F;
     private static final float DOOR_SPEED = 6F;
@@ -48,6 +55,8 @@ public class TEFridge extends TEInventory implements ITickable
     private MachineEnergyContainer energyContainer;
 
     private int applyTrait = 0;
+
+    private boolean addedToIc2Network = false;
 
     public TEFridge()
     {
@@ -166,6 +175,63 @@ public class TEFridge extends TEInventory implements ITickable
         return capability == CapabilityEnergy.ENERGY && facing == this.getRotation().getOpposite() ? (T) this.energyContainer : super.getCapability(capability, facing);
     }
 
+    @Override
+    public double getDemandedEnergy()
+    {
+        return Math.ceil(energyContainer.receiveEnergy(Integer.MAX_VALUE, true) / (double) TechConfig.DEVICES.ratioIc2);
+    }
+
+    @Override
+    public int getSinkTier()
+    {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public double injectEnergy(EnumFacing facing, double amount, double voltage)
+    {
+        energyContainer.receiveEnergy((int) Math.ceil(amount) * TechConfig.DEVICES.ratioIc2, false);
+        return 0;
+    }
+
+    @Optional.Method(modid = "ic2")
+    @Override
+    public void invalidate()
+    {
+        super.invalidate();
+        if (!world.isRemote && addedToIc2Network)
+        {
+            MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+            addedToIc2Network = false;
+        }
+    }
+
+    @Optional.Method(modid = "ic2")
+    @Override
+    public void validate()
+    {
+        super.validate();
+        if (!world.isRemote && TechConfig.DEVICES.acceptIc2EU && !addedToIc2Network)
+        {
+            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+            addedToIc2Network = true;
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    @Nonnull
+    public AxisAlignedBB getRenderBoundingBox()
+    {
+        return INFINITE_EXTENT_AABB;
+    }
+
+    @Override
+    public boolean acceptsEnergyFrom(IEnergyEmitter iEnergyEmitter, EnumFacing facing)
+    {
+        return TechConfig.DEVICES.acceptIc2EU && facing == this.getRotation().getOpposite();
+    }
+
     public ItemStack getSlot(int slot)
     {
         return inventory.extractItem(slot, 64, true);
@@ -189,14 +255,6 @@ public class TEFridge extends TEInventory implements ITickable
     public boolean hasStack(int slot)
     {
         return inventory.extractItem(slot, 64, true) != ItemStack.EMPTY;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    @Nonnull
-    public AxisAlignedBB getRenderBoundingBox()
-    {
-        return INFINITE_EXTENT_AABB;
     }
 
     public EnumFacing getRotation()

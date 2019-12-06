@@ -53,6 +53,10 @@ repositories {
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
+    maven {
+		name = "ic2"
+		url = "http://maven.ic2.player.to/"
+	}
 }
 
 dependencies {
@@ -60,6 +64,7 @@ dependencies {
     deobfCompile "mezz.jei:jei_1.12.2:4.13.1.222"
 	deobfProvided "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
 	deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.12-6"
+    compile 'net.industrial-craft:industrialcraft-2:2.8.170-ex112:api'
     compile fileTree(include: ["*.jar"], dir: "libs")
 }
 

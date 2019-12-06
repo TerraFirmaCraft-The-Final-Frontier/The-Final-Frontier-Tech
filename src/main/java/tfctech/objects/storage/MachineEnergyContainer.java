@@ -8,9 +8,6 @@ import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import net.dries007.tfc.api.capability.heat.IItemHeat;
-import net.dries007.tfc.api.capability.metal.IMetalItem;
-
 /**
  * Energy storage for machines
  * Energy can only be input from outside and only be extracted internally

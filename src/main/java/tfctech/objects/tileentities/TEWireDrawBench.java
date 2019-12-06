@@ -137,26 +137,6 @@ public class TEWireDrawBench extends TEInventory implements ITickable
         super.setAndUpdateSlots(slot);
     }
 
-    @Nonnull
-    public ItemStack extractItem(int slot, boolean simulate)
-    {
-        if (slot < 0 || slot > 1 || (progress > 0 && progress < 100))
-        {
-            return ItemStack.EMPTY;
-        }
-        if (slot == 1 && !simulate)
-        {
-            cachedWireColor = 0x00000000;
-            progress = 0;
-        }
-        ItemStack output = inventory.extractItem(slot, 64, simulate);
-        if (!simulate)
-        {
-            setAndUpdateSlots(slot);
-        }
-        return output;
-    }
-
     @Override
     public void readFromNBT(NBTTagCompound nbt)
     {
@@ -175,6 +155,26 @@ public class TEWireDrawBench extends TEInventory implements ITickable
         nbt.setBoolean("working", working);
         nbt.setInteger("progress", progress);
         return super.writeToNBT(nbt);
+    }
+
+    @Nonnull
+    public ItemStack extractItem(int slot, boolean simulate)
+    {
+        if (slot < 0 || slot > 1 || (progress > 0 && progress < 100))
+        {
+            return ItemStack.EMPTY;
+        }
+        if (slot == 1 && !simulate)
+        {
+            cachedWireColor = 0x00000000;
+            progress = 0;
+        }
+        ItemStack output = inventory.extractItem(slot, 64, simulate);
+        if (!simulate)
+        {
+            setAndUpdateSlots(slot);
+        }
+        return output;
     }
 
     @Nullable

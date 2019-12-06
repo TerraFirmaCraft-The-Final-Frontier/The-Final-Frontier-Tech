@@ -28,7 +28,8 @@ public class ModelFridge extends ModelBase
 
     private float open = 0.0F;
 
-    public ModelFridge() {
+    public ModelFridge()
+    {
         textureWidth = 128;
         textureHeight = 64;
 

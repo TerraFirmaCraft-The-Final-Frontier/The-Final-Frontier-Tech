@@ -12,12 +12,18 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.common.Optional;
 
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergyEmitter;
+import ic2.api.energy.tile.IEnergySink;
 import net.dries007.tfc.ConfigTFC;
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
 import net.dries007.tfc.api.capability.heat.IItemHeat;
@@ -37,7 +43,8 @@ import static tfctech.objects.blocks.devices.BlockElectricForge.LIT;
 
 @SuppressWarnings("WeakerAccess")
 @ParametersAreNonnullByDefault
-public class TEElectricForge extends TEInventory implements ITickable, ITileFields, IMachineSoundEffect
+@Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "ic2")
+public class TEElectricForge extends TEInventory implements ITickable, ITileFields, IMachineSoundEffect, IEnergySink
 {
     public static final int SLOT_INPUT_MIN = 0;
     public static final int SLOT_INPUT_MAX = 8;
@@ -47,6 +54,8 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     private float targetTemperature = 0.0F;
     private MachineEnergyContainer energyContainer;
     private int litTime = 0;
+
+    private boolean addedToIc2Network = false;
 
     public TEElectricForge()
     {
@@ -64,6 +73,30 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
         if (targetTemperature > (float) TechConfig.DEVICES.electricForgeMaxTemperature)
             targetTemperature = (float) TechConfig.DEVICES.electricForgeMaxTemperature;
         if (targetTemperature < 0) targetTemperature = 0;
+    }
+
+    @Optional.Method(modid = "ic2")
+    @Override
+    public void invalidate()
+    {
+        super.invalidate();
+        if (!world.isRemote && addedToIc2Network)
+        {
+            MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+            addedToIc2Network = false;
+        }
+    }
+
+    @Optional.Method(modid = "ic2")
+    @Override
+    public void validate()
+    {
+        super.validate();
+        if (!world.isRemote && TechConfig.DEVICES.acceptIc2EU && !addedToIc2Network)
+        {
+            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+            addedToIc2Network = true;
+        }
     }
 
     @Override
@@ -84,7 +117,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
         }
         IBlockState state = world.getBlockState(pos);
         int energyUsage = (int) ((float) TechConfig.DEVICES.electricForgeEnergyConsumption * targetTemperature / 100);
-        if(energyUsage < 1)energyUsage = 1;
+        if (energyUsage < 1) energyUsage = 1;
         for (int i = SLOT_INPUT_MIN; i <= SLOT_INPUT_MAX; i++)
         {
             ItemStack stack = inventory.getStackInSlot(i);
@@ -145,6 +178,19 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     }
 
     @Override
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
+    {
+        return (capability == CapabilityEnergy.ENERGY && (facing == EnumFacing.UP || facing == EnumFacing.DOWN || facing == world.getBlockState(pos).getValue(BlockElectricForge.FACING).getOpposite())) || super.hasCapability(capability, facing);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
+    {
+        return capability == CapabilityEnergy.ENERGY && (facing == EnumFacing.UP || facing == EnumFacing.DOWN || facing == world.getBlockState(pos).getValue(BlockElectricForge.FACING).getOpposite()) ? (T) this.energyContainer : super.getCapability(capability, facing);
+    }
+
+    @Override
     public int getSlotLimit(int slot)
     {
         return 1;
@@ -167,11 +213,6 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     public int getFieldCount()
     {
         return 2;
-    }
-
-    public int getEnergyCapacity()
-    {
-        return energyContainer.getMaxEnergyStored();
     }
 
     @Override
@@ -209,6 +250,11 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
         }
     }
 
+    public int getEnergyCapacity()
+    {
+        return energyContainer.getMaxEnergyStored();
+    }
+
     @Override
     public SoundEvent getSoundEvent()
     {
@@ -230,6 +276,31 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     public int getEnergyStored()
     {
         return energyContainer.getEnergyStored();
+    }
+
+    @Override
+    public double getDemandedEnergy()
+    {
+        return Math.ceil(energyContainer.receiveEnergy(Integer.MAX_VALUE, true) / (double) TechConfig.DEVICES.ratioIc2);
+    }
+
+    @Override
+    public int getSinkTier()
+    {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public double injectEnergy(EnumFacing facing, double amount, double voltage)
+    {
+        energyContainer.receiveEnergy((int) Math.ceil(amount) * TechConfig.DEVICES.ratioIc2, false);
+        return 0;
+    }
+
+    @Override
+    public boolean acceptsEnergyFrom(IEnergyEmitter iEnergyEmitter, EnumFacing facing)
+    {
+        return TechConfig.DEVICES.acceptIc2EU && (facing == EnumFacing.UP || facing == EnumFacing.DOWN || facing == world.getBlockState(pos).getValue(BlockElectricForge.FACING).getOpposite());
     }
 
     private void handleInputMelting(ItemStack stack, int index)
@@ -277,19 +348,6 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
             // Handle possible item output
             inventory.setStackInSlot(index, recipe.getOutputStack(stack));
         }
-    }
-
-    @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
-    {
-        return (capability == CapabilityEnergy.ENERGY && (facing == EnumFacing.UP || facing == EnumFacing.DOWN || facing == world.getBlockState(pos).getValue(BlockElectricForge.FACING).getOpposite())) || super.hasCapability(capability, facing);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
-    {
-        return capability == CapabilityEnergy.ENERGY && (facing == EnumFacing.UP || facing == EnumFacing.DOWN || facing == world.getBlockState(pos).getValue(BlockElectricForge.FACING).getOpposite()) ? (T) this.energyContainer : super.getCapability(capability, facing);
     }
 
     private void updateCachedRecipes()

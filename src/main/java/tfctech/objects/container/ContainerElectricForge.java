@@ -23,9 +23,9 @@ public class ContainerElectricForge extends ContainerTE<TEElectricForge> impleme
     public void onButtonPress(int i, @Nullable NBTTagCompound nbtTagCompound)
     {
         int value = i % 2 == 0 ? 1 : -1;
-        if(i / 4 < 1)
+        if (i / 4 < 1)
         {
-            if(i / 2 < 1)
+            if (i / 2 < 1)
             {
                 value *= 50;
             }

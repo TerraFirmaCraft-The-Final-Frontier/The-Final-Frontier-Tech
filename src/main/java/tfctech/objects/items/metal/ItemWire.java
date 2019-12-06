@@ -34,6 +34,16 @@ public class ItemWire extends ItemTechMetal
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
+    @Override
+    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items)
+    {
+        if (this.isInCreativeTab(tab))
+        {
+            items.add(new ItemStack(this));
+            items.add(new ItemStack(this, 1, 4));
+        }
+    }
+
     @Nonnull
     @Override
     public String getItemStackDisplayName(@Nonnull ItemStack stack)
@@ -45,15 +55,5 @@ public class ItemWire extends ItemTechMetal
             return (new TextComponentTranslation("item.tfctech.metalitem.wire.unfinished", metalName)).getFormattedText();
         }
         return super.getItemStackDisplayName(stack);
-    }
-
-    @Override
-    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items)
-    {
-        if (this.isInCreativeTab(tab))
-        {
-            items.add(new ItemStack(this));
-            items.add(new ItemStack(this, 1, 4));
-        }
     }
 }

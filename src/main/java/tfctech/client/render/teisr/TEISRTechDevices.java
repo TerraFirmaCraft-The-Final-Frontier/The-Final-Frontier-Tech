@@ -22,11 +22,11 @@ public class TEISRTechDevices extends TileEntityItemStackRenderer
     @Override
     public void renderByItem(ItemStack itemStack, float partialTicks)
     {
-        if(itemStack.getItem() instanceof ItemBlockWireDrawBench)
+        if (itemStack.getItem() instanceof ItemBlockWireDrawBench)
         {
             TileEntityRendererDispatcher.instance.render(teWireDrawBench, 0.0D, 0.0D, 0.0D, partialTicks);
         }
-        else if(itemStack.getItem() instanceof ItemBlockFridge)
+        else if (itemStack.getItem() instanceof ItemBlockFridge)
         {
             TileEntityRendererDispatcher.instance.render(teFridge, 0.0D, 0.0D, 0.0D, partialTicks);
         }
