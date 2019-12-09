@@ -4,6 +4,12 @@ import net.dries007.tfc.api.capability.food.FoodTrait;
 
 public final class TechFoodTraits
 {
-    public static final FoodTrait COLD = new FoodTrait("cold", 0.25f);
-    public static final FoodTrait FROZEN = new FoodTrait("frozen", 0.1f);
+    public static FoodTrait COLD;
+    public static FoodTrait FROZEN;
+
+    public static void init()
+    {
+        COLD = new FoodTrait("cold", 0.25f);
+        FROZEN = new FoodTrait("frozen", 0.1f);
+    }
 }

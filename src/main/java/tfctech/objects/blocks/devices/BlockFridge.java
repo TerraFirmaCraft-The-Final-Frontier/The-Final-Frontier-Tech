@@ -206,6 +206,14 @@ public class BlockFridge extends BlockHorizontal
     }
 
     @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+    {
+        TEFridge te = Helpers.getTE(worldIn, pos, TEFridge.class);
+        if (te != null) te.onBreakBlock(worldIn, pos, state);
+        super.breakBlock(worldIn, pos, state);
+    }
+
+    @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
         BlockPos TEPos = pos;

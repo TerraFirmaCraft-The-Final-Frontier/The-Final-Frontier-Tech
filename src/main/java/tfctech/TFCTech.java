@@ -14,6 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import tfctech.client.TechGuiHandler;
 import tfctech.network.PacketLatexUpdate;
 import tfctech.network.PacketTileEntityUpdate;
+import tfctech.registry.TechFoodTraits;
 
 @SuppressWarnings("WeakerAccess")
 @Mod(modid = TFCTech.MODID, name = TFCTech.NAME, version = TFCTech.VERSION, dependencies = TFCTech.DEPENDENCIES, certificateFingerprint = TFCTech.SIGNING_KEY)
@@ -62,6 +63,7 @@ public class TFCTech
         //Waila/Hwyla/TOP initialization (if present)
         FMLInterModComms.sendMessage("waila", "register", "tfctech.compat.waila.WailaPlugin.callbackRegister");
         FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "tfctech.compat.waila.TOPPlugin");
+        TechFoodTraits.init();
     }
 
     @EventHandler

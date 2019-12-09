@@ -57,6 +57,9 @@ repositories {
 		name = "ic2"
 		url = "http://maven.ic2.player.to/"
 	}
+    maven {
+		url "https://minecraft.curseforge.com/api/maven"
+	}
 }
 
 dependencies {
@@ -64,6 +67,7 @@ dependencies {
     deobfCompile "mezz.jei:jei_1.12.2:4.13.1.222"
 	deobfProvided "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
 	deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.12-6"
+    deobfProvided "gregtechce:gregtech:1.12.2:1.8.5.436"
     compile 'net.industrial-craft:industrialcraft-2:2.8.170-ex112:api'
     compile fileTree(include: ["*.jar"], dir: "libs")
 }

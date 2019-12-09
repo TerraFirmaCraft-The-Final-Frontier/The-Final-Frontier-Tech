@@ -5,16 +5,20 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -57,6 +61,7 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
     private int applyTrait = 0;
 
     private boolean addedToIc2Network = false;
+    private int mainBlock = 0; // 0 - not initialized, 1 = main block, -1 not main block
 
     public TEFridge()
     {
@@ -79,14 +84,24 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
         return energyContainer.getEnergyStored();
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isMainBlock()
     {
-        if (!hasWorld())
+        if (mainBlock == 0)
         {
-            return false;
+            if (!hasWorld() || world.isAirBlock(pos))
+            {
+                return false;
+            }
+            if (world.getBlockState(pos).getValue(UPPER))
+            {
+                mainBlock = 1;
+            }
+            else
+            {
+                mainBlock = -1;
+            }
         }
-        return world.getBlockState(pos).getValue(UPPER);
+        return mainBlock == 1;
     }
 
     public ItemStack insertItem(int slot, ItemStack stack)
@@ -157,6 +172,13 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
     }
 
     @Override
+    public void onChunkUnload()
+    {
+        super.onChunkUnload();
+        ic2Unload();
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
     {
@@ -178,6 +200,15 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
     @Override
     public double getDemandedEnergy()
     {
+        if (!isMainBlock())
+        {
+            TEFridge te = Helpers.getTE(world, pos.up(), TEFridge.class);
+            if (te != null && te.addedToIc2Network)
+            {
+                return Math.ceil(te.energyContainer.receiveEnergy(Integer.MAX_VALUE, true) / (double) TechConfig.DEVICES.ratioIc2);
+            }
+            return 0;
+        }
         return Math.ceil(energyContainer.receiveEnergy(Integer.MAX_VALUE, true) / (double) TechConfig.DEVICES.ratioIc2);
     }
 
@@ -190,15 +221,21 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
     @Override
     public double injectEnergy(EnumFacing facing, double amount, double voltage)
     {
+        if (!isMainBlock())
+        {
+            TEFridge te = Helpers.getTE(world, pos.up(), TEFridge.class);
+            if (te != null && te.addedToIc2Network)
+            {
+                te.energyContainer.receiveEnergy((int) Math.ceil(amount) * TechConfig.DEVICES.ratioIc2, false);
+            }
+            return 0;
+        }
         energyContainer.receiveEnergy((int) Math.ceil(amount) * TechConfig.DEVICES.ratioIc2, false);
         return 0;
     }
 
-    @Optional.Method(modid = "ic2")
-    @Override
-    public void invalidate()
+    public void ic2Unload()
     {
-        super.invalidate();
         if (!world.isRemote && addedToIc2Network)
         {
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
@@ -206,16 +243,36 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
         }
     }
 
-    @Optional.Method(modid = "ic2")
-    @Override
-    public void validate()
+    public void ic2Load()
     {
-        super.validate();
-        if (!world.isRemote && TechConfig.DEVICES.acceptIc2EU && !addedToIc2Network)
+        if (!world.isRemote && TechConfig.DEVICES.acceptIc2EU && !addedToIc2Network && Loader.isModLoaded("ic2"))
         {
             MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
             addedToIc2Network = true;
         }
+    }
+
+    @Override
+    public void onBreakBlock(World world, BlockPos pos, IBlockState state)
+    {
+        ic2Unload();
+        if (isMainBlock())
+        {
+            TEFridge child = Helpers.getTE(world, pos.down(), TEFridge.class);
+            if (child != null)
+            {
+                child.ic2Unload();
+            }
+        }
+        else
+        {
+            TEFridge main = Helpers.getTE(world, pos.up(), TEFridge.class);
+            if (main != null)
+            {
+                main.ic2Unload();
+            }
+        }
+        super.onBreakBlock(world, pos, state);
     }
 
     @SideOnly(Side.CLIENT)
@@ -229,6 +286,14 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
     @Override
     public boolean acceptsEnergyFrom(IEnergyEmitter iEnergyEmitter, EnumFacing facing)
     {
+        if (!isMainBlock())
+        {
+            TEFridge te = Helpers.getTE(world, pos.up(), TEFridge.class);
+            if (te == null || !te.addedToIc2Network)
+            {
+                return false;
+            }
+        }
         return TechConfig.DEVICES.acceptIc2EU && facing == this.getRotation().getOpposite();
     }
 
@@ -301,6 +366,7 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
     @Override
     public void update()
     {
+        ic2Load();
         if (!isMainBlock()) return;
         lastOpen = open;
         if (openingState == 1)
