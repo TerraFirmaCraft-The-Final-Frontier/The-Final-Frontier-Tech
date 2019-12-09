@@ -24,7 +24,7 @@ public class TFCTech
     public static final String NAME = "TFCTech Unofficial";
     public static final String VERSION = "@VERSION@";
     public static final String SIGNING_KEY = "@FINGERPRINT@";
-    public static final String DEPENDENCIES = "required-after:tfc;after:ic2";
+    public static final String DEPENDENCIES = "required-after:tfc;after:ic2;after:gregtech";
 
     @Mod.Instance
     private static TFCTech instance = null;

@@ -24,6 +24,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import gregtech.api.capability.GregtechCapabilities;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyEmitter;
@@ -168,7 +169,18 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
                 return false;
             }
         }
-        return (capability == CapabilityEnergy.ENERGY && facing == this.getRotation().getOpposite()) || super.hasCapability(capability, facing);
+        if (facing == null || facing == this.getRotation().getOpposite())
+        {
+            if (capability == CapabilityEnergy.ENERGY)
+            {
+                return true;
+            }
+            else if (TechConfig.DEVICES.acceptGTCEEU && Loader.isModLoaded("gregtech") && capability == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER)
+            {
+                return true;
+            }
+        }
+        return super.hasCapability(capability, facing);
     }
 
     @Override
@@ -194,7 +206,18 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
                 return null;
             }
         }
-        return capability == CapabilityEnergy.ENERGY && facing == this.getRotation().getOpposite() ? (T) this.energyContainer : super.getCapability(capability, facing);
+        if (facing == null || facing == this.getRotation().getOpposite())
+        {
+            if (capability == CapabilityEnergy.ENERGY)
+            {
+                return (T) this.energyContainer;
+            }
+            else if (TechConfig.DEVICES.acceptGTCEEU && Loader.isModLoaded("gregtech") && capability == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER)
+            {
+                return (T) this.energyContainer.getGTCEHandler();
+            }
+        }
+        return super.getCapability(capability, facing);
     }
 
     @Override

@@ -14,8 +14,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 
+import gregtech.api.capability.GregtechCapabilities;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyEmitter;
@@ -166,14 +168,36 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     @Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
     {
-        return (capability == CapabilityEnergy.ENERGY && facing == world.getBlockState(pos).getValue(FACING)) || super.hasCapability(capability, facing);
+        if (facing == null || facing == world.getBlockState(pos).getValue(FACING))
+        {
+            if (capability == CapabilityEnergy.ENERGY)
+            {
+                return true;
+            }
+            else if (TechConfig.DEVICES.acceptGTCEEU && Loader.isModLoaded("gregtech") && capability == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER)
+            {
+                return true;
+            }
+        }
+        return super.hasCapability(capability, facing);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
     {
-        return capability == CapabilityEnergy.ENERGY && facing == world.getBlockState(pos).getValue(FACING) ? (T) this.energyContainer : super.getCapability(capability, facing);
+        if (facing == null || facing == world.getBlockState(pos).getValue(FACING))
+        {
+            if (capability == CapabilityEnergy.ENERGY)
+            {
+                return (T) this.energyContainer;
+            }
+            else if (TechConfig.DEVICES.acceptGTCEEU && Loader.isModLoaded("gregtech") && capability == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER)
+            {
+                return (T) this.energyContainer.getGTCEHandler();
+            }
+        }
+        return super.getCapability(capability, facing);
     }
 
     @Override

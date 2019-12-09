@@ -47,6 +47,11 @@ public final class TechConfig
         @Config.LangKey("config." + MODID + ".devices.ratioGTCE")
         public int ratioGTCE = 4;
 
+        @Config.Comment({"Which voltage tier machines should register to?"})
+        @Config.RangeInt(min = 1)
+        @Config.LangKey("config." + MODID + ".devices.gtceVoltage")
+        public int gtceVoltage = 32;
+
         @Config.Comment({"Modifier for how quickly electric forge heats items. Smaller number = slower temperature changes. Note: This is affected by TFC global modifier."})
         @Config.RangeDouble(min = 0.01D, max = 1000.0D)
         @Config.LangKey("config." + MODID + ".devices.electricForgeSpeed")

@@ -95,6 +95,9 @@ config.tfctech.devices.acceptGTCEEU.tooltip=Should TFCTech machines accepts GTCE
 config.tfctech.devices.ratioGTCE=GTCE EU Ratio
 config.tfctech.devices.ratioGTCE.tooltip=How much energy 1 GTCE EU unit gives to machines?
 
+config.tfctech.devices.gtceVoltage=GTCE Voltage Input
+config.tfctech.devices.gtceVoltage.tooltip=Which voltage tier machines should register to?
+
 ### Electric Forge
 config.tfctech.devices.electricForgeSpeed=Electric Forge Speed
 config.tfctech.devices.electricForgeSpeed.tooltip=Modifier for how quickly electric forge heats items. Smaller number = slower temperature changes. Note: This is affected by TFC global modifier.
