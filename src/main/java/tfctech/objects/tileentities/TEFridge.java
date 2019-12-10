@@ -25,8 +25,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.capability.GregtechCapabilities;
-import ic2.api.energy.event.EnergyTileLoadEvent;
-import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
 import mcp.MethodsReturnNonnullByDefault;
@@ -187,7 +185,10 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
     public void onChunkUnload()
     {
         super.onChunkUnload();
-        ic2Unload();
+        if (Loader.isModLoaded("ic2"))
+        {
+            ic2Unload();
+        }
     }
 
     @Override
@@ -257,20 +258,22 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
         return 0;
     }
 
+    @Optional.Method(modid = "ic2")
     public void ic2Unload()
     {
         if (!world.isRemote && addedToIc2Network)
         {
-            MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+            MinecraftForge.EVENT_BUS.post(new ic2.api.energy.event.EnergyTileUnloadEvent(this));
             addedToIc2Network = false;
         }
     }
 
+    @Optional.Method(modid = "ic2")
     public void ic2Load()
     {
-        if (!world.isRemote && TechConfig.DEVICES.acceptIc2EU && !addedToIc2Network && Loader.isModLoaded("ic2"))
+        if (!world.isRemote && TechConfig.DEVICES.acceptIc2EU && !addedToIc2Network)
         {
-            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+            MinecraftForge.EVENT_BUS.post(new ic2.api.energy.event.EnergyTileLoadEvent(this));
             addedToIc2Network = true;
         }
     }
@@ -278,21 +281,24 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
     @Override
     public void onBreakBlock(World world, BlockPos pos, IBlockState state)
     {
-        ic2Unload();
-        if (isMainBlock())
+        if (Loader.isModLoaded("ic2"))
         {
-            TEFridge child = Helpers.getTE(world, pos.down(), TEFridge.class);
-            if (child != null)
+            ic2Unload();
+            if (isMainBlock())
             {
-                child.ic2Unload();
+                TEFridge child = Helpers.getTE(world, pos.down(), TEFridge.class);
+                if (child != null)
+                {
+                    child.ic2Unload();
+                }
             }
-        }
-        else
-        {
-            TEFridge main = Helpers.getTE(world, pos.up(), TEFridge.class);
-            if (main != null)
+            else
             {
-                main.ic2Unload();
+                TEFridge main = Helpers.getTE(world, pos.up(), TEFridge.class);
+                if (main != null)
+                {
+                    main.ic2Unload();
+                }
             }
         }
         super.onBreakBlock(world, pos, state);
@@ -306,6 +312,7 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
         return INFINITE_EXTENT_AABB;
     }
 
+    @Optional.Method(modid = "ic2")
     @Override
     public boolean acceptsEnergyFrom(IEnergyEmitter iEnergyEmitter, EnumFacing facing)
     {
@@ -389,7 +396,10 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
     @Override
     public void update()
     {
-        ic2Load();
+        if (Loader.isModLoaded("ic2"))
+        {
+            ic2Load();
+        }
         if (!isMainBlock()) return;
         lastOpen = open;
         if (openingState == 1)

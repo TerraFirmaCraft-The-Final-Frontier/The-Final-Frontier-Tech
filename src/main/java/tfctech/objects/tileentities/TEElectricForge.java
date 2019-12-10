@@ -22,8 +22,6 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 
 import gregtech.api.capability.GregtechCapabilities;
-import ic2.api.energy.event.EnergyTileLoadEvent;
-import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
 import net.dries007.tfc.ConfigTFC;
@@ -84,7 +82,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
         super.invalidate();
         if (!world.isRemote && addedToIc2Network)
         {
-            MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+            MinecraftForge.EVENT_BUS.post(new ic2.api.energy.event.EnergyTileUnloadEvent(this));
             addedToIc2Network = false;
         }
     }
@@ -96,7 +94,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
         super.validate();
         if (!world.isRemote && TechConfig.DEVICES.acceptIc2EU && !addedToIc2Network)
         {
-            MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+            MinecraftForge.EVENT_BUS.post(new ic2.api.energy.event.EnergyTileLoadEvent(this));
             addedToIc2Network = true;
         }
     }
@@ -321,6 +319,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
         return 0;
     }
 
+    @Optional.Method(modid = "ic2")
     @Override
     public boolean acceptsEnergyFrom(IEnergyEmitter iEnergyEmitter, EnumFacing facing)
     {
