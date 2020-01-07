@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -16,6 +15,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.capability.GregtechCapabilities;
 import ic2.api.energy.tile.IEnergyEmitter;
@@ -28,7 +29,6 @@ import tfctech.TFCTech;
 import tfctech.TechConfig;
 import tfctech.client.TechSounds;
 import tfctech.client.audio.IMachineSoundEffect;
-import tfctech.client.audio.MachineSound;
 import tfctech.objects.blocks.devices.BlockElectricForge;
 import tfctech.objects.storage.MachineEnergyContainer;
 
@@ -43,6 +43,7 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     private int litTime = 0; //Client "effects" only
 
     private boolean addedToIc2Network = false;
+    private boolean soundPlay = false;
 
     public TEInductionCrucible()
     {
@@ -108,17 +109,9 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     @Override
     public void update()
     {
-        if (this.hasWorld() && world.isRemote)
+        if (world.isRemote)
         {
-            if (isPlaying())
-            {
-                MachineSound sound = new MachineSound(this);
-                // Play sound on client side
-                if (!Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sound))
-                {
-                    Minecraft.getMinecraft().getSoundHandler().playSound(sound);
-                }
-            }
+            IMachineSoundEffect.super.update();
             return;
         }
         IBlockState state = world.getBlockState(pos);
@@ -240,6 +233,7 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
         }
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public SoundEvent getSoundEvent()
     {
@@ -247,11 +241,24 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     }
 
     @Override
-    public boolean isPlaying()
+    public boolean shouldPlay()
     {
-        return !this.isInvalid() && this.hasWorld() && world.getBlockState(pos).getValue(LIT);
+        return !this.isInvalid() && world.getBlockState(pos).getValue(LIT);
     }
 
+    @Override
+    public boolean isPlaying()
+    {
+        return soundPlay;
+    }
+
+    @Override
+    public void setPlaying(boolean value)
+    {
+        soundPlay = value;
+    }
+
+    @SideOnly(Side.CLIENT)
     @Override
     public BlockPos getSoundPos()
     {

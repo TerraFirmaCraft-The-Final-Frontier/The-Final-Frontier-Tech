@@ -48,6 +48,6 @@ public class MachineSound extends PositionedSound implements ITickableSound
     @Override
     public boolean isDonePlaying()
     {
-        return !machine.isPlaying();
+        return !machine.shouldPlay();
     }
 }

@@ -1,11 +1,11 @@
 package tfctech.objects.tileentities;
 
+import java.util.Arrays;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -20,6 +20,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gregtech.api.capability.GregtechCapabilities;
 import ic2.api.energy.tile.IEnergyEmitter;
@@ -35,7 +37,6 @@ import tfctech.TFCTech;
 import tfctech.TechConfig;
 import tfctech.client.TechSounds;
 import tfctech.client.audio.IMachineSoundEffect;
-import tfctech.client.audio.MachineSound;
 import tfctech.objects.blocks.devices.BlockElectricForge;
 import tfctech.objects.storage.MachineEnergyContainer;
 
@@ -54,6 +55,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     private float targetTemperature = 0.0F;
     private MachineEnergyContainer energyContainer;
     private int litTime = 0;
+    private boolean soundPlay = false;
 
     private boolean addedToIc2Network = false;
 
@@ -61,10 +63,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     {
         super(12);
         energyContainer = new MachineEnergyContainer(TechConfig.DEVICES.electricForgeEnergyCapacity, TechConfig.DEVICES.electricForgeEnergyCapacity, 0);
-        for (int i = 0; i < cachedRecipes.length; i++)
-        {
-            cachedRecipes[i] = null;
-        }
+        Arrays.fill(cachedRecipes, null);
     }
 
     public void addTargetTemperature(int value)
@@ -102,17 +101,9 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     @Override
     public void update()
     {
-        if (this.hasWorld() && world.isRemote)
+        if (world.isRemote)
         {
-            if (isPlaying())
-            {
-                MachineSound sound = new MachineSound(this);
-                // Play sound on client side
-                if (!Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sound))
-                {
-                    Minecraft.getMinecraft().getSoundHandler().playSound(sound);
-                }
-            }
+            IMachineSoundEffect.super.update();
             return;
         }
         IBlockState state = world.getBlockState(pos);
@@ -132,7 +123,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
                 {
                     float heatSpeed = (float) TechConfig.DEVICES.electricForgeSpeed * 15.0F;
                     float temp = cap.getTemperature() + heatSpeed * cap.getHeatCapacity() * (float) ConfigTFC.GENERAL.temperatureModifierGlobal;
-                    cap.setTemperature(temp > targetTemperature ? targetTemperature : temp);
+                    cap.setTemperature(Math.min(temp, targetTemperature));
                     litTime = 15;
                 }
                 handleInputMelting(stack, i);
@@ -277,6 +268,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
         return energyContainer.getMaxEnergyStored();
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public SoundEvent getSoundEvent()
     {
@@ -284,11 +276,24 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     }
 
     @Override
-    public boolean isPlaying()
+    public boolean shouldPlay()
     {
-        return !this.isInvalid() && this.hasWorld() && world.getBlockState(pos).getValue(LIT);
+        return !this.isInvalid() && world.getBlockState(pos).getValue(LIT);
     }
 
+    @Override
+    public boolean isPlaying()
+    {
+        return soundPlay;
+    }
+
+    @Override
+    public void setPlaying(boolean value)
+    {
+        soundPlay = value;
+    }
+
+    @SideOnly(Side.CLIENT)
     @Override
     public BlockPos getSoundPos()
     {
