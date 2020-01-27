@@ -16,7 +16,7 @@ public class ContainerElectricForge extends ContainerTE<TEElectricForge> impleme
 {
     public ContainerElectricForge(InventoryPlayer playerInv, TEElectricForge te)
     {
-        super(playerInv, te, true);
+        super(playerInv, te);
     }
 
     @Override
