@@ -35,6 +35,7 @@ public final class TechBlocks
     public static final BlockLatexExtractor LATEX_EXTRACTOR = getNull();
     public static final BlockWireDrawBench WIRE_DRAW_BENCH = getNull();
     public static final BlockFridge FRIDGE = getNull();
+    public static final BlockSmeltery SMELTERY = getNull();
 
     private static ImmutableList<ItemBlock> allInventoryItemBlocks, allTEISRBlocks;
     private static ImmutableList<BlockFluidBase> allFluidBlocks;
@@ -87,6 +88,7 @@ public final class TechBlocks
 
         //No itemblocks
         register(r, "latex_extractor", new BlockLatexExtractor());
+        register(r, "smeltery", new BlockSmeltery());
 
         //Register TEs
         register(TEElectricForge.class, "electric_forge");
@@ -94,6 +96,7 @@ public final class TechBlocks
         register(TELatexExtractor.class, "latex_extractor");
         register(TEWireDrawBench.class, "wire_draw_bench");
         register(TEFridge.class, "fridge");
+        register(TESmeltery.class, "smeltery");
     }
 
     private static <T extends Block> T register(IForgeRegistry<Block> r, String name, T block, CreativeTabs ct)

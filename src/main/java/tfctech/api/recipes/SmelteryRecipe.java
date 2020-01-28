@@ -25,7 +25,7 @@ public class SmelteryRecipe extends IForgeRegistryEntry.Impl<SmelteryRecipe>
     }
 
     @Nullable
-    public SmelteryRecipe get(ItemStack... ingredients)
+    public static SmelteryRecipe get(ItemStack... ingredients)
     {
         return TechRegistries.SMELTERY.getValuesCollection().stream().filter(x -> x.isValidInput(ingredients)).findFirst().orElse(null);
     }
@@ -43,14 +43,41 @@ public class SmelteryRecipe extends IForgeRegistryEntry.Impl<SmelteryRecipe>
         return outputFluid != null;
     }
 
-    public ItemStack[] getOutputStack()
+    public ItemStack[] getOutputStack(@Nullable List<ItemStack> inputs)
     {
-        return this.outputStack;
+        int recipeCount = this.getRecipeCount(inputs);
+        ItemStack[] output = new ItemStack[this.outputStack.length];
+        for (int i = 0; i < output.length; i++)
+        {
+            output[i] = this.outputStack[i].copy();
+            output[i].setCount(output[i].getCount() * recipeCount);
+        }
+        return output;
     }
 
-    public FluidStack getOutputFluid()
+    public FluidStack getOutputFluid(@Nullable List<ItemStack> inputs)
     {
-        return this.outputFluid;
+        FluidStack output = this.outputFluid.copy();
+        output.amount *= this.getRecipeCount(inputs);
+        return output;
+    }
+
+    private int getRecipeCount(@Nullable List<ItemStack> inputs)
+    {
+        if (inputs == null) return 1;
+        int recipeCount = Integer.MAX_VALUE;
+        for (IIngredient<ItemStack> ingredient : ingredients)
+        {
+            for (ItemStack input : inputs)
+            {
+                if (ingredient.test(input))
+                {
+                    recipeCount = Math.min(recipeCount, input.getCount() / ingredient.getAmount());
+                    break;
+                }
+            }
+        }
+        return recipeCount;
     }
 
     public float getSolidifyTemp()

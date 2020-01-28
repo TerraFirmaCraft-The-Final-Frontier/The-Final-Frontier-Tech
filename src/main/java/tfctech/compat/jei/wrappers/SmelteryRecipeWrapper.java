@@ -39,11 +39,11 @@ public class SmelteryRecipeWrapper implements IRecipeWrapper
 
         if (recipe.isFluid())
         {
-            allOutputFluids.add(NonNullList.withSize(1, recipe.getOutputFluid()));
+            allOutputFluids.add(NonNullList.withSize(1, recipe.getOutputFluid(null)));
         }
         else
         {
-            for (ItemStack stack : recipe.getOutputStack())
+            for (ItemStack stack : recipe.getOutputStack(null))
             {
                 allOutputs.add(NonNullList.withSize(1, stack));
             }

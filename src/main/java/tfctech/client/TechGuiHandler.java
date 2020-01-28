@@ -15,9 +15,12 @@ import net.dries007.tfc.util.Helpers;
 import tfctech.TFCTech;
 import tfctech.client.gui.GuiElectricForge;
 import tfctech.client.gui.GuiInductionCrucible;
+import tfctech.client.gui.GuiSmeltery;
 import tfctech.objects.container.ContainerElectricForge;
+import tfctech.objects.container.ContainerSmeltery;
 import tfctech.objects.tileentities.TEElectricForge;
 import tfctech.objects.tileentities.TEInductionCrucible;
+import tfctech.objects.tileentities.TESmeltery;
 
 import static tfctech.TFCTech.MODID;
 
@@ -44,6 +47,9 @@ public class TechGuiHandler implements IGuiHandler
             case INDUCTION_CRUCIBLE:
                 TEInductionCrucible teInductionCrucible = Helpers.getTE(world, pos, TEInductionCrucible.class);
                 return teInductionCrucible == null ? null : new ContainerCrucible(player.inventory, teInductionCrucible);
+            case SMELTERY:
+                TESmeltery teSmeltery = Helpers.getTE(world, pos, TESmeltery.class);
+                return teSmeltery == null ? null : new ContainerSmeltery(player.inventory, teSmeltery);
             default:
                 return null;
         }
@@ -63,6 +69,8 @@ public class TechGuiHandler implements IGuiHandler
                 return new GuiElectricForge(container, player.inventory, Helpers.getTE(world, pos, TEElectricForge.class));
             case INDUCTION_CRUCIBLE:
                 return new GuiInductionCrucible(container, player.inventory, Helpers.getTE(world, pos, TEInductionCrucible.class));
+            case SMELTERY:
+                return new GuiSmeltery(container, player.inventory, Helpers.getTE(world, pos, TESmeltery.class));
             default:
                 return null;
         }
@@ -71,7 +79,8 @@ public class TechGuiHandler implements IGuiHandler
     public enum Type
     {
         ELECTRIC_FORGE,
-        INDUCTION_CRUCIBLE;
+        INDUCTION_CRUCIBLE,
+        SMELTERY;
 
         private static Type[] values = values();
 
