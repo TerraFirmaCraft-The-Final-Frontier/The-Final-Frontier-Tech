@@ -42,6 +42,7 @@ import tfctech.registry.TechFoodTraits;
 
 import static tfctech.objects.blocks.devices.BlockFridge.UPPER;
 
+@SuppressWarnings("WeakerAccess")
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "ic2")

@@ -9,9 +9,9 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.dries007.tfc.api.capability.heat.ItemHeatHandler;
 import net.dries007.tfc.api.capability.size.Size;
 import net.dries007.tfc.api.capability.size.Weight;
-import net.dries007.tfc.objects.items.ItemMisc;
 
-public class ItemMiscHeatable extends ItemMisc
+@SuppressWarnings("WeakerAccess")
+public class ItemMiscHeatable extends ItemMiscTech
 {
 
     private float heatCapacity, meltTemp;
@@ -19,6 +19,13 @@ public class ItemMiscHeatable extends ItemMisc
     public ItemMiscHeatable(Size size, Weight weight, float heatCapacity, float meltTemp)
     {
         super(size, weight);
+        this.heatCapacity = heatCapacity;
+        this.meltTemp = meltTemp;
+    }
+
+    public ItemMiscHeatable(Size size, Weight weight, float heatCapacity, float meltTemp, String oreDictionary)
+    {
+        super(size, weight, oreDictionary);
         this.heatCapacity = heatCapacity;
         this.meltTemp = meltTemp;
     }

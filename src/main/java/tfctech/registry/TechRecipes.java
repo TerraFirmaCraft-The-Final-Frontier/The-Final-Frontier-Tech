@@ -10,6 +10,7 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -24,6 +25,7 @@ import net.dries007.tfc.api.recipes.heat.HeatRecipeSimple;
 import net.dries007.tfc.api.recipes.knapping.KnappingRecipe;
 import net.dries007.tfc.api.recipes.knapping.KnappingRecipeSimple;
 import net.dries007.tfc.api.recipes.knapping.KnappingType;
+import net.dries007.tfc.api.recipes.quern.QuernRecipe;
 import net.dries007.tfc.api.registries.TFCRegistries;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.api.util.TFCConstants;
@@ -32,6 +34,7 @@ import net.dries007.tfc.objects.items.metal.ItemMetal;
 import net.dries007.tfc.objects.recipes.ShapelessDamageRecipe;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.forge.ForgeRule;
+import tfctech.api.recipes.SmelteryRecipe;
 import tfctech.api.recipes.WireDrawingRecipe;
 import tfctech.objects.fluids.TechFluids;
 import tfctech.objects.items.TechItems;
@@ -55,7 +58,17 @@ public final class TechRecipes
     {
         event.getRegistry().registerAll(
                 new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.RUBBER_MIX)), new ItemStack(TechItems.RUBBER), 600f, Metal.Tier.TIER_I).setRegistryName("rubber"),
-                new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE)), new ItemStack(TechItems.MOLD_RACKWHEEL_PIECE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_rackwheel")
+                new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE)), new ItemStack(TechItems.MOLD_RACKWHEEL_PIECE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_rackwheel"),
+                new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.WOOD_DUST_POT)), new ItemStack(TechItems.POTASH_POT), 500f, Metal.Tier.TIER_I).setRegistryName("potash_pot"),
+                new HeatRecipeSimple(IIngredient.of("rockFlux"), new ItemStack(TechItems.LIME, 2), 600f, Metal.Tier.TIER_I).setRegistryName("lime")
+        );
+    }
+
+    @SubscribeEvent
+    public static void onRegisterQuernRecipeEvent(RegistryEvent.Register<QuernRecipe> event)
+    {
+        event.getRegistry().registerAll(
+                new QuernRecipe(IIngredient.of("logWood"), new ItemStack(TechItems.WOOD_DUST, 6)).setRegistryName("wood_dust")
         );
     }
 
@@ -74,6 +87,7 @@ public final class TechRecipes
 
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
+            //noinspection deprecation
             if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
                 continue;
             //Register all wires
@@ -107,12 +121,24 @@ public final class TechRecipes
     }
 
     @SubscribeEvent
+    public static void onRegisterSmelteryRecipeEvent(RegistryEvent.Register<SmelteryRecipe> event)
+    {
+        IForgeRegistry<SmelteryRecipe> r = event.getRegistry();
+        r.registerAll(
+                SmelteryRecipe.Builder.newFluidBuilder(new ResourceLocation(MODID, "molten_glass"))
+                        .addInput(IIngredient.of("dustPotash")).addInput(IIngredient.of("sandSilica")).addInput(IIngredient.of("dustLime"))
+                        .setOutput(new FluidStack(TechFluids.GLASS.get(), 1000), 800).build()
+        );
+    }
+
+    @SubscribeEvent
     public static void onRegisterWireDrawingRecipeEvent(RegistryEvent.Register<WireDrawingRecipe> event)
     {
         IForgeRegistry<WireDrawingRecipe> r = event.getRegistry();
         //Register all wires
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
+            //noinspection deprecation
             if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
                 continue;
             for (int i = 4; i > 0; i--)
@@ -140,6 +166,7 @@ public final class TechRecipes
         // Tier V-VI = Steel sleeve
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
+            //noinspection deprecation
             if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
                 continue;
             IIngredient<ItemStack> ingredient1 = IIngredient.of(new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.RACKWHEEL)));
@@ -185,6 +212,7 @@ public final class TechRecipes
         ResourceLocation groupScrew = new ResourceLocation(MODID, "screw");
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
+            //noinspection deprecation
             if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
                 continue;
 

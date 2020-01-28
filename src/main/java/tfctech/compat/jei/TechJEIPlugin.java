@@ -10,7 +10,9 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import net.dries007.tfc.compat.jei.wrappers.SimpleRecipeWrapper;
+import tfctech.compat.jei.categories.SmelteryCategory;
 import tfctech.compat.jei.categories.WireDrawingCategory;
+import tfctech.compat.jei.wrappers.SmelteryRecipeWrapper;
 import tfctech.objects.blocks.TechBlocks;
 import tfctech.registry.TechRegistries;
 
@@ -20,12 +22,14 @@ import static tfctech.TFCTech.MODID;
 public class TechJEIPlugin implements IModPlugin
 {
     private static final String WIRE_DRAWING_UID = MODID + ".wire_drawing";
+    private static final String SMELTERY_UID = MODID + ".smeltery";
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry)
     {
         //Add new JEI recipe categories
         registry.addRecipeCategories(new WireDrawingCategory(registry.getJeiHelpers().getGuiHelper(), WIRE_DRAWING_UID));
+        registry.addRecipeCategories(new SmelteryCategory(registry.getJeiHelpers().getGuiHelper(), SMELTERY_UID));
     }
 
     @Override
@@ -39,5 +43,13 @@ public class TechJEIPlugin implements IModPlugin
 
         registry.addRecipes(wireList, WIRE_DRAWING_UID);
         registry.addRecipeCatalyst(new ItemStack(TechBlocks.WIRE_DRAW_BENCH), WIRE_DRAWING_UID);
+
+        List<SmelteryRecipeWrapper> smelteryList = TechRegistries.SMELTERY.getValuesCollection()
+                .stream()
+                .map(SmelteryRecipeWrapper::new)
+                .collect(Collectors.toList());
+
+        registry.addRecipes(smelteryList, SMELTERY_UID);
+        registry.addRecipeCatalyst(new ItemStack(TechBlocks.WIRE_DRAW_BENCH), SMELTERY_UID);
     }
 }

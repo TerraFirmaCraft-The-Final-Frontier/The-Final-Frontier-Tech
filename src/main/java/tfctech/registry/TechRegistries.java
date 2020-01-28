@@ -8,6 +8,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryBuilder;
 
+import tfctech.api.recipes.SmelteryRecipe;
 import tfctech.api.recipes.WireDrawingRecipe;
 
 import static tfctech.TFCTech.MODID;
@@ -16,11 +17,13 @@ import static tfctech.TFCTech.MODID;
 public final class TechRegistries
 {
     public static IForgeRegistry<WireDrawingRecipe> WIRE_DRAWING;
+    public static IForgeRegistry<SmelteryRecipe> SMELTERY;
 
     @SubscribeEvent
     public static void onNewRegistryEvent(RegistryEvent.NewRegistry event)
     {
         WIRE_DRAWING = createRegistry(new ResourceLocation(MODID, "wire_drawing_recipe"), WireDrawingRecipe.class);
+        SMELTERY = createRegistry(new ResourceLocation(MODID, "smeltery_recipe"), SmelteryRecipe.class);
     }
 
     private static <T extends IForgeRegistryEntry<T>> IForgeRegistry<T> createRegistry(ResourceLocation name, Class<T> tClass)

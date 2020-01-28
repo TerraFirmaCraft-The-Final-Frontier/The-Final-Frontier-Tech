@@ -1,6 +1,7 @@
 package tfctech.objects.items;
 
 import java.util.function.Function;
+import javax.annotation.Nonnull;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
@@ -21,9 +22,12 @@ import net.dries007.tfc.api.capability.size.Size;
 import net.dries007.tfc.api.capability.size.Weight;
 import net.dries007.tfc.api.registries.TFCRegistries;
 import net.dries007.tfc.api.types.Metal;
+import net.dries007.tfc.api.types.Rock;
 import net.dries007.tfc.api.util.TFCConstants;
 import net.dries007.tfc.objects.ToolMaterialsTFC;
-import net.dries007.tfc.objects.items.ItemMisc;
+import net.dries007.tfc.objects.blocks.BlocksTFC;
+import net.dries007.tfc.objects.blocks.stone.BlockRockVariant;
+import net.dries007.tfc.objects.items.ItemsTFC;
 import net.dries007.tfc.objects.items.ceramics.ItemPottery;
 import net.dries007.tfc.util.OreDictionaryHelper;
 import tfctech.objects.blocks.TechBlocks;
@@ -48,11 +52,22 @@ public final class TechItems
     @GameRegistry.ObjectHolder("ceramics/fluid_bowl")
     public static final ItemFluidBowl FLUID_BOWL = getNull();
     @GameRegistry.ObjectHolder("latex/vulcanizing_agents")
-    public static final ItemMisc VULCANIZING_AGENTS = getNull();
+    public static final ItemMiscTech VULCANIZING_AGENTS = getNull();
     @GameRegistry.ObjectHolder("latex/rubber_mix")
     public static final ItemMiscHeatable RUBBER_MIX = getNull();
     @GameRegistry.ObjectHolder("latex/rubber")
     public static final ItemMiscHeatable RUBBER = getNull();
+
+    @GameRegistry.ObjectHolder("glass/lime")
+    public static final ItemMiscTech LIME = getNull();
+    @GameRegistry.ObjectHolder("glass/potash")
+    public static final ItemMiscTech POTASH = getNull();
+    @GameRegistry.ObjectHolder("glass/potash_pot")
+    public static final ItemPottery POTASH_POT = getNull();
+    @GameRegistry.ObjectHolder("glass/wood_dust")
+    public static final ItemMiscTech WOOD_DUST = getNull();
+    @GameRegistry.ObjectHolder("glass/wood_dust_pot")
+    public static final ItemPottery WOOD_DUST_POT = getNull();
 
 
     @GameRegistry.ObjectHolder("metal/iron_draw_plate")
@@ -64,9 +79,9 @@ public final class TechItems
     @GameRegistry.ObjectHolder("metal/iron_tongs")
     public static final ItemTechMetal IRON_TONGS = getNull();
     @GameRegistry.ObjectHolder("wiredraw/leather_belt")
-    public static final ItemMisc LEATHER_BELT = getNull();
+    public static final ItemMiscTech LEATHER_BELT = getNull();
     @GameRegistry.ObjectHolder("wiredraw/winch")
-    public static final ItemMisc WINCH = getNull();
+    public static final ItemMiscTech WINCH = getNull();
 
     @GameRegistry.ObjectHolder("metal/copper_inductor")
     public static final ItemTechMetal COPPER_INDUCTOR = getNull();
@@ -109,12 +124,32 @@ public final class TechItems
         IForgeRegistry<Item> r = event.getRegistry();
         ImmutableList.Builder<Item> simpleItems = ImmutableList.builder();
 
-        simpleItems.add(register(r, "latex/vulcanizing_agents", new ItemMisc(Size.SMALL, Weight.LIGHT), CT_MISC));
-        simpleItems.add(register(r, "latex/rubber_mix", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.8f, 800f), CT_MISC));
-        simpleItems.add(register(r, "latex/rubber", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.8f, 800f), CT_MISC));
+        simpleItems.add(register(r, "glass/wood_dust", new ItemMiscTech(Size.SMALL, Weight.LIGHT, "dustWood"), CT_MISC));
+        simpleItems.add(register(r, "glass/wood_dust_pot", new ItemPottery(), CT_MISC));
+        simpleItems.add(register(r, "glass/potash_pot", new ItemPottery()
+        {
+            @Nonnull
+            @Override
+            public ItemStack getContainerItem(@Nonnull ItemStack itemStack)
+            {
+                return new ItemStack(ItemsTFC.FIRED_POT);
+            }
 
-        simpleItems.add(register(r, "wiredraw/leather_belt", new ItemMisc(Size.NORMAL, Weight.LIGHT), CT_MISC));
-        simpleItems.add(register(r, "wiredraw/winch", new ItemMisc(Size.NORMAL, Weight.MEDIUM), CT_MISC));
+            @Override
+            public boolean hasContainerItem(ItemStack stack)
+            {
+                return true;
+            }
+        }, CT_MISC));
+        simpleItems.add(register(r, "glass/potash", new ItemMiscTech(Size.SMALL, Weight.LIGHT, "dustPotash"), CT_MISC));
+        simpleItems.add(register(r, "glass/lime", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.2f, 2000f, "dustLime"), CT_MISC));
+
+        simpleItems.add(register(r, "latex/vulcanizing_agents", new ItemMiscTech(Size.SMALL, Weight.LIGHT), CT_MISC));
+        simpleItems.add(register(r, "latex/rubber_mix", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.8f, 800f), CT_MISC));
+        simpleItems.add(register(r, "latex/rubber", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.8f, 800f, "rubber"), CT_MISC));
+
+        simpleItems.add(register(r, "wiredraw/leather_belt", new ItemMiscTech(Size.NORMAL, Weight.LIGHT), CT_MISC));
+        simpleItems.add(register(r, "wiredraw/winch", new ItemMiscTech(Size.NORMAL, Weight.MEDIUM), CT_MISC));
 
         //Unfired is simple
         simpleItems.add(register(r, "ceramics/unfired/rackwheel_piece", new ItemPottery(), CT_MISC));
@@ -143,6 +178,7 @@ public final class TechItems
 
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
+            //noinspection deprecation
             if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
                 continue;
             //noinspection ConstantConditions
@@ -170,6 +206,38 @@ public final class TechItems
             ItemTechMetal techMetal = (ItemTechMetal) metalItem;
             OreDictionary.registerOre(OreDictionaryHelper.toString(techMetal.getType(), techMetal.getMetal(ItemStack.EMPTY)), new ItemStack(metalItem, 1, 0));
         }
+
+        for (Item item : allSimpleItems)
+        {
+            if (item instanceof ItemMiscTech && ((ItemMiscTech) item).getOreDictionary() != null)
+            {
+                OreDictionary.registerOre(((ItemMiscTech) item).getOreDictionary(), item);
+            }
+        }
+    }
+
+    /**
+     * Add missing ore dictionary to TFC
+     */
+    public static void init()
+    {
+        BlocksTFC.getAllBlockRockVariants().forEach(x -> {
+            if (x.getType() == Rock.Type.SAND && isSilica(x))
+            {
+                OreDictionary.registerOre("sandSilica", x);
+            }
+        });
+    }
+
+    private static boolean isSilica(BlockRockVariant block)
+    {
+        //noinspection ConstantConditions
+        String rockName = block.getRock().getRegistryName().getPath().toLowerCase();
+        return rockName.equalsIgnoreCase("chert") ||
+                rockName.equalsIgnoreCase("granite") ||
+                rockName.equalsIgnoreCase("quartzite") ||
+                rockName.equalsIgnoreCase("rhyolite") ||
+                rockName.equalsIgnoreCase("phyllite");
     }
 
     private static <T extends Block> ItemBlock createItemBlock(T block, Function<T, ItemBlock> producer)
