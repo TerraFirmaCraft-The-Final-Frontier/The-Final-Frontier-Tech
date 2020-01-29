@@ -71,6 +71,10 @@ fluid.latex=Latex
 tooltip.tfctech.ceramics.fluid_bowl.fluid=Contains %smB of %s
 tooltip.tfctech.metalitem.wire.stage=Stage %s
 
+## Smeltery info
+tooltip.tfctech.smeltery.molten=Molten
+tooltip.tfctech.smeltery.solid=Solidified
+
 ## Status
 tooltip.tfctech.wiredraw.low_tier=Drawing Plate is too low tier!
 

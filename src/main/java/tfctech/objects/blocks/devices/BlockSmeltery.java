@@ -135,7 +135,7 @@ public class BlockSmeltery extends BlockHorizontal implements ILightableBlock
                         {
                             smeltery.onIgnite();
                         }
-                        else if (held.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null))
+                        else if (held.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
                         {
                             IFluidHandler fluidHandler = smeltery.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
                             if (fluidHandler != null)

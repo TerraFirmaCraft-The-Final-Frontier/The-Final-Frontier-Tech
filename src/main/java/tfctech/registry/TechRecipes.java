@@ -3,6 +3,7 @@ package tfctech.registry;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
@@ -34,6 +35,7 @@ import net.dries007.tfc.objects.items.metal.ItemMetal;
 import net.dries007.tfc.objects.recipes.ShapelessDamageRecipe;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.forge.ForgeRule;
+import tfctech.api.recipes.GlassworkingRecipe;
 import tfctech.api.recipes.SmelteryRecipe;
 import tfctech.api.recipes.WireDrawingRecipe;
 import tfctech.objects.fluids.TechFluids;
@@ -117,6 +119,17 @@ public final class TechRecipes
 
         r.registerAll(
                 new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE), "XXXXX", "X XXX", "X  XX", "XX  X", "XXXXX").setRegistryName("clay_rackwheel_piece")
+        );
+    }
+
+    @SubscribeEvent
+    public static void onRegisterGlassworkingRecipeEvent(RegistryEvent.Register<GlassworkingRecipe> event)
+    {
+        IForgeRegistry<GlassworkingRecipe> r = event.getRegistry();
+
+        r.registerAll(
+            new GlassworkingRecipe(new ResourceLocation(MODID, "glass_bottle"), new ItemStack(Items.GLASS_BOTTLE),
+                " X X ", "X   X", "X   X", "X   X", "XXXXX")
         );
     }
 

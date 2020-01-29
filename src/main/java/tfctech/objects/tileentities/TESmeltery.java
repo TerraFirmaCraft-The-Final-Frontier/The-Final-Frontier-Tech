@@ -16,7 +16,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
 import net.dries007.tfc.api.recipes.heat.HeatRecipe;
 import net.dries007.tfc.api.recipes.heat.HeatRecipeMetalMelting;
@@ -25,6 +24,7 @@ import net.dries007.tfc.objects.fluids.capability.FluidHandlerSided;
 import net.dries007.tfc.objects.fluids.capability.FluidTankCallback;
 import net.dries007.tfc.objects.fluids.capability.IFluidHandlerSidedCallback;
 import net.dries007.tfc.objects.fluids.capability.IFluidTankCallback;
+import net.dries007.tfc.objects.te.ITileFields;
 import net.dries007.tfc.objects.te.TEInventory;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.dries007.tfc.util.fuel.FuelManager;
@@ -34,13 +34,14 @@ import tfctech.objects.blocks.devices.BlockSmeltery;
 import static net.dries007.tfc.objects.blocks.property.ILightableBlock.LIT;
 
 @ParametersAreNonnullByDefault
-public class TESmeltery extends TEInventory implements ITickable, ICalendarTickable, IFluidHandlerSidedCallback, IFluidTankCallback
+public class TESmeltery extends TEInventory implements ITickable, ICalendarTickable, IFluidHandlerSidedCallback, IFluidTankCallback, ITileFields
 {
+    public static final int FLUID_CAPACITY = 4000;
     private int form = 5;
     private int burnTicks = 0;
     private long lastPlayerTick = 0;
     private float temp = 0, solidifyTemp = 0;
-    private FluidTank tank = new FluidTankCallback(this, 0, 3000);
+    private FluidTank tank = new FluidTankCallback(this, 0, FLUID_CAPACITY);
 
     public TESmeltery()
     {
@@ -72,9 +73,32 @@ public class TESmeltery extends TEInventory implements ITickable, ICalendarTicka
             }
             else
             {
-                temp = CapabilityItemHeat.adjustTemp(temp, 0.2f, 1);
+                temp = CapabilityItemHeat.adjustTemp(temp, 0.25f, 1);
             }
         }
+    }
+
+    public boolean hasFluid()
+    {
+        return tank.drain(1, false) != null;
+    }
+
+    /*
+     * For visuals only
+     */
+    public FluidStack getFluid()
+    {
+        return tank.drain(FLUID_CAPACITY, false);
+    }
+
+    public float getTemp()
+    {
+        return temp;
+    }
+
+    public boolean isSolidified()
+    {
+        return hasFluid() && temp <= solidifyTemp;
     }
 
     @Override
@@ -86,7 +110,7 @@ public class TESmeltery extends TEInventory implements ITickable, ICalendarTicka
     @Override
     public boolean canDrain(EnumFacing enumFacing)
     {
-        return true;
+        return !isSolidified();
     }
 
     @Override
@@ -110,12 +134,12 @@ public class TESmeltery extends TEInventory implements ITickable, ICalendarTicka
                     long surplusTicks = burnTicks * -1;
                     burnTicks = 0;
                     finishCooking();
-                    temp = CapabilityItemHeat.adjustTemp(temp, 0.2f, surplusTicks);
+                    temp = CapabilityItemHeat.adjustTemp(temp, 0.25f, surplusTicks);
                 }
             }
             else
             {
-                temp = CapabilityItemHeat.adjustTemp(temp, 0.2f, l);
+                temp = CapabilityItemHeat.adjustTemp(temp, 0.25f, l);
             }
         }
     }
@@ -160,7 +184,6 @@ public class TESmeltery extends TEInventory implements ITickable, ICalendarTicka
     @Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
     {
-        // Allow extraction of fluids via front facing
         return (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) || super.hasCapability(capability, facing);
     }
 
@@ -181,7 +204,7 @@ public class TESmeltery extends TEInventory implements ITickable, ICalendarTicka
         {
             world.setBlockState(pos, world.getBlockState(pos).withProperty(LIT, true));
             this.burnTicks = 500; //todo config
-            for (int i = 4; i < 8; i++)
+            for (int i = 0; i < 4; i++)
             {
                 inventory.setStackInSlot(i, ItemStack.EMPTY);
             }
@@ -192,11 +215,50 @@ public class TESmeltery extends TEInventory implements ITickable, ICalendarTicka
     }
 
     @Override
+    public int getFieldCount()
+    {
+        return 2;
+    }
+
+    @Override
+    public void setField(int index, int value)
+    {
+        switch (index)
+        {
+            case 1:
+                temp = value;
+                break;
+            case 2:
+                solidifyTemp = value;
+                break;
+        }
+    }
+
+    @Override
+    public int getField(int index)
+    {
+        switch (index)
+        {
+            case 1:
+                return (int) temp;
+            case 2:
+                return (int) solidifyTemp;
+        }
+        return 0;
+    }
+
+    @Override
+    public int getSlotLimit(int slot)
+    {
+        return slot >= 4 ? 64 : 1; //1 fuel
+    }
+
+    @Override
     public boolean isItemValid(int slot, @Nonnull ItemStack stack)
     {
-        if(slot < 4)
+        if (slot >= 4)
         {
-            return !FuelManager.isItemFuel(stack); // Accept anything non-fuel, destroy not recipe-able after firing
+            return !hasFluid() && !FuelManager.isItemFuel(stack); // Accept anything non-fuel, destroy not recipe-able after firing
         }
         else
         {
@@ -206,7 +268,7 @@ public class TESmeltery extends TEInventory implements ITickable, ICalendarTicka
 
     private boolean hasFuel()
     {
-        for(int i = 4; i < 8; i++)
+        for (int i = 0; i < 4; i++)
         {
             if(!FuelManager.isItemFuel(inventory.getStackInSlot(i)))
             {
@@ -214,12 +276,6 @@ public class TESmeltery extends TEInventory implements ITickable, ICalendarTicka
             }
         }
         return true;
-    }
-
-    @Override
-    public int getSlotLimit(int slot)
-    {
-        return slot < 4 ? 64 : 1; //1 fuel
     }
 
     public boolean addWall()
@@ -250,7 +306,7 @@ public class TESmeltery extends TEInventory implements ITickable, ICalendarTicka
         if (tank.drain(1, false) == null)
         {
             List<ItemStack> input = new ArrayList<>();
-            for (int i = 0; i < 4; i++)
+            for (int i = 4; i < 8; i++)
             {
                 input.add(inventory.extractItem(i, 64, false));
             }
@@ -262,9 +318,6 @@ public class TESmeltery extends TEInventory implements ITickable, ICalendarTicka
                 {
                     temp = 1600f;
                     tank.fillInternal(recipe.getOutputFluid(input), true);
-                    TerraFirmaCraft.getLog().warn("TANK1 = " + tank);
-                    TerraFirmaCraft.getLog().warn("TANK2 = " + tank.drain(1, false));
-                    TerraFirmaCraft.getLog().warn("FLUID = " + recipe.getOutputFluid(input));
                     solidifyTemp = recipe.getSolidifyTemp();
                 }
                 else
@@ -272,7 +325,7 @@ public class TESmeltery extends TEInventory implements ITickable, ICalendarTicka
                     ItemStack[] outputs = recipe.getOutputStack(input);
                     for (int i = 0; i < outputs.length && i < 4; i++)
                     {
-                        inventory.insertItem(i, outputs[i], false);
+                        inventory.insertItem(i + 4, outputs[i], false);
                     }
                     temp = 0;
                     solidifyTemp = 0;
@@ -293,7 +346,7 @@ public class TESmeltery extends TEInventory implements ITickable, ICalendarTicka
                         }
                         else
                         {
-                            inventory.insertItem(i, heatRecipe.getOutputStack(input.get(i)), false);
+                            inventory.insertItem(i + 4, heatRecipe.getOutputStack(input.get(i)), false);
                         }
                     }
                 }

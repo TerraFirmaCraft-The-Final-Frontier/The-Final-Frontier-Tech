@@ -21,9 +21,10 @@ public class ContainerSmeltery extends ContainerTE<TESmeltery>
         IItemHandler inventory = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
         if (inventory != null)
         {
-            for (int i = 0; i < 8; i++)
+            int slots = tile.hasFluid() ? 4 : 8;
+            for (int i = 0; i < slots; i++)
             {
-                int row = i / 4;
+                int row = 1 - (i / 4);
                 int column = i % 4;
                 int x = 53 + column * 18;
                 int y = 21 + row * 35;
