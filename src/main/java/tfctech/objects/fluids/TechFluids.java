@@ -16,8 +16,6 @@ public final class TechFluids
     private static final ResourceLocation LAVA_FLOW = new ResourceLocation(TFCConstants.MOD_ID, "blocks/lava_flow");
     private static final HashBiMap<Fluid, FluidWrapper> WRAPPERS = HashBiMap.create();
 
-    public static final float GLASS_MELT_TEMPERATURE = 800f;
-
     public static FluidWrapper LATEX;
     public static FluidWrapper GLASS;
 
@@ -25,6 +23,13 @@ public final class TechFluids
     {
         LATEX = registerFluid(new Fluid("latex", LAVA_STILL, LAVA_FLOW, 0xFFF8F8F8));
         GLASS = registerFluid(new Fluid("glass", LAVA_STILL, LAVA_FLOW, 0xFFC0F5FE));
+
+        setFluidTemperatures();
+    }
+
+    private static void setFluidTemperatures()
+    {
+        GLASS.get().setTemperature(1073); // Kelvin
     }
 
     private static FluidWrapper registerFluid(@Nonnull Fluid newFluid)

@@ -138,9 +138,10 @@ public final class TechRecipes
     {
         IForgeRegistry<SmelteryRecipe> r = event.getRegistry();
         r.registerAll(
-                SmelteryRecipe.Builder.newFluidBuilder(new ResourceLocation(MODID, "molten_glass"))
+            new SmelteryRecipe.Builder()
                         .addInput(IIngredient.of("dustPotash")).addInput(IIngredient.of("sandSilica")).addInput(IIngredient.of("dustLime"))
-                        .setOutput(new FluidStack(TechFluids.GLASS.get(), 1000), TechFluids.GLASS_MELT_TEMPERATURE).build()
+                .setOutput(new FluidStack(TechFluids.GLASS.get(), 1000), 800).build()
+                .setRegistryName(new ResourceLocation(MODID, "glass"))
         );
     }
 

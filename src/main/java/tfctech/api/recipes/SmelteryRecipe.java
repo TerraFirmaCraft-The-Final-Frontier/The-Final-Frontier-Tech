@@ -6,7 +6,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -16,9 +15,8 @@ import tfctech.registry.TechRegistries;
 public class SmelteryRecipe extends IForgeRegistryEntry.Impl<SmelteryRecipe>
 {
     private IIngredient<ItemStack>[] ingredients;
-    private ItemStack[] outputStack;
     private FluidStack outputFluid;
-    private float solidifyTemp;
+    private float meltTemp;
 
     private SmelteryRecipe()
     {
@@ -38,51 +36,14 @@ public class SmelteryRecipe extends IForgeRegistryEntry.Impl<SmelteryRecipe>
         return ingredients;
     }
 
-    public boolean isFluid()
+    public FluidStack getOutput()
     {
-        return outputFluid != null;
+        return this.outputFluid.copy();
     }
 
-    public ItemStack[] getOutputStack(@Nullable List<ItemStack> inputs)
+    public float getMeltTemp()
     {
-        int recipeCount = this.getRecipeCount(inputs);
-        ItemStack[] output = new ItemStack[this.outputStack.length];
-        for (int i = 0; i < output.length; i++)
-        {
-            output[i] = this.outputStack[i].copy();
-            output[i].setCount(output[i].getCount() * recipeCount);
-        }
-        return output;
-    }
-
-    public FluidStack getOutputFluid(@Nullable List<ItemStack> inputs)
-    {
-        FluidStack output = this.outputFluid.copy();
-        output.amount *= this.getRecipeCount(inputs);
-        return output;
-    }
-
-    private int getRecipeCount(@Nullable List<ItemStack> inputs)
-    {
-        if (inputs == null) return 1;
-        int recipeCount = Integer.MAX_VALUE;
-        for (IIngredient<ItemStack> ingredient : ingredients)
-        {
-            for (ItemStack input : inputs)
-            {
-                if (ingredient.test(input))
-                {
-                    recipeCount = Math.min(recipeCount, input.getCount() / ingredient.getAmount());
-                    break;
-                }
-            }
-        }
-        return recipeCount;
-    }
-
-    public float getSolidifyTemp()
-    {
-        return this.solidifyTemp;
+        return meltTemp;
     }
 
     private boolean isValidInput(ItemStack... ingredients)
@@ -106,29 +67,33 @@ public class SmelteryRecipe extends IForgeRegistryEntry.Impl<SmelteryRecipe>
         return true;
     }
 
+    public void consumeInputs(List<ItemStack> inputs)
+    {
+        for (IIngredient<ItemStack> ingredient : this.ingredients)
+        {
+            for (ItemStack stack : inputs)
+            {
+                if (ingredient.test(stack))
+                {
+                    stack.shrink(ingredient.getAmount());
+                    break;
+                }
+            }
+        }
+    }
+
     public static class Builder<T extends Builder>
     {
-        public static ItemBuilder newItemBuilder(ResourceLocation registryName)
-        {
-            return new ItemBuilder(registryName);
-        }
+        private SmelteryRecipe recipe;
+        private List<IIngredient<ItemStack>> listInput;
 
-        public static FluidBuilder newFluidBuilder(ResourceLocation registryName)
-        {
-            return new FluidBuilder(registryName);
-        }
-
-        SmelteryRecipe recipe;
-        List<IIngredient<ItemStack>> listInput;
-
-        private Builder(ResourceLocation registryName)
+        public Builder()
         {
             recipe = new SmelteryRecipe();
-            recipe.setRegistryName(registryName);
             listInput = new ArrayList<>();
         }
 
-        public T addInput(@Nonnull IIngredient<ItemStack> ingredient)
+        public Builder addInput(@Nonnull IIngredient<ItemStack> ingredient)
         {
             if (this.listInput.size() < 4)
             {
@@ -138,8 +103,14 @@ public class SmelteryRecipe extends IForgeRegistryEntry.Impl<SmelteryRecipe>
             {
                 throw new IllegalStateException("Smeltery recipes must have at most 4 ingredients!");
             }
-            //noinspection unchecked
-            return (T) this;
+            return this;
+        }
+
+        public Builder setOutput(@Nonnull FluidStack fluidStack, float meltTemp)
+        {
+            this.recipe.outputFluid = fluidStack;
+            this.recipe.meltTemp = meltTemp;
+            return this;
         }
 
         public SmelteryRecipe build()
@@ -148,45 +119,15 @@ public class SmelteryRecipe extends IForgeRegistryEntry.Impl<SmelteryRecipe>
             {
                 throw new IllegalStateException("Smeltery recipes must have at least 1 ingredient!");
             }
+            else if (this.recipe.outputFluid == null)
+            {
+                throw new IllegalStateException("Missing Smeltery recipe output!");
+            }
             else
             {
                 //noinspection unchecked
                 this.recipe.ingredients = listInput.toArray(new IIngredient[0]);
                 return this.recipe;
-            }
-        }
-
-        public static class FluidBuilder extends Builder<FluidBuilder>
-        {
-            private FluidBuilder(ResourceLocation registryName)
-            {
-                super(registryName);
-            }
-
-            public FluidBuilder setOutput(@Nonnull FluidStack fluidStack, float solidifyTemp)
-            {
-                this.recipe.outputFluid = fluidStack;
-                this.recipe.solidifyTemp = solidifyTemp;
-                this.recipe.outputStack = null;
-                return this;
-            }
-        }
-
-        public static class ItemBuilder extends Builder<ItemBuilder>
-        {
-            private ItemBuilder(ResourceLocation registryName)
-            {
-                super(registryName);
-            }
-
-            public ItemBuilder setOutput(ItemStack... stacks) throws IllegalArgumentException
-            {
-                if (stacks.length <= 0 || stacks.length > 4)
-                    throw new IllegalArgumentException("Output must be [1-4] ItemStacks");
-                this.recipe.outputStack = stacks;
-                this.recipe.solidifyTemp = 0;
-                this.recipe.outputFluid = null;
-                return this;
             }
         }
     }

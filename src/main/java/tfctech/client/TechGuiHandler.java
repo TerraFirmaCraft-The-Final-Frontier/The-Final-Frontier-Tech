@@ -17,14 +17,14 @@ import tfctech.TFCTech;
 import tfctech.client.gui.GuiElectricForge;
 import tfctech.client.gui.GuiGlassworking;
 import tfctech.client.gui.GuiInductionCrucible;
-import tfctech.client.gui.GuiSmeltery;
+import tfctech.client.gui.GuiSmelteryCauldron;
 import tfctech.objects.container.ContainerElectricForge;
 import tfctech.objects.container.ContainerGlassworking;
-import tfctech.objects.container.ContainerSmeltery;
+import tfctech.objects.container.ContainerSmelteryCauldron;
 import tfctech.objects.items.glassworking.ItemBlowpipe;
 import tfctech.objects.tileentities.TEElectricForge;
 import tfctech.objects.tileentities.TEInductionCrucible;
-import tfctech.objects.tileentities.TESmeltery;
+import tfctech.objects.tileentities.TESmelteryCauldron;
 
 import static tfctech.TFCTech.MODID;
 
@@ -53,8 +53,8 @@ public class TechGuiHandler implements IGuiHandler
                 TEInductionCrucible teInductionCrucible = Helpers.getTE(world, pos, TEInductionCrucible.class);
                 return teInductionCrucible == null ? null : new ContainerCrucible(player.inventory, teInductionCrucible);
             case SMELTERY:
-                TESmeltery teSmeltery = Helpers.getTE(world, pos, TESmeltery.class);
-                return teSmeltery == null ? null : new ContainerSmeltery(player.inventory, teSmeltery);
+                TESmelteryCauldron teSmelteryCauldron = Helpers.getTE(world, pos, TESmelteryCauldron.class);
+                return teSmelteryCauldron == null ? null : new ContainerSmelteryCauldron(player.inventory, teSmelteryCauldron);
             case GLASSWORKING:
                 return new ContainerGlassworking(player.inventory, stack.getItem() instanceof ItemBlowpipe ? stack : player.getHeldItemOffhand());
             default:
@@ -77,7 +77,7 @@ public class TechGuiHandler implements IGuiHandler
             case INDUCTION_CRUCIBLE:
                 return new GuiInductionCrucible(container, player.inventory, Helpers.getTE(world, pos, TEInductionCrucible.class));
             case SMELTERY:
-                return new GuiSmeltery(container, player.inventory, Helpers.getTE(world, pos, TESmeltery.class));
+                return new GuiSmelteryCauldron(container, player.inventory, Helpers.getTE(world, pos, TESmelteryCauldron.class));
             case GLASSWORKING:
                 return new GuiGlassworking(container, player);
             default:

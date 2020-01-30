@@ -176,7 +176,7 @@ public class ContainerGlassworking extends Container implements IButtonHandler
     {
         matrix.set(index, value);
         // Check if glass has not solidified
-        if (canWork())
+        if (!canWork())
         {
             matrix.setAll(false);
         }
@@ -191,7 +191,7 @@ public class ContainerGlassworking extends Container implements IButtonHandler
     public boolean canWork()
     {
         IItemHeat capHeat = stack.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);
-        return capHeat instanceof ItemBlowpipe.BlowpipeCapability && !((ItemBlowpipe.BlowpipeCapability) capHeat).canWork();
+        return capHeat instanceof ItemBlowpipe.BlowpipeCapability && ((ItemBlowpipe.BlowpipeCapability) capHeat).canWork();
     }
 
     private void addContainerSlots()
@@ -206,7 +206,7 @@ public class ContainerGlassworking extends Container implements IButtonHandler
         IItemHeat capHeat = stack.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);
         if (capHeat instanceof ItemBlowpipe.BlowpipeCapability)
         {
-            ((ItemBlowpipe.BlowpipeCapability) capHeat).consume();
+            ((ItemBlowpipe.BlowpipeCapability) capHeat).consumeFluid();
         }
         if (this.isOffhand)
         {

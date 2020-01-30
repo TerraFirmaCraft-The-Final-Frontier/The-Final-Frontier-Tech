@@ -10,7 +10,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 
-version = "1.12.2-1.1.5"
+version = "1.12.2-1.2.6"
 group = "tfctech"
 archivesBaseName = "TFCTech-Unofficial"
 
@@ -22,7 +22,7 @@ compileJava {
 minecraft {
     version = "1.12.2-14.23.5.2838"
     runDir = "run"
-    mappings = "snapshot_20180814"
+    mappings = "stable_39"
 	
 	replace("@VERSION@",project.version)
     replace("@FINGERPRINT@", project.findProperty("signSHA1"))
@@ -63,12 +63,12 @@ repositories {
 }
 
 dependencies {
-    deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.8.9"
-    deobfCompile "mezz.jei:jei_1.12.2:4.13.1.222"
-	deobfProvided "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
-	deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.12-6"
-    deobfProvided "gregtechce:gregtech:1.12.2:1.8.5.436"
-    compile 'net.industrial-craft:industrialcraft-2:2.8.170-ex112:api'
+    deobfProvided "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.8.9"
+    deobfProvided "mezz.jei:jei_1.12.2:4.13.1.222"
+	compileOnly "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
+	deobfProvided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.12-6"
+    compileOnly "gregtechce:gregtech:1.12.2:1.8.5.436"
+    compileOnly 'net.industrial-craft:industrialcraft-2:2.8.170-ex112:api'
     compile fileTree(include: ["*.jar"], dir: "libs")
 }
 

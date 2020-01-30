@@ -21,15 +21,16 @@ import net.minecraftforge.fluids.FluidStack;
 import net.dries007.tfc.api.capability.heat.Heat;
 import net.dries007.tfc.client.FluidSpriteCache;
 import net.dries007.tfc.client.gui.GuiContainerTE;
-import tfctech.objects.tileentities.TESmeltery;
+import tfctech.objects.tileentities.TESmelteryCauldron;
 
 import static tfctech.TFCTech.MODID;
 
-public class GuiSmeltery extends GuiContainerTE<TESmeltery>
+public class GuiSmelteryCauldron extends GuiContainerTE<TESmelteryCauldron>
 {
+    // todo change this gui for 4 slots + tank
     private static final ResourceLocation SMELTERY_BACKGROUND = new ResourceLocation(MODID, "textures/gui/smeltery.png");
 
-    public GuiSmeltery(Container container, InventoryPlayer playerInv, TESmeltery tile)
+    public GuiSmelteryCauldron(Container container, InventoryPlayer playerInv, TESmelteryCauldron tile)
     {
         super(container, playerInv, tile, SMELTERY_BACKGROUND);
     }
@@ -38,7 +39,7 @@ public class GuiSmeltery extends GuiContainerTE<TESmeltery>
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
     {
         super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
-        if (tile.hasFluid())
+        if (tile.getFluid() != null)
         {
             int posX = guiLeft + 52;
             int posY = guiTop + 20;
@@ -46,7 +47,7 @@ public class GuiSmeltery extends GuiContainerTE<TESmeltery>
 
             // Fluid
             FluidStack fluid = tile.getFluid();
-            int fillPixels = (int) Math.min(Math.ceil((fluid.amount / (float) TESmeltery.FLUID_CAPACITY) * 18), 18);
+            int fillPixels = (int) Math.min(Math.ceil((fluid.amount / (float) TESmelteryCauldron.FLUID_CAPACITY) * 18), 18);
             TextureAtlasSprite sprite = FluidSpriteCache.getStillSprite(fluid.getFluid());
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             BufferBuilder buffer = Tessellator.getInstance().getBuffer();
@@ -100,12 +101,12 @@ public class GuiSmeltery extends GuiContainerTE<TESmeltery>
         super.renderHoveredToolTip(mouseX, mouseY);
         int relX = mouseX - guiLeft;
         int relY = mouseY - guiTop;
-        if (relX >= 52 && relY >= 20 && relX < 130 && relY < 38 && tile.hasFluid())
+        if (relX >= 52 && relY >= 20 && relX < 130 && relY < 38 && tile.getFluid() != null)
         {
             FluidStack fluid = tile.getFluid();
             List<String> tooltip = new ArrayList<>();
             tooltip.add(fluid.getLocalizedName());
-            tooltip.add(fluid.amount + " / " + TESmeltery.FLUID_CAPACITY);
+            tooltip.add(fluid.amount + " / " + TESmelteryCauldron.FLUID_CAPACITY);
             if (tile.isSolidified())
             {
                 tooltip.add(TextFormatting.DARK_GRAY + I18n.format("tooltip.tfctech.smeltery.solid"));

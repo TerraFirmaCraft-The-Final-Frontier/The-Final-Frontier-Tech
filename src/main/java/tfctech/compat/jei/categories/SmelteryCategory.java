@@ -26,7 +26,7 @@ public class SmelteryCategory extends BaseRecipeCategory<SmelteryRecipeWrapper>
 
     public SmelteryCategory(IGuiHelper helper, String Uid)
     {
-        super(helper.createBlankDrawable(136, 62), Uid);
+        super(helper.createBlankDrawable(106, 62), Uid);
         fluidSlotBackgroound = helper.createDrawable(BARREL_TEXTURES, 7, 15, 18, 60);
         fluidSlot = helper.createDrawable(BARREL_TEXTURES, 176, 0, 18, 53);
         fire = helper.createDrawable(ICONS, 0, 0, 14, 14);
@@ -44,17 +44,12 @@ public class SmelteryCategory extends BaseRecipeCategory<SmelteryRecipeWrapper>
         slot.draw(minecraft, 5, 35);
         slot.draw(minecraft, 23, 35);
 
-        fire.draw(minecraft, 45, 30);
-        fireAnimated.draw(minecraft, 45, 30);
+        fire.draw(minecraft, 55, 30);
+        fireAnimated.draw(minecraft, 55, 30);
 
         //Output
-        slot.draw(minecraft, 67, 17);
-        slot.draw(minecraft, 85, 17);
-        slot.draw(minecraft, 67, 35);
-        slot.draw(minecraft, 85, 35);
-
-        fluidSlotBackgroound.draw(minecraft, 109, 1);
-        fluidSlot.draw(minecraft, 109, 5);
+        fluidSlotBackgroound.draw(minecraft, 80, 1);
+        fluidSlot.draw(minecraft, 80, 5);
     }
 
     @Override
@@ -66,26 +61,13 @@ public class SmelteryCategory extends BaseRecipeCategory<SmelteryRecipeWrapper>
         itemStackGroup.init(2, true, 5, 35);
         itemStackGroup.init(3, true, 23, 35);
 
-        itemStackGroup.init(4, false, 67, 17);
-        itemStackGroup.init(5, false, 85, 17);
-        itemStackGroup.init(6, false, 67, 35);
-        itemStackGroup.init(7, false, 85, 35);
-
         for (int i = 0; i < ingredients.getInputs(VanillaTypes.ITEM).size(); i++)
         {
             itemStackGroup.set(i, ingredients.getInputs(VanillaTypes.ITEM).get(i));
         }
 
-        for (int i = 0; i < ingredients.getOutputs(VanillaTypes.ITEM).size(); i++)
-        {
-            itemStackGroup.set(i + 4, ingredients.getInputs(VanillaTypes.ITEM).get(i));
-        }
-
-        if (ingredients.getOutputs(VanillaTypes.FLUID).size() > 0)
-        {
-            IGuiFluidStackGroup fluidStackGroup = recipeLayout.getFluidStacks();
-            fluidStackGroup.init(0, false, 114, 6, 8, 50, ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0).amount, true, null);
-            fluidStackGroup.set(0, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
-        }
+        IGuiFluidStackGroup fluidStackGroup = recipeLayout.getFluidStacks();
+        fluidStackGroup.init(0, false, 85, 6, 8, 50, ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0).amount, true, null);
+        fluidStackGroup.set(0, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
     }
 }

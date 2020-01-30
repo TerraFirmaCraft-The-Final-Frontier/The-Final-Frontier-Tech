@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
@@ -11,6 +12,7 @@ import net.minecraftforge.fluids.FluidStack;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import net.dries007.tfc.api.capability.heat.Heat;
 import net.dries007.tfc.objects.inventory.ingredient.IIngredient;
 import tfctech.api.recipes.SmelteryRecipe;
 
@@ -34,21 +36,18 @@ public class SmelteryRecipeWrapper implements IRecipeWrapper
         }
         ingredients.setInputLists(VanillaTypes.ITEM, allInputs);
 
-        List<List<ItemStack>> allOutputs = new ArrayList<>();
         List<List<FluidStack>> allOutputFluids = new ArrayList<>();
-
-        if (recipe.isFluid())
-        {
-            allOutputFluids.add(NonNullList.withSize(1, recipe.getOutputFluid(null)));
-        }
-        else
-        {
-            for (ItemStack stack : recipe.getOutputStack(null))
-            {
-                allOutputs.add(NonNullList.withSize(1, stack));
-            }
-        }
-        ingredients.setOutputLists(VanillaTypes.ITEM, allOutputs);
+        allOutputFluids.add(NonNullList.withSize(1, recipe.getOutput()));
         ingredients.setOutputLists(VanillaTypes.FLUID, allOutputFluids);
+    }
+
+    @Override
+    public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY)
+    {
+        float x = 44f;
+        float y = 3f;
+        String text = Heat.getTooltip(recipe.getMeltTemp());
+        x = x - minecraft.fontRenderer.getStringWidth(text) / 2.0f;
+        minecraft.fontRenderer.drawString(text, x, y, 0xFFFFFF, false);
     }
 }

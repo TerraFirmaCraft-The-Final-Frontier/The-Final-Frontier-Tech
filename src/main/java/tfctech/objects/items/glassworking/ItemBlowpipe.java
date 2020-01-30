@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.collect.Sets;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -31,15 +32,19 @@ import net.dries007.tfc.api.capability.heat.IItemHeat;
 import net.dries007.tfc.api.capability.heat.ItemHeatHandler;
 import net.dries007.tfc.api.capability.size.Size;
 import net.dries007.tfc.api.capability.size.Weight;
+import net.dries007.tfc.objects.fluids.capability.FluidWhitelistHandler;
 import net.dries007.tfc.util.calendar.CalendarTFC;
 import tfctech.client.TechGuiHandler;
 import tfctech.objects.fluids.TechFluids;
 import tfctech.objects.items.ItemMiscTech;
 
+@SuppressWarnings("WeakerAccess")
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ItemBlowpipe extends ItemMiscTech
 {
+    public static final int BLOWPIPE_TANK = 250;
+
     public ItemBlowpipe()
     {
         super(Size.LARGE, Weight.LIGHT);
@@ -71,36 +76,33 @@ public class ItemBlowpipe extends ItemMiscTech
 
     public static class BlowpipeCapability extends ItemHeatHandler implements ICapabilityProvider, IFluidHandlerItem
     {
-        private boolean hasGlass;
-        private ItemStack stack;
+        private FluidWhitelistHandler tank;
 
         BlowpipeCapability(ItemStack stack, @Nullable NBTTagCompound nbt)
         {
-            super(nbt, 0.35f, Float.MAX_VALUE);
-            this.stack = stack;
+            this.heatCapacity = 0.35f;
+            this.meltTemp = Float.MAX_VALUE;
+            this.tank = new FluidWhitelistHandler(stack, BLOWPIPE_TANK, Sets.newHashSet(TechFluids.GLASS.get()));
+            deserializeNBT(nbt);
         }
 
         public boolean canWork()
         {
-            return hasGlass && getTemperature() >= TechFluids.GLASS_MELT_TEMPERATURE;
+            FluidStack fluidStack = getFluid();
+            return fluidStack != null && getTemperature() + 273 >= fluidStack.getFluid().getTemperature();
         }
 
         public boolean isSolidified()
         {
-            return hasGlass && getTemperature() < TechFluids.GLASS_MELT_TEMPERATURE;
-        }
-
-        public void consume()
-        {
-            this.setTemperature(0);
-            this.hasGlass = false;
+            FluidStack fluidStack = getFluid();
+            return fluidStack != null && getTemperature() + 273 < fluidStack.getFluid().getTemperature();
         }
 
         @Override
         public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing)
         {
             return capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY
-                    || capability == CapabilityItemHeat.ITEM_HEAT_CAPABILITY;
+                || capability == CapabilityItemHeat.ITEM_HEAT_CAPABILITY;
         }
 
         @Nullable
@@ -126,7 +128,11 @@ public class ItemBlowpipe extends ItemMiscTech
             {
                 nbt.setLong("ticks", this.lastUpdateTick);
             }
-            nbt.setBoolean("glass", hasGlass);
+            FluidStack fluidStack = tank.drain(BLOWPIPE_TANK, false);
+            if (fluidStack != null)
+            {
+                nbt.setTag("tank", fluidStack.writeToNBT(new NBTTagCompound()));
+            }
             return nbt;
         }
 
@@ -137,13 +143,12 @@ public class ItemBlowpipe extends ItemMiscTech
             {
                 temperature = nbt.getFloat("heat");
                 lastUpdateTick = nbt.getLong("ticks");
-                hasGlass = nbt.getBoolean("glass");
+                tank.fill(FluidStack.loadFluidStackFromNBT(nbt.getCompoundTag("tank")), true);
             }
             else
             {
                 temperature = 0;
                 lastUpdateTick = CalendarTFC.PLAYER_TIME.getTicks();
-                hasGlass = false;
             }
         }
 
@@ -152,14 +157,15 @@ public class ItemBlowpipe extends ItemMiscTech
         public void addHeatInfo(@Nonnull ItemStack stack, @Nonnull List<String> tooltip)
         {
             super.addHeatInfo(stack, tooltip);
-            if (hasGlass)
+            FluidStack fluid = tank.drain(BLOWPIPE_TANK, false);
+            if (fluid != null)
             {
-                tooltip.add(new FluidStack(TechFluids.GLASS.get(), 1).getLocalizedName());
-                if (getTemperature() < TechFluids.GLASS_MELT_TEMPERATURE)
+                tooltip.add(fluid.getLocalizedName());
+                if (isSolidified())
                 {
                     tooltip.add(TextFormatting.DARK_GRAY + I18n.format("tooltip.tfctech.smeltery.solid"));
                 }
-                else
+                else if (canWork())
                 {
                     tooltip.add(TextFormatting.YELLOW + I18n.format("tooltip.tfctech.smeltery.molten"));
                 }
@@ -169,26 +175,31 @@ public class ItemBlowpipe extends ItemMiscTech
         @Override
         public IFluidTankProperties[] getTankProperties()
         {
-            return new FluidTankProperties[] {new FluidTankProperties(this.hasGlass ? new FluidStack(TechFluids.GLASS.get(), 250) : null, 250)};
+            return new FluidTankProperties[] {new FluidTankProperties(tank.drain(BLOWPIPE_TANK, false), BLOWPIPE_TANK)};
         }
 
         @Override
         public int fill(FluidStack fluidStack, boolean doFill)
         {
-            if (hasGlass || !fluidStack.getFluid().equals(TechFluids.GLASS.get()))
+            int value = tank.fill(fluidStack, doFill);
+            if (doFill && value > 0)
             {
-                return 0;
+                this.temperature = fluidStack.getFluid().getTemperature(); // giving 273 heat so player has time to craft.
+                this.lastUpdateTick = CalendarTFC.PLAYER_TIME.getTicks();
             }
-            else
-            {
-                if (doFill)
-                {
-                    hasGlass = true;
-                    this.temperature = 1600f;
-                    this.lastUpdateTick = CalendarTFC.PLAYER_TIME.getTicks();
-                }
-                return 250;
-            }
+            return value;
+        }
+
+        public void consumeFluid()
+        {
+            tank.drain(BLOWPIPE_TANK, true);
+            this.setTemperature(0);
+        }
+
+        @Nullable
+        public FluidStack getFluid()
+        {
+            return tank.drain(BLOWPIPE_TANK, false);
         }
 
         @Nullable
@@ -209,7 +220,7 @@ public class ItemBlowpipe extends ItemMiscTech
         @Override
         public ItemStack getContainer()
         {
-            return this.stack;
+            return this.tank.getContainer();
         }
     }
 }

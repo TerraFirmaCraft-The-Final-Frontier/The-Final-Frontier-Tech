@@ -6,11 +6,11 @@ import net.minecraftforge.items.IItemHandler;
 
 import net.dries007.tfc.objects.container.ContainerTE;
 import net.dries007.tfc.objects.inventory.slot.SlotCallback;
-import tfctech.objects.tileentities.TESmeltery;
+import tfctech.objects.tileentities.TESmelteryCauldron;
 
-public class ContainerSmeltery extends ContainerTE<TESmeltery>
+public class ContainerSmelteryCauldron extends ContainerTE<TESmelteryCauldron>
 {
-    public ContainerSmeltery(InventoryPlayer playerInv, TESmeltery te)
+    public ContainerSmelteryCauldron(InventoryPlayer playerInv, TESmelteryCauldron te)
     {
         super(playerInv, te);
     }
@@ -21,9 +21,9 @@ public class ContainerSmeltery extends ContainerTE<TESmeltery>
         IItemHandler inventory = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
         if (inventory != null)
         {
-            int slots = tile.hasFluid() ? 4 : 8;
-            for (int i = 0; i < slots; i++)
+            for (int i = 0; i < 4; i++)
             {
+                // todo change slots and GUI
                 int row = 1 - (i / 4);
                 int column = i % 4;
                 int x = 53 + column * 18;

@@ -34,7 +34,6 @@ import tfctech.objects.blocks.TechBlocks;
 import tfctech.objects.items.ceramics.ItemFluidBowl;
 import tfctech.objects.items.ceramics.ItemTechMold;
 import tfctech.objects.items.glassworking.ItemBlowpipe;
-import tfctech.objects.items.glassworking.ItemFireClayWall;
 import tfctech.objects.items.metal.ItemGroove;
 import tfctech.objects.items.metal.ItemTechMetal;
 
@@ -72,8 +71,6 @@ public final class TechItems
     public static final ItemMiscTech WOOD_DUST = getNull();
     @GameRegistry.ObjectHolder("glass/wood_dust_pot")
     public static final ItemPottery WOOD_DUST_POT = getNull();
-    @GameRegistry.ObjectHolder("glass/fire_clay_wall")
-    public static final ItemFireClayWall FIRE_CLAY_WALL = getNull();
 
 
     @GameRegistry.ObjectHolder("metal/iron_draw_plate")
@@ -131,7 +128,6 @@ public final class TechItems
         ImmutableList.Builder<Item> simpleItems = ImmutableList.builder();
 
         simpleItems.add(register(r, "glass/blowpipe", new ItemBlowpipe(), CT_MISC));
-        simpleItems.add(register(r, "glass/fire_clay_wall", new ItemFireClayWall(), CT_MISC));
         simpleItems.add(register(r, "glass/wood_dust", new ItemMiscTech(Size.SMALL, Weight.LIGHT, "dustWood"), CT_MISC));
         simpleItems.add(register(r, "glass/wood_dust_pot", new ItemPottery(), CT_MISC));
         simpleItems.add(register(r, "glass/potash_pot", new ItemPottery()
