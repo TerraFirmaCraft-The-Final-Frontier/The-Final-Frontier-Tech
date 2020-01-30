@@ -1,4 +1,4 @@
-package tfctech.objects.items;
+package tfctech.objects.items.glassworking;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -16,9 +16,9 @@ import net.dries007.tfc.api.capability.size.Size;
 import net.dries007.tfc.api.capability.size.Weight;
 import net.dries007.tfc.util.Helpers;
 import tfctech.objects.blocks.TechBlocks;
+import tfctech.objects.items.ItemMiscTech;
 import tfctech.objects.tileentities.TESmeltery;
 
-@SuppressWarnings("WeakerAccess")
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ItemFireClayWall extends ItemMiscTech

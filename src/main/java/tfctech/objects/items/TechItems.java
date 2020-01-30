@@ -33,6 +33,8 @@ import net.dries007.tfc.util.OreDictionaryHelper;
 import tfctech.objects.blocks.TechBlocks;
 import tfctech.objects.items.ceramics.ItemFluidBowl;
 import tfctech.objects.items.ceramics.ItemTechMold;
+import tfctech.objects.items.glassworking.ItemBlowpipe;
+import tfctech.objects.items.glassworking.ItemFireClayWall;
 import tfctech.objects.items.metal.ItemGroove;
 import tfctech.objects.items.metal.ItemTechMetal;
 
@@ -58,6 +60,8 @@ public final class TechItems
     @GameRegistry.ObjectHolder("latex/rubber")
     public static final ItemMiscHeatable RUBBER = getNull();
 
+    @GameRegistry.ObjectHolder("glass/blowpipe")
+    public static final ItemBlowpipe BLOWPIPE = getNull();
     @GameRegistry.ObjectHolder("glass/lime")
     public static final ItemMiscTech LIME = getNull();
     @GameRegistry.ObjectHolder("glass/potash")
@@ -126,6 +130,7 @@ public final class TechItems
         IForgeRegistry<Item> r = event.getRegistry();
         ImmutableList.Builder<Item> simpleItems = ImmutableList.builder();
 
+        simpleItems.add(register(r, "glass/blowpipe", new ItemBlowpipe(), CT_MISC));
         simpleItems.add(register(r, "glass/fire_clay_wall", new ItemFireClayWall(), CT_MISC));
         simpleItems.add(register(r, "glass/wood_dust", new ItemMiscTech(Size.SMALL, Weight.LIGHT, "dustWood"), CT_MISC));
         simpleItems.add(register(r, "glass/wood_dust_pot", new ItemPottery(), CT_MISC));

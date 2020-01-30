@@ -10,12 +10,13 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.dries007.tfc.api.util.TFCConstants;
 import net.dries007.tfc.objects.fluids.properties.FluidWrapper;
 
-@SuppressWarnings("WeakerAccess")
 public final class TechFluids
 {
     private static final ResourceLocation LAVA_STILL = new ResourceLocation(TFCConstants.MOD_ID, "blocks/lava_still");
     private static final ResourceLocation LAVA_FLOW = new ResourceLocation(TFCConstants.MOD_ID, "blocks/lava_flow");
     private static final HashBiMap<Fluid, FluidWrapper> WRAPPERS = HashBiMap.create();
+
+    public static final float GLASS_MELT_TEMPERATURE = 800f;
 
     public static FluidWrapper LATEX;
     public static FluidWrapper GLASS;

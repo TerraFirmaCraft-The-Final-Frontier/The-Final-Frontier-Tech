@@ -129,7 +129,7 @@ public final class TechRecipes
 
         r.registerAll(
             new GlassworkingRecipe(new ResourceLocation(MODID, "glass_bottle"), new ItemStack(Items.GLASS_BOTTLE),
-                " X X ", "X   X", "X   X", "X   X", "XXXXX")
+                    " X X ", " X X ", "X   X", "X   X", " XXX ")
         );
     }
 
@@ -140,7 +140,7 @@ public final class TechRecipes
         r.registerAll(
                 SmelteryRecipe.Builder.newFluidBuilder(new ResourceLocation(MODID, "molten_glass"))
                         .addInput(IIngredient.of("dustPotash")).addInput(IIngredient.of("sandSilica")).addInput(IIngredient.of("dustLime"))
-                        .setOutput(new FluidStack(TechFluids.GLASS.get(), 1000), 800).build()
+                        .setOutput(new FluidStack(TechFluids.GLASS.get(), 1000), TechFluids.GLASS_MELT_TEMPERATURE).build()
         );
     }
 

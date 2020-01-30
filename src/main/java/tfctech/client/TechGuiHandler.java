@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -14,10 +15,13 @@ import net.dries007.tfc.objects.container.ContainerCrucible;
 import net.dries007.tfc.util.Helpers;
 import tfctech.TFCTech;
 import tfctech.client.gui.GuiElectricForge;
+import tfctech.client.gui.GuiGlassworking;
 import tfctech.client.gui.GuiInductionCrucible;
 import tfctech.client.gui.GuiSmeltery;
 import tfctech.objects.container.ContainerElectricForge;
+import tfctech.objects.container.ContainerGlassworking;
 import tfctech.objects.container.ContainerSmeltery;
+import tfctech.objects.items.glassworking.ItemBlowpipe;
 import tfctech.objects.tileentities.TEElectricForge;
 import tfctech.objects.tileentities.TEInductionCrucible;
 import tfctech.objects.tileentities.TESmeltery;
@@ -38,6 +42,7 @@ public class TechGuiHandler implements IGuiHandler
     public Container getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
         BlockPos pos = new BlockPos(x, y, z);
+        ItemStack stack = player.getHeldItemMainhand();
         Type type = Type.valueOf(ID);
         switch (type)
         {
@@ -50,6 +55,8 @@ public class TechGuiHandler implements IGuiHandler
             case SMELTERY:
                 TESmeltery teSmeltery = Helpers.getTE(world, pos, TESmeltery.class);
                 return teSmeltery == null ? null : new ContainerSmeltery(player.inventory, teSmeltery);
+            case GLASSWORKING:
+                return new ContainerGlassworking(player.inventory, stack.getItem() instanceof ItemBlowpipe ? stack : player.getHeldItemOffhand());
             default:
                 return null;
         }
@@ -71,6 +78,8 @@ public class TechGuiHandler implements IGuiHandler
                 return new GuiInductionCrucible(container, player.inventory, Helpers.getTE(world, pos, TEInductionCrucible.class));
             case SMELTERY:
                 return new GuiSmeltery(container, player.inventory, Helpers.getTE(world, pos, TESmeltery.class));
+            case GLASSWORKING:
+                return new GuiGlassworking(container, player);
             default:
                 return null;
         }
@@ -80,7 +89,8 @@ public class TechGuiHandler implements IGuiHandler
     {
         ELECTRIC_FORGE,
         INDUCTION_CRUCIBLE,
-        SMELTERY;
+        SMELTERY,
+        GLASSWORKING;
 
         private static Type[] values = values();
 
