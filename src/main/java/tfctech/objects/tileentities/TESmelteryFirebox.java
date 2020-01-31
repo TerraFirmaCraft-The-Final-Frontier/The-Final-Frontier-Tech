@@ -1,7 +1,6 @@
 package tfctech.objects.tileentities;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
@@ -22,42 +21,58 @@ import net.dries007.tfc.util.fuel.FuelManager;
 
 import static net.dries007.tfc.objects.blocks.property.ILightableBlock.LIT;
 
-@SuppressWarnings("WeakerAccess")
 public class TESmelteryFirebox extends TEInventory implements ITickable, ICalendarTickable, ITileFields
 {
     private float temperature;
     private float burnTemperature;
     private int burnTicks;
+    private int airTicks;
     private long lastPlayerTick;
 
     private int reload;
 
     public TESmelteryFirebox()
     {
-        super(4);
+        super(8);
         temperature = 0;
         burnTemperature = 0;
         burnTicks = 0;
         lastPlayerTick = CalendarTFC.PLAYER_TIME.getTicks();
         reload = 0;
+        airTicks = 0;
     }
 
     @Override
     public int getFieldCount()
     {
-        return 1;
+        return 2;
     }
 
     @Override
     public void setField(int index, int value)
     {
-        temperature = value;
+        switch (index)
+        {
+            case 0:
+                temperature = value;
+                break;
+            case 1:
+                burnTicks = value;
+                break;
+        }
     }
 
     @Override
-    public int getField(int i)
+    public int getField(int index)
     {
-        return (int) temperature;
+        switch (index)
+        {
+            case 0:
+                return (int) temperature;
+            case 1:
+                return burnTicks;
+        }
+        return 0;
     }
 
     @Override
@@ -69,7 +84,9 @@ public class TESmelteryFirebox extends TEInventory implements ITickable, ICalend
             IBlockState state = world.getBlockState(pos);
             if (state.getValue(LIT))
             {
-                if (--burnTicks <= 0)
+                burnTicks -= airTicks > 0 ? 2 : 1;
+                if (--airTicks <= 0) airTicks = 0;
+                if (burnTicks <= 0)
                 {
                     consumeFuel();
                 }
@@ -78,14 +95,16 @@ public class TESmelteryFirebox extends TEInventory implements ITickable, ICalend
             {
                 burnTemperature = 0;
                 burnTicks = 0;
+                airTicks = 0;
             }
             if (temperature > 0 || burnTemperature > 0)
             {
                 // Update temperature
-                if (temperature != burnTemperature)
+                float targetTemperature = burnTemperature + airTicks;
+                if (temperature != targetTemperature)
                 {
                     float delta = (float) ConfigTFC.GENERAL.temperatureModifierHeating;
-                    temperature = CapabilityItemHeat.adjustTempTowards(temperature, burnTemperature, delta, delta);
+                    temperature = CapabilityItemHeat.adjustTempTowards(temperature, targetTemperature, delta * (airTicks > 0 ? 2 : 1));
                 }
             }
         }
@@ -174,37 +193,44 @@ public class TESmelteryFirebox extends TEInventory implements ITickable, ICalend
     }
 
     @Override
-    public void deserializeNBT(@Nullable NBTTagCompound nbt)
+    public void readFromNBT(NBTTagCompound nbt)
     {
-        super.deserializeNBT(nbt);
-        if (nbt != null)
-        {
-            temperature = nbt.getFloat("temperature");
-            burnTemperature = nbt.getFloat("burnTemperature");
-            burnTicks = nbt.getInteger("burnTicks");
-            lastPlayerTick = nbt.getLong("lastPlayerTick");
-        }
+        temperature = nbt.getFloat("temperature");
+        burnTemperature = nbt.getFloat("burnTemperature");
+        burnTicks = nbt.getInteger("burnTicks");
+        lastPlayerTick = nbt.getLong("lastPlayerTick");
+        airTicks = nbt.getInteger("airTicks");
+        super.readFromNBT(nbt);
     }
 
     @Nonnull
     @Override
-    public NBTTagCompound serializeNBT()
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
-        NBTTagCompound nbt = super.serializeNBT();
         nbt.setFloat("temperature", temperature);
         nbt.setInteger("burnTicks", burnTicks);
         nbt.setFloat("burnTemperature", burnTemperature);
         nbt.setLong("lastPlayerTick", lastPlayerTick);
-        return nbt;
+        nbt.setInteger("airTicks", airTicks);
+        return super.writeToNBT(nbt);
+    }
+
+    public void onAirIntake(int airAmount)
+    {
+        airTicks += airAmount;
+        if (airTicks > 600)
+        {
+            airTicks = 600;
+        }
     }
 
     private void consumeFuel()
     {
         burnTicks = 0;
         IBlockState state = world.getBlockState(pos);
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 8; i++)
         {
-            ItemStack stack = inventory.extractItem(i, 1, true);
+            ItemStack stack = inventory.extractItem(i, 1, false);
             if (!stack.isEmpty())
             {
                 Fuel fuel = FuelManager.getFuel(stack);
@@ -219,6 +245,7 @@ public class TESmelteryFirebox extends TEInventory implements ITickable, ICalend
         {
             world.setBlockState(pos, state.withProperty(LIT, false));
             burnTicks = 0;
+            airTicks = 0;
             burnTemperature = 0;
         }
     }

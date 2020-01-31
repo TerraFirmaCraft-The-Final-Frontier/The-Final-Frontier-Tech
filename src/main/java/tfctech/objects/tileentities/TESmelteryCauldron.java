@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
+import net.dries007.tfc.ConfigTFC;
 import net.dries007.tfc.objects.fluids.capability.FluidHandlerSided;
 import net.dries007.tfc.objects.fluids.capability.FluidTankCallback;
 import net.dries007.tfc.objects.fluids.capability.IFluidHandlerSidedCallback;
@@ -39,7 +40,7 @@ public class TESmelteryCauldron extends TEInventory implements ITickable, IFluid
 
     public TESmelteryCauldron()
     {
-        super(4);
+        super(8);
         fireboxPos = null;
         reload = 0;
     }
@@ -58,7 +59,7 @@ public class TESmelteryCauldron extends TEInventory implements ITickable, IFluid
                     temp = firebox.getTemperature();
                 }
                 List<ItemStack> input = new ArrayList<>();
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 8; i++)
                 {
                     input.add(inventory.extractItem(i, 64, true));
                 }
@@ -69,12 +70,12 @@ public class TESmelteryCauldron extends TEInventory implements ITickable, IFluid
                     if (recipe.getMeltTemp() <= temp)
                     {
                         recipe.consumeInputs(input);
-                        for (int i = 0; i < 4; i++)
+                        for (int i = 0; i < 8; i++)
                         {
                             inventory.setStackInSlot(i, input.get(i));
                         }
                         tank.fillInternal(recipe.getOutput(), true);
-                        temp -= 50;
+                        temp -= ConfigTFC.GENERAL.temperatureModifierHeating * 150;
                         if (firebox != null)
                         {
                             firebox.setTemperature(temp);

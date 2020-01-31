@@ -75,8 +75,8 @@ public final class TechBlocks
 
         inventoryItemBlocks.add(new ItemBlockTFC(register(r, "electric_forge", new BlockElectricForge(), CT_MISC)));
         inventoryItemBlocks.add(new ItemBlockTFC(register(r, "induction_crucible", new BlockInductionCrucible(), CT_MISC)));
-        inventoryItemBlocks.add(new ItemBlockTFC(register(r, "smelter_cauldron", new BlockSmelteryCauldron(), CT_MISC)));
-        inventoryItemBlocks.add(new ItemBlockTFC(register(r, "smelter_firebox", new BlockSmelteryFirebox(), CT_MISC)));
+        inventoryItemBlocks.add(new ItemBlockTFC(register(r, "smeltery_cauldron", new BlockSmelteryCauldron(), CT_MISC)));
+        inventoryItemBlocks.add(new ItemBlockTFC(register(r, "smeltery_firebox", new BlockSmelteryFirebox(), CT_MISC)));
 
         allInventoryItemBlocks = inventoryItemBlocks.build();
 

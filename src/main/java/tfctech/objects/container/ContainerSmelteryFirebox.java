@@ -6,11 +6,11 @@ import net.minecraftforge.items.IItemHandler;
 
 import net.dries007.tfc.objects.container.ContainerTE;
 import net.dries007.tfc.objects.inventory.slot.SlotCallback;
-import tfctech.objects.tileentities.TESmelteryCauldron;
+import tfctech.objects.tileentities.TESmelteryFirebox;
 
-public class ContainerSmelteryCauldron extends ContainerTE<TESmelteryCauldron>
+public class ContainerSmelteryFirebox extends ContainerTE<TESmelteryFirebox>
 {
-    public ContainerSmelteryCauldron(InventoryPlayer playerInv, TESmelteryCauldron te)
+    public ContainerSmelteryFirebox(InventoryPlayer playerInv, TESmelteryFirebox te)
     {
         super(playerInv, te);
     }
@@ -26,7 +26,7 @@ public class ContainerSmelteryCauldron extends ContainerTE<TESmelteryCauldron>
                 int row = 1 - (i / 4);
                 int column = i % 4;
                 int x = 53 + column * 18;
-                int y = 21 + row * 18;
+                int y = 29 + row * 18;
                 addSlotToContainer(new SlotCallback(inventory, i, x, y, tile));
             }
         }

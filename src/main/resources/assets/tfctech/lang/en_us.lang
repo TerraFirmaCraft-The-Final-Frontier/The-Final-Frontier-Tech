@@ -27,6 +27,8 @@ tile.tfctech.induction_crucible.name=Induction Crucible
 tile.tfctech.wire_draw_bench.name=Wire Drawing Bench
 tile.tfctech.fridge.name=Fridge
 tile.tfctech.latex_extractor.name=Latex Extractor
+tile.tfctech.smeltery_cauldron.name=Smeltery Cauldron
+tile.tfctech.smeltery_firebox.name=Smeltery Firebox
 
 # Items
 ## Ceramics
@@ -40,6 +42,14 @@ item.tfctech.ceramics.mold.rackwheel_piece.filled=%s Rackwheel Piece Mold
 item.tfctech.latex.vulcanizing_agents.name=Vulcanizing Agents
 item.tfctech.latex.rubber_mix.name=Rubber Mix
 item.tfctech.latex.rubber.name=Rubber
+
+## Glass
+item.tfctech.glass.blowpipe.name=Blowpipe
+item.tfctech.glass.lime.name=Lime
+item.tfctech.glass.potash.name=Potash
+item.tfctech.glass.potash_pot.name=Pot with Potash
+item.tfctech.glass.wood_dust.name=Wood Dust
+item.tfctech.glass.wood_dust_pot.name=Pot with Wood Dust
 
 ## Wiredraw
 item.tfctech.wiredraw.leather_belt.name=Leather Belt
@@ -65,6 +75,7 @@ item.tfctech.metalitem.wire.unfinished=Unfinished %s Wire
 
 ## Fluids
 fluid.latex=Latex
+fluid.glass=Glass
 
 # Tooltips
 ## Itemstack Info
@@ -74,6 +85,7 @@ tooltip.tfctech.metalitem.wire.stage=Stage %s
 ## Smeltery info
 tooltip.tfctech.smeltery.molten=Molten
 tooltip.tfctech.smeltery.solid=Solidified
+tooltip.tfctech.smeltery.invalid=Smeltery structure not formed
 
 ## Status
 tooltip.tfctech.wiredraw.low_tier=Drawing Plate is too low tier!
@@ -139,6 +151,7 @@ config.tfctech.devices.fridgeLoseEfficiency.tooltip=How fast fridges lose effici
 
 # JEI
 jei.category.tfctech.wire_drawing=Wire Drawing
+jei.category.tfctech.smeltery=Smeltery
 
 # Waila/Hwyla/TOP
 waila.tfctech.wiredraw.progress=Progress: %d%%

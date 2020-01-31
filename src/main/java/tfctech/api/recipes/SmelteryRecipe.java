@@ -95,13 +95,13 @@ public class SmelteryRecipe extends IForgeRegistryEntry.Impl<SmelteryRecipe>
 
         public Builder addInput(@Nonnull IIngredient<ItemStack> ingredient)
         {
-            if (this.listInput.size() < 4)
+            if (this.listInput.size() < 8)
             {
                 this.listInput.add(ingredient);
             }
             else
             {
-                throw new IllegalStateException("Smeltery recipes must have at most 4 ingredients!");
+                throw new IllegalStateException("Smeltery recipes must have at most 8 ingredients!");
             }
             return this;
         }

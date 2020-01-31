@@ -10,6 +10,7 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import net.dries007.tfc.compat.jei.wrappers.SimpleRecipeWrapper;
+import tfctech.client.gui.GuiSmelteryCauldron;
 import tfctech.compat.jei.categories.SmelteryCategory;
 import tfctech.compat.jei.categories.WireDrawingCategory;
 import tfctech.compat.jei.wrappers.SmelteryRecipeWrapper;
@@ -50,6 +51,9 @@ public class TechJEIPlugin implements IModPlugin
                 .collect(Collectors.toList());
 
         registry.addRecipes(smelteryList, SMELTERY_UID);
-        registry.addRecipeCatalyst(new ItemStack(TechBlocks.WIRE_DRAW_BENCH), SMELTERY_UID);
+        registry.addRecipeCatalyst(new ItemStack(TechBlocks.SMELTERY_CAULDRON), SMELTERY_UID);
+
+        // Click areas
+        registry.addRecipeClickArea(GuiSmelteryCauldron.class, 52, 58, 72, 15, SMELTERY_UID);
     }
 }

@@ -26,7 +26,7 @@ public class SmelteryCategory extends BaseRecipeCategory<SmelteryRecipeWrapper>
 
     public SmelteryCategory(IGuiHelper helper, String Uid)
     {
-        super(helper.createBlankDrawable(106, 62), Uid);
+        super(helper.createBlankDrawable(114, 72), Uid);
         fluidSlotBackgroound = helper.createDrawable(BARREL_TEXTURES, 7, 15, 18, 60);
         fluidSlot = helper.createDrawable(BARREL_TEXTURES, 176, 0, 18, 53);
         fire = helper.createDrawable(ICONS, 0, 0, 14, 14);
@@ -41,15 +41,25 @@ public class SmelteryCategory extends BaseRecipeCategory<SmelteryRecipeWrapper>
         //Input
         slot.draw(minecraft, 5, 17);
         slot.draw(minecraft, 23, 17);
+        slot.draw(minecraft, 41, 17);
+        slot.draw(minecraft, 59, 17);
         slot.draw(minecraft, 5, 35);
         slot.draw(minecraft, 23, 35);
+        slot.draw(minecraft, 41, 35);
+        slot.draw(minecraft, 59, 35);
 
-        fire.draw(minecraft, 55, 30);
-        fireAnimated.draw(minecraft, 55, 30);
+        fire.draw(minecraft, 7, 55);
+        fireAnimated.draw(minecraft, 7, 55);
+        fire.draw(minecraft, 25, 55);
+        fireAnimated.draw(minecraft, 25, 55);
+        fire.draw(minecraft, 43, 55);
+        fireAnimated.draw(minecraft, 43, 55);
+        fire.draw(minecraft, 61, 55);
+        fireAnimated.draw(minecraft, 61, 55);
 
         //Output
-        fluidSlotBackgroound.draw(minecraft, 80, 1);
-        fluidSlot.draw(minecraft, 80, 5);
+        fluidSlotBackgroound.draw(minecraft, 87, 5);
+        fluidSlot.draw(minecraft, 87, 9);
     }
 
     @Override
@@ -58,8 +68,12 @@ public class SmelteryCategory extends BaseRecipeCategory<SmelteryRecipeWrapper>
         IGuiItemStackGroup itemStackGroup = recipeLayout.getItemStacks();
         itemStackGroup.init(0, true, 5, 17);
         itemStackGroup.init(1, true, 23, 17);
-        itemStackGroup.init(2, true, 5, 35);
-        itemStackGroup.init(3, true, 23, 35);
+        itemStackGroup.init(2, true, 41, 17);
+        itemStackGroup.init(3, true, 59, 17);
+        itemStackGroup.init(4, true, 5, 35);
+        itemStackGroup.init(5, true, 23, 35);
+        itemStackGroup.init(6, true, 41, 35);
+        itemStackGroup.init(7, true, 59, 35);
 
         for (int i = 0; i < ingredients.getInputs(VanillaTypes.ITEM).size(); i++)
         {
@@ -67,7 +81,7 @@ public class SmelteryCategory extends BaseRecipeCategory<SmelteryRecipeWrapper>
         }
 
         IGuiFluidStackGroup fluidStackGroup = recipeLayout.getFluidStacks();
-        fluidStackGroup.init(0, false, 85, 6, 8, 50, ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0).amount, true, null);
+        fluidStackGroup.init(0, false, 92, 10, 8, 50, ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0).amount, true, null);
         fluidStackGroup.set(0, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
     }
 }

@@ -16,12 +16,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
+import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
+import net.dries007.tfc.api.capability.heat.IItemHeat;
 import net.dries007.tfc.api.capability.size.IItemSize;
 import net.dries007.tfc.api.capability.size.Size;
 import net.dries007.tfc.api.capability.size.Weight;
@@ -83,19 +86,34 @@ public class BlockSmelteryCauldron extends Block implements IItemSize
         {
             if (!world.isRemote)
             {
-                TESmelteryCauldron smeltery = Helpers.getTE(world, pos, TESmelteryCauldron.class);
-                ItemStack held = player.getHeldItem(hand);
-                if (held.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
+                if (BlockSmelteryFirebox.isValidStructure(world, pos.down()))
                 {
-                    IFluidHandler fluidHandler = smeltery.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
-                    if (fluidHandler != null)
+                    TESmelteryCauldron smeltery = Helpers.getTE(world, pos, TESmelteryCauldron.class);
+                    ItemStack held = player.getHeldItem(hand);
+                    if (held.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
                     {
-                        FluidUtil.interactWithFluidHandler(player, hand, fluidHandler);
+                        IFluidHandler fluidHandler = smeltery.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
+                        if (fluidHandler != null)
+                        {
+                            if (FluidUtil.interactWithFluidHandler(player, hand, fluidHandler))
+                            {
+                                held = player.getHeldItem(hand); // Forge update item in hand
+                                IItemHeat cap = held.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);
+                                if (cap != null)
+                                {
+                                    cap.setTemperature(smeltery.getTemp());
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        TechGuiHandler.openGui(world, pos, player, TechGuiHandler.Type.SMELTERY_CAULDRON);
                     }
                 }
                 else
                 {
-                    TechGuiHandler.openGui(world, pos, player, TechGuiHandler.Type.SMELTERY);
+                    player.sendStatusMessage(new TextComponentTranslation("tooltip.tfctech.smeltery.invalid"), true);
                 }
             }
             return true;
