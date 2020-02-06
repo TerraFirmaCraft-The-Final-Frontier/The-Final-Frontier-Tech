@@ -1,7 +1,6 @@
 package tfctech.api.recipes;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import net.dries007.tfc.util.SimpleCraftMatrix;
@@ -17,11 +16,10 @@ public class GlassworkingRecipe extends IForgeRegistryEntry.Impl<GlassworkingRec
     private final SimpleCraftMatrix matrix;
     private final ItemStack output;
 
-    public GlassworkingRecipe(ResourceLocation name, ItemStack output, String... pattern)
+    public GlassworkingRecipe(ItemStack output, String... pattern)
     {
         this.matrix = new SimpleCraftMatrix(false, pattern);
         this.output = output;
-        setRegistryName(name);
     }
 
     public SimpleCraftMatrix getMatrix()

@@ -130,8 +130,8 @@ public final class TechRecipes
         IForgeRegistry<GlassworkingRecipe> r = event.getRegistry();
 
         r.registerAll(
-            new GlassworkingRecipe(new ResourceLocation(MODID, "glass_bottle"), new ItemStack(Items.GLASS_BOTTLE),
-                " X X ", " X X ", "X   X", "X   X", " XXX ")
+            new GlassworkingRecipe(new ItemStack(Items.GLASS_BOTTLE),
+                " X X ", " X X ", "X   X", "X   X", " XXX ").setRegistryName(MODID, "glass_bottle")
         );
     }
 

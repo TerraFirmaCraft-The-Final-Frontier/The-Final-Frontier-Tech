@@ -9,17 +9,16 @@ import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
-import net.dries007.tfc.api.util.TFCConstants;
 import net.dries007.tfc.compat.jei.BaseRecipeCategory;
+import tfctech.TFCTech;
 import tfctech.compat.jei.wrappers.SmelteryRecipeWrapper;
 
 @ParametersAreNonnullByDefault
 public class SmelteryCategory extends BaseRecipeCategory<SmelteryRecipeWrapper>
 {
-    private static final ResourceLocation ICONS = new ResourceLocation(TFCConstants.MOD_ID, "textures/gui/jei/icons.png");
-    private static final ResourceLocation BARREL_TEXTURES = new ResourceLocation(TFCConstants.MOD_ID, "textures/gui/barrel.png");
+    private static final ResourceLocation ICONS = new ResourceLocation(TFCTech.MODID, "textures/gui/elements.png");
 
-    private final IDrawableStatic fluidSlotBackgroound, fluidSlot;
+    private final IDrawableStatic fluidSlotBackground;
     private final IDrawableStatic slot;
     private final IDrawableStatic fire;
     private final IDrawableAnimated fireAnimated;
@@ -27,10 +26,10 @@ public class SmelteryCategory extends BaseRecipeCategory<SmelteryRecipeWrapper>
     public SmelteryCategory(IGuiHelper helper, String Uid)
     {
         super(helper.createBlankDrawable(114, 72), Uid);
-        fluidSlotBackgroound = helper.createDrawable(BARREL_TEXTURES, 7, 15, 18, 60);
-        fluidSlot = helper.createDrawable(BARREL_TEXTURES, 176, 0, 18, 53);
-        fire = helper.createDrawable(ICONS, 0, 0, 14, 14);
-        IDrawableStatic arrowAnimated = helper.createDrawable(ICONS, 14, 0, 14, 14);
+        fluidSlotBackground = helper.createDrawable(ICONS, 0, 102, 18, 49);
+        //fluidSlot = helper.createDrawable(ICONS, 18, 102, 18, 49);
+        fire = helper.createDrawable(ICONS, 0, 151, 14, 14);
+        IDrawableStatic arrowAnimated = helper.createDrawable(ICONS, 14, 151, 14, 14);
         this.fireAnimated = helper.createAnimatedDrawable(arrowAnimated, 160, IDrawableAnimated.StartDirection.TOP, true);
         this.slot = helper.getSlotDrawable();
     }
@@ -58,8 +57,7 @@ public class SmelteryCategory extends BaseRecipeCategory<SmelteryRecipeWrapper>
         fireAnimated.draw(minecraft, 61, 55);
 
         //Output
-        fluidSlotBackgroound.draw(minecraft, 87, 5);
-        fluidSlot.draw(minecraft, 87, 9);
+        fluidSlotBackground.draw(minecraft, 87, 9);
     }
 
     @Override
@@ -81,7 +79,7 @@ public class SmelteryCategory extends BaseRecipeCategory<SmelteryRecipeWrapper>
         }
 
         IGuiFluidStackGroup fluidStackGroup = recipeLayout.getFluidStacks();
-        fluidStackGroup.init(0, false, 92, 10, 8, 50, ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0).amount, true, null);
+        fluidStackGroup.init(0, false, 88, 10, 16, 47, ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0).amount, false, null);
         fluidStackGroup.set(0, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
     }
 }

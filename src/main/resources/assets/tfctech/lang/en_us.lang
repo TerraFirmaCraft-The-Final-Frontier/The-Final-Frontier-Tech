@@ -153,6 +153,7 @@ config.tfctech.devices.fridgeLoseEfficiency.tooltip=How fast fridges lose effici
 # JEI
 jei.category.tfctech.wire_drawing=Wire Drawing
 jei.category.tfctech.smeltery=Smeltery
+jei.category.tfctech.glassworking=Glassworking
 
 # Waila/Hwyla/TOP
 waila.tfctech.wiredraw.progress=Progress: %d%%

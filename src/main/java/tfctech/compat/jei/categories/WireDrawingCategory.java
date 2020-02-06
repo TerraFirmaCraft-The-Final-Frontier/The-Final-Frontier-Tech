@@ -12,14 +12,14 @@ import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
-import net.dries007.tfc.api.util.TFCConstants;
 import net.dries007.tfc.compat.jei.BaseRecipeCategory;
 import net.dries007.tfc.compat.jei.wrappers.SimpleRecipeWrapper;
+import tfctech.TFCTech;
 
 @ParametersAreNonnullByDefault
 public class WireDrawingCategory extends BaseRecipeCategory<SimpleRecipeWrapper>
 {
-    private static final ResourceLocation ICONS = new ResourceLocation(TFCConstants.MOD_ID, "textures/gui/jei/icons.png");
+    private static final ResourceLocation ICONS = new ResourceLocation(TFCTech.MODID, "textures/gui/elements.png");
 
     private final IDrawableStatic slot;
     private final IDrawableStatic arrow;
@@ -28,8 +28,8 @@ public class WireDrawingCategory extends BaseRecipeCategory<SimpleRecipeWrapper>
     public WireDrawingCategory(IGuiHelper helper, String Uid)
     {
         super(helper.createBlankDrawable(140, 38), Uid);
-        arrow = helper.createDrawable(ICONS, 0, 14, 22, 16);
-        IDrawableStatic arrowAnimated = helper.createDrawable(ICONS, 22, 14, 22, 16);
+        arrow = helper.createDrawable(ICONS, 0, 165, 22, 16);
+        IDrawableStatic arrowAnimated = helper.createDrawable(ICONS, 22, 165, 22, 16);
         this.arrowAnimated = helper.createAnimatedDrawable(arrowAnimated, 80, IDrawableAnimated.StartDirection.LEFT, false);
         this.slot = helper.getSlotDrawable();
     }
