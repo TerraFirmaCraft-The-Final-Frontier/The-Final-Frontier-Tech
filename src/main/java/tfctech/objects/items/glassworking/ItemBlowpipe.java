@@ -81,7 +81,7 @@ public class ItemBlowpipe extends ItemMiscTech
         BlowpipeCapability(ItemStack stack, @Nullable NBTTagCompound nbt)
         {
             this.heatCapacity = 0.35f;
-            this.meltTemp = Float.MAX_VALUE;
+            this.meltTemp = 1599f;
             this.tank = new FluidWhitelistHandler(stack, BLOWPIPE_TANK, Sets.newHashSet(TechFluids.GLASS.get()));
             deserializeNBT(nbt);
         }
@@ -156,20 +156,21 @@ public class ItemBlowpipe extends ItemMiscTech
         @Override
         public void addHeatInfo(@Nonnull ItemStack stack, @Nonnull List<String> tooltip)
         {
-            super.addHeatInfo(stack, tooltip);
             FluidStack fluid = tank.drain(BLOWPIPE_TANK, false);
             if (fluid != null)
             {
-                tooltip.add(fluid.getLocalizedName());
+                String fluidDesc = TextFormatting.DARK_GREEN + fluid.getLocalizedName();
                 if (isSolidified())
                 {
-                    tooltip.add(TextFormatting.DARK_GRAY + I18n.format("tooltip.tfctech.smeltery.solid"));
+                    fluidDesc += I18n.format("tfc.tooltip.solid");
                 }
                 else if (canWork())
                 {
-                    tooltip.add(TextFormatting.YELLOW + I18n.format("tooltip.tfctech.smeltery.molten"));
+                    fluidDesc += I18n.format("tfc.tooltip.liquid");
                 }
+                tooltip.add(fluidDesc);
             }
+            super.addHeatInfo(stack, tooltip);
         }
 
         @Override
@@ -190,18 +191,6 @@ public class ItemBlowpipe extends ItemMiscTech
             return value;
         }
 
-        public void consumeFluid()
-        {
-            tank.drain(BLOWPIPE_TANK, true);
-            this.setTemperature(0);
-        }
-
-        @Nullable
-        public FluidStack getFluid()
-        {
-            return tank.drain(BLOWPIPE_TANK, false);
-        }
-
         @Nullable
         @Override
         public FluidStack drain(FluidStack fluidStack, boolean doDrain)
@@ -214,6 +203,18 @@ public class ItemBlowpipe extends ItemMiscTech
         public FluidStack drain(int maxAmount, boolean doDrain)
         {
             return null;
+        }
+
+        public void consumeFluid()
+        {
+            tank.drain(BLOWPIPE_TANK, true);
+            this.setTemperature(0);
+        }
+
+        @Nullable
+        public FluidStack getFluid()
+        {
+            return tank.drain(BLOWPIPE_TANK, false);
         }
 
         @Nonnull

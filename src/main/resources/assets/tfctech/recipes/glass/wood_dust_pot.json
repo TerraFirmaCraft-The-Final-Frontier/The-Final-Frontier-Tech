@@ -6,6 +6,18 @@
       "ore": "dustWood"
     },
     {
+      "type": "forge:ore_dict",
+      "ore": "dustWood"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "dustWood"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "dustWood"
+    },
+    {
       "item": "tfc:ceramics/fired/pot"
     },
     [

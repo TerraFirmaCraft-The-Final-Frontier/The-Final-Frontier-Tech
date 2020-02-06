@@ -2,22 +2,20 @@ package tfctech.objects.tileentities;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
 
 import net.dries007.tfc.ConfigTFC;
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
 import net.dries007.tfc.objects.te.ITileFields;
 import net.dries007.tfc.objects.te.TEInventory;
-import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.CalendarTFC;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.dries007.tfc.util.fuel.Fuel;
 import net.dries007.tfc.util.fuel.FuelManager;
+import tfctech.objects.blocks.devices.BlockSmelteryCauldron;
 
 import static net.dries007.tfc.objects.blocks.property.ILightableBlock.LIT;
 
@@ -90,6 +88,17 @@ public class TESmelteryFirebox extends TEInventory implements ITickable, ICalend
                 {
                     consumeFuel();
                 }
+                if (reload++ >= 20)
+                {
+                    reload = 0;
+                    if (!(world.getBlockState(pos.up()).getBlock() instanceof BlockSmelteryCauldron))
+                    {
+                        temperature = 0;
+                        world.setBlockState(pos, state.withProperty(LIT, false));
+                        burnTicks = 0;
+                        airTicks = 0;
+                    }
+                }
             }
             else
             {
@@ -106,16 +115,6 @@ public class TESmelteryFirebox extends TEInventory implements ITickable, ICalend
                     float delta = (float) ConfigTFC.GENERAL.temperatureModifierHeating;
                     temperature = CapabilityItemHeat.adjustTempTowards(temperature, targetTemperature, delta * (airTicks > 0 ? 2 : 1));
                 }
-            }
-        }
-        if (reload++ >= 20)
-        {
-            reload = 0;
-            BlockPos cauldronPos = pos.up().offset(world.getBlockState(pos).getValue(BlockHorizontal.FACING).getOpposite());
-            TESmelteryCauldron teCauldron = Helpers.getTE(world, cauldronPos, TESmelteryCauldron.class);
-            if (teCauldron != null)
-            {
-                teCauldron.setFireboxPos(pos);
             }
         }
     }

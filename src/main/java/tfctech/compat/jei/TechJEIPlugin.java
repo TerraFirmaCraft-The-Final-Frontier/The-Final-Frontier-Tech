@@ -37,18 +37,18 @@ public class TechJEIPlugin implements IModPlugin
     public void register(IModRegistry registry)
     {
         List<SimpleRecipeWrapper> wireList = TechRegistries.WIRE_DRAWING.getValuesCollection()
-                .stream()
-                .filter(x -> x.getIngredients().size() == 2) //Only shows recipes which have a wire drawing plate (so, it can be obtained)
-                .map(SimpleRecipeWrapper::new)
-                .collect(Collectors.toList());
+            .stream()
+            .filter(x -> x.getIngredients().size() == 2) //Only shows recipes which have a wire drawing plate (so, it can be obtained)
+            .map(SimpleRecipeWrapper::new)
+            .collect(Collectors.toList());
 
         registry.addRecipes(wireList, WIRE_DRAWING_UID);
         registry.addRecipeCatalyst(new ItemStack(TechBlocks.WIRE_DRAW_BENCH), WIRE_DRAWING_UID);
 
         List<SmelteryRecipeWrapper> smelteryList = TechRegistries.SMELTERY.getValuesCollection()
-                .stream()
-                .map(SmelteryRecipeWrapper::new)
-                .collect(Collectors.toList());
+            .stream()
+            .map(SmelteryRecipeWrapper::new)
+            .collect(Collectors.toList());
 
         registry.addRecipes(smelteryList, SMELTERY_UID);
         registry.addRecipeCatalyst(new ItemStack(TechBlocks.SMELTERY_CAULDRON), SMELTERY_UID);

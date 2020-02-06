@@ -12,6 +12,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -28,8 +29,6 @@ import net.dries007.tfc.api.capability.size.IItemSize;
 import net.dries007.tfc.api.capability.size.Size;
 import net.dries007.tfc.api.capability.size.Weight;
 import net.dries007.tfc.api.util.IBellowsConsumerBlock;
-import net.dries007.tfc.objects.blocks.BlockCharcoalPile;
-import net.dries007.tfc.objects.blocks.BlockFireBrick;
 import net.dries007.tfc.objects.blocks.property.ILightableBlock;
 import net.dries007.tfc.objects.items.ItemFireStarter;
 import net.dries007.tfc.objects.te.TEBellows;
@@ -37,58 +36,10 @@ import net.dries007.tfc.util.Helpers;
 import tfctech.client.TechGuiHandler;
 import tfctech.objects.tileentities.TESmelteryFirebox;
 
-@SuppressWarnings("WeakerAccess")
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class BlockSmelteryFirebox extends BlockHorizontal implements IBellowsConsumerBlock, ILightableBlock, IItemSize
 {
-    /**
-     * Checks if the smeltery structure is formed
-     *
-     * @param world the world obj
-     * @param pos   the pos of the charcoal pile
-     * @return true if this smeltery structure is valid
-     */
-    public static boolean isValidStructure(World world, BlockPos pos)
-    {
-        IBlockState charcoalPile = world.getBlockState(pos);
-        if (charcoalPile.getBlock() instanceof BlockCharcoalPile && charcoalPile.getValue(BlockCharcoalPile.LAYERS) == 8)
-        {
-            // Check for fireboxes + bricks
-            int fireboxes = 0;
-            int bricks = 0;
-            for (EnumFacing face : EnumFacing.HORIZONTALS)
-            {
-                IBlockState checkState = world.getBlockState(pos.offset(face));
-                if (checkState.getBlock() instanceof BlockSmelteryFirebox && checkState.getValue(FACING) == face)
-                {
-                    fireboxes++;
-                }
-                else if (checkState.getBlock() instanceof BlockFireBrick)
-                {
-                    bricks++;
-                }
-            }
-            pos = pos.up(); // The cauldron position
-            if (fireboxes != 1 || bricks != 3 || !(world.getBlockState(pos).getBlock() instanceof BlockSmelteryCauldron))
-            {
-                // First layer not valid or cauldron not above
-                return false;
-            }
-            // Second layer + above
-            for (EnumFacing face : EnumFacing.HORIZONTALS)
-            {
-                IBlockState checkState = world.getBlockState(pos.offset(face));
-                if (checkState.getBlock() instanceof BlockFireBrick)
-                {
-                    bricks++;
-                }
-            }
-            // Must have the above block set and one open space to access the cauldron
-            return bricks == 6 && world.getBlockState(pos.up()).getBlock() instanceof BlockFireBrick;
-        }
-        return false;
-    }
 
     public BlockSmelteryFirebox()
     {
@@ -141,7 +92,7 @@ public class BlockSmelteryFirebox extends BlockHorizontal implements IBellowsCon
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        return FULL_BLOCK_AABB;
+        return FULL_BLOCK_AABB; // todo
     }
 
     @Override
@@ -160,25 +111,14 @@ public class BlockSmelteryFirebox extends BlockHorizontal implements IBellowsCon
     }
 
     @Override
-    public boolean canPlaceBlockAt(World world, BlockPos pos)
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
-        for (EnumFacing facing : EnumFacing.HORIZONTALS)
+        TESmelteryFirebox te = Helpers.getTE(worldIn, pos, TESmelteryFirebox.class);
+        if (te != null)
         {
-            IBlockState state = world.getBlockState(pos.offset(facing));
-            if (state.getBlock() instanceof BlockCharcoalPile && state.getValue(BlockCharcoalPile.LAYERS) == 8)
-            {
-                for (EnumFacing face : EnumFacing.HORIZONTALS)
-                {
-                    if (world.getBlockState(pos.offset(facing).offset(face)).getBlock() instanceof BlockSmelteryFirebox)
-                    {
-                        // don't allow two fireboxes on the same structure
-                        return false;
-                    }
-                }
-                return true;
-            }
+            te.onBreakBlock(worldIn, pos, state);
         }
-        return false;
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override
@@ -188,10 +128,10 @@ public class BlockSmelteryFirebox extends BlockHorizontal implements IBellowsCon
         {
             if (!world.isRemote)
             {
-                if (isValidStructure(world, pos.offset(state.getValue(FACING).getOpposite())))
+                ItemStack held = player.getHeldItem(hand);
+                if (world.getBlockState(pos.up()).getBlock() instanceof BlockSmelteryCauldron)
                 {
                     TESmelteryFirebox firebox = Helpers.getTE(world, pos, TESmelteryFirebox.class);
-                    ItemStack held = player.getHeldItem(hand);
                     if (ItemFireStarter.canIgnite(held) && firebox.onIgnite())
                     {
                         ItemFireStarter.onIgnition(held);
@@ -203,28 +143,19 @@ public class BlockSmelteryFirebox extends BlockHorizontal implements IBellowsCon
                 }
                 else
                 {
-                    player.sendStatusMessage(new TextComponentTranslation("tooltip.tfctech.smeltery.invalid"), true);
+                    if (held.getItem() instanceof ItemBlock && ((ItemBlock) held.getItem()).getBlock() instanceof BlockSmelteryCauldron && world.getBlockState(pos.up()).getMaterial().isReplaceable())
+                    {
+                        held.getItem().onItemUse(player, world, pos.up(), hand, side, hitX, hitY, hitZ);
+                    }
+                    else
+                    {
+                        player.sendStatusMessage(new TextComponentTranslation("tooltip.tfctech.smeltery.invalid"), true);
+                    }
                 }
             }
             return true;
         }
         return false;
-    }
-
-    @Override
-    public boolean canIntakeFrom(@Nonnull TEBellows teBellows, @Nonnull Vec3i offset, @Nonnull EnumFacing enumFacing)
-    {
-        return offset.equals(TEBellows.OFFSET_LEVEL);
-    }
-
-    @Override
-    public void onAirIntake(@Nonnull TEBellows teBellows, @Nonnull World world, @Nonnull BlockPos pos, int airAmount)
-    {
-        TESmelteryFirebox firebox = Helpers.getTE(world, pos, TESmelteryFirebox.class);
-        if (firebox != null)
-        {
-            firebox.onAirIntake(airAmount);
-        }
     }
 
     @Override
@@ -255,14 +186,22 @@ public class BlockSmelteryFirebox extends BlockHorizontal implements IBellowsCon
     @Override
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
     {
-        for (EnumFacing face : EnumFacing.HORIZONTALS)
+        return getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+    }
+
+    @Override
+    public boolean canIntakeFrom(@Nonnull TEBellows teBellows, @Nonnull Vec3i offset, @Nonnull EnumFacing direction)
+    {
+        return offset.equals(TEBellows.OFFSET_LEVEL);
+    }
+
+    @Override
+    public void onAirIntake(@Nonnull TEBellows teBellows, @Nonnull World world, @Nonnull BlockPos pos, int airAmount)
+    {
+        TESmelteryFirebox firebox = Helpers.getTE(world, pos, TESmelteryFirebox.class);
+        if (firebox != null)
         {
-            IBlockState state = world.getBlockState(pos.offset(face));
-            if (state.getBlock() instanceof BlockCharcoalPile && state.getValue(BlockCharcoalPile.LAYERS) == 8)
-            {
-                return getDefaultState().withProperty(FACING, face.getOpposite());
-            }
+            firebox.onAirIntake(airAmount);
         }
-        return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
     }
 }

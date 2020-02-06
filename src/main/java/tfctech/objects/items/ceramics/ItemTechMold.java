@@ -139,6 +139,7 @@ public class ItemTechMold extends ItemPottery
             if (resource != null)
             {
                 Metal metal = FluidsTFC.getMetalFromFluid(resource.getFluid());
+                //noinspection ConstantConditions,deprecation
                 if (metal != null && ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(true))
                 {
                     int fillAmount = tank.fill(resource, doFill);
@@ -208,7 +209,7 @@ public class ItemTechMold extends ItemPottery
         public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing)
         {
             return capability == FLUID_HANDLER_CAPABILITY
-                    || capability == CapabilityItemHeat.ITEM_HEAT_CAPABILITY;
+                || capability == CapabilityItemHeat.ITEM_HEAT_CAPABILITY;
         }
 
         @Nullable

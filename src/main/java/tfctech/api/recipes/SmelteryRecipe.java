@@ -14,18 +14,17 @@ import tfctech.registry.TechRegistries;
 
 public class SmelteryRecipe extends IForgeRegistryEntry.Impl<SmelteryRecipe>
 {
+    @Nullable
+    public static SmelteryRecipe get(ItemStack... ingredients)
+    {
+        return TechRegistries.SMELTERY.getValuesCollection().stream().filter(x -> x.isValidInput(ingredients)).findFirst().orElse(null);
+    }
     private IIngredient<ItemStack>[] ingredients;
     private FluidStack outputFluid;
     private float meltTemp;
 
     private SmelteryRecipe()
     {
-    }
-
-    @Nullable
-    public static SmelteryRecipe get(ItemStack... ingredients)
-    {
-        return TechRegistries.SMELTERY.getValuesCollection().stream().filter(x -> x.isValidInput(ingredients)).findFirst().orElse(null);
     }
 
     /**
@@ -44,6 +43,21 @@ public class SmelteryRecipe extends IForgeRegistryEntry.Impl<SmelteryRecipe>
     public float getMeltTemp()
     {
         return meltTemp;
+    }
+
+    public void consumeInputs(List<ItemStack> inputs)
+    {
+        for (IIngredient<ItemStack> ingredient : this.ingredients)
+        {
+            for (ItemStack stack : inputs)
+            {
+                if (ingredient.test(stack))
+                {
+                    stack.shrink(ingredient.getAmount());
+                    break;
+                }
+            }
+        }
     }
 
     private boolean isValidInput(ItemStack... ingredients)
@@ -65,21 +79,6 @@ public class SmelteryRecipe extends IForgeRegistryEntry.Impl<SmelteryRecipe>
             }
         }
         return true;
-    }
-
-    public void consumeInputs(List<ItemStack> inputs)
-    {
-        for (IIngredient<ItemStack> ingredient : this.ingredients)
-        {
-            for (ItemStack stack : inputs)
-            {
-                if (ingredient.test(stack))
-                {
-                    stack.shrink(ingredient.getAmount());
-                    break;
-                }
-            }
-        }
     }
 
     public static class Builder<T extends Builder>

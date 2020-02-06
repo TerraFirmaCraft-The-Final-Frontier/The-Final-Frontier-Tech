@@ -4,11 +4,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -33,7 +35,7 @@ import tfctech.client.TechGuiHandler;
 import tfctech.objects.tileentities.TESmelteryCauldron;
 
 @ParametersAreNonnullByDefault
-public class BlockSmelteryCauldron extends Block implements IItemSize
+public class BlockSmelteryCauldron extends BlockHorizontal implements IItemSize
 {
     public BlockSmelteryCauldron()
     {
@@ -41,6 +43,21 @@ public class BlockSmelteryCauldron extends Block implements IItemSize
         setHardness(3.0F);
         setSoundType(SoundType.STONE);
         setHarvestLevel("pickaxe", 0);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    @Nonnull
+    public IBlockState getStateFromMeta(int meta)
+    {
+        return this.getDefaultState()
+            .withProperty(FACING, EnumFacing.byHorizontalIndex(meta % 4));
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state)
+    {
+        return state.getValue(FACING).getHorizontalIndex();
     }
 
     @Override
@@ -55,7 +72,7 @@ public class BlockSmelteryCauldron extends Block implements IItemSize
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        return FULL_BLOCK_AABB;
+        return FULL_BLOCK_AABB; // todo
     }
 
     @Override
@@ -74,9 +91,14 @@ public class BlockSmelteryCauldron extends Block implements IItemSize
     }
 
     @Override
-    public boolean hasTileEntity(IBlockState state)
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
-        return true;
+        TESmelteryCauldron te = Helpers.getTE(worldIn, pos, TESmelteryCauldron.class);
+        if (te != null)
+        {
+            te.onBreakBlock(worldIn, pos, state);
+        }
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override
@@ -86,7 +108,7 @@ public class BlockSmelteryCauldron extends Block implements IItemSize
         {
             if (!world.isRemote)
             {
-                if (BlockSmelteryFirebox.isValidStructure(world, pos.down()))
+                if (world.getBlockState(pos.down()).getBlock() instanceof BlockSmelteryFirebox)
                 {
                     TESmelteryCauldron smeltery = Helpers.getTE(world, pos, TESmelteryCauldron.class);
                     ItemStack held = player.getHeldItem(hand);
@@ -121,11 +143,31 @@ public class BlockSmelteryCauldron extends Block implements IItemSize
         return false;
     }
 
+    @Nonnull
+    @Override
+    protected BlockStateContainer createBlockState()
+    {
+        return new BlockStateContainer(this, FACING);
+    }
+
+    @Override
+    public boolean hasTileEntity(IBlockState state)
+    {
+        return true;
+    }
+
     @Nullable
     @Override
     public TileEntity createTileEntity(World world, IBlockState state)
     {
         return new TESmelteryCauldron();
+    }
+
+    @Nonnull
+    @Override
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
+    {
+        return getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
     @Nonnull

@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -32,7 +31,6 @@ import tfctech.api.recipes.SmelteryRecipe;
 public class TESmelteryCauldron extends TEInventory implements ITickable, IFluidHandlerSidedCallback, IFluidTankCallback, ITileFields
 {
     public static final int FLUID_CAPACITY = 4000;
-    private BlockPos fireboxPos;
     private float temp;
     private FluidTank tank = new FluidTankCallback(this, 0, FLUID_CAPACITY);
 
@@ -41,22 +39,25 @@ public class TESmelteryCauldron extends TEInventory implements ITickable, IFluid
     public TESmelteryCauldron()
     {
         super(8);
-        fireboxPos = null;
         reload = 0;
     }
 
     @Override
     public void update()
     {
-        if (!world.isRemote && fireboxPos != null)
+        if (!world.isRemote)
         {
             if (++reload >= 10)
             {
                 reload = 0;
-                TESmelteryFirebox firebox = Helpers.getTE(world, fireboxPos, TESmelteryFirebox.class);
+                TESmelteryFirebox firebox = Helpers.getTE(world, pos.down(), TESmelteryFirebox.class);
                 if (firebox != null)
                 {
                     temp = firebox.getTemperature();
+                }
+                else
+                {
+                    temp = 0;
                 }
                 List<ItemStack> input = new ArrayList<>();
                 for (int i = 0; i < 8; i++)
@@ -84,11 +85,6 @@ public class TESmelteryCauldron extends TEInventory implements ITickable, IFluid
                 }
             }
         }
-    }
-
-    public void setFireboxPos(BlockPos pos)
-    {
-        this.fireboxPos = pos;
     }
 
     /*

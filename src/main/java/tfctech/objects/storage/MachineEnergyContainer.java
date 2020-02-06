@@ -156,7 +156,7 @@ public class MachineEnergyContainer extends EnergyStorage implements INBTSeriali
         @Override
         public long getInputVoltage()
         {
-            return (long) TechConfig.DEVICES.gtceVoltage;
+            return TechConfig.DEVICES.gtceVoltage;
         }
 
         @Override

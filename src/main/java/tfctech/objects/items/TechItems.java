@@ -59,6 +59,8 @@ public final class TechItems
     @GameRegistry.ObjectHolder("latex/rubber")
     public static final ItemMiscHeatable RUBBER = getNull();
 
+    @GameRegistry.ObjectHolder("glass/unfired_blowpipe")
+    public static final ItemPottery UNFIRED_BLOWPIPE = getNull();
     @GameRegistry.ObjectHolder("glass/blowpipe")
     public static final ItemBlowpipe BLOWPIPE = getNull();
     @GameRegistry.ObjectHolder("glass/lime")
@@ -127,6 +129,7 @@ public final class TechItems
         IForgeRegistry<Item> r = event.getRegistry();
         ImmutableList.Builder<Item> simpleItems = ImmutableList.builder();
 
+        simpleItems.add(register(r, "glass/unfired_blowpipe", new ItemPottery(), CT_MISC));
         simpleItems.add(register(r, "glass/blowpipe", new ItemBlowpipe(), CT_MISC));
         simpleItems.add(register(r, "glass/wood_dust", new ItemMiscTech(Size.SMALL, Weight.LIGHT, "dustWood"), CT_MISC));
         simpleItems.add(register(r, "glass/wood_dust_pot", new ItemPottery(), CT_MISC));
@@ -238,10 +241,10 @@ public final class TechItems
         //noinspection ConstantConditions
         String rockName = block.getRock().getRegistryName().getPath().toLowerCase();
         return rockName.equalsIgnoreCase("chert") ||
-                rockName.equalsIgnoreCase("granite") ||
-                rockName.equalsIgnoreCase("quartzite") ||
-                rockName.equalsIgnoreCase("rhyolite") ||
-                rockName.equalsIgnoreCase("phyllite");
+            rockName.equalsIgnoreCase("granite") ||
+            rockName.equalsIgnoreCase("quartzite") ||
+            rockName.equalsIgnoreCase("rhyolite") ||
+            rockName.equalsIgnoreCase("phyllite");
     }
 
     private static <T extends Block> ItemBlock createItemBlock(T block, Function<T, ItemBlock> producer)

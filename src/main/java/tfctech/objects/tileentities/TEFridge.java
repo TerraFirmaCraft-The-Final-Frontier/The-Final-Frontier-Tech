@@ -183,16 +183,6 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
     }
 
     @Override
-    public void onChunkUnload()
-    {
-        super.onChunkUnload();
-        if (Loader.isModLoaded("ic2"))
-        {
-            ic2Unload();
-        }
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
     {
@@ -220,6 +210,50 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
             }
         }
         return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public void onBreakBlock(World world, BlockPos pos, IBlockState state)
+    {
+        if (Loader.isModLoaded("ic2"))
+        {
+            ic2Unload();
+            if (isMainBlock())
+            {
+                TEFridge child = Helpers.getTE(world, pos.down(), TEFridge.class);
+                if (child != null)
+                {
+                    child.ic2Unload();
+                }
+            }
+            else
+            {
+                TEFridge main = Helpers.getTE(world, pos.up(), TEFridge.class);
+                if (main != null)
+                {
+                    main.ic2Unload();
+                }
+            }
+        }
+        super.onBreakBlock(world, pos, state);
+    }
+
+    @Override
+    public void onChunkUnload()
+    {
+        super.onChunkUnload();
+        if (Loader.isModLoaded("ic2"))
+        {
+            ic2Unload();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    @Nonnull
+    public AxisAlignedBB getRenderBoundingBox()
+    {
+        return INFINITE_EXTENT_AABB;
     }
 
     @Override
@@ -277,40 +311,6 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
             MinecraftForge.EVENT_BUS.post(new ic2.api.energy.event.EnergyTileLoadEvent(this));
             addedToIc2Network = true;
         }
-    }
-
-    @Override
-    public void onBreakBlock(World world, BlockPos pos, IBlockState state)
-    {
-        if (Loader.isModLoaded("ic2"))
-        {
-            ic2Unload();
-            if (isMainBlock())
-            {
-                TEFridge child = Helpers.getTE(world, pos.down(), TEFridge.class);
-                if (child != null)
-                {
-                    child.ic2Unload();
-                }
-            }
-            else
-            {
-                TEFridge main = Helpers.getTE(world, pos.up(), TEFridge.class);
-                if (main != null)
-                {
-                    main.ic2Unload();
-                }
-            }
-        }
-        super.onBreakBlock(world, pos, state);
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    @Nonnull
-    public AxisAlignedBB getRenderBoundingBox()
-    {
-        return INFINITE_EXTENT_AABB;
     }
 
     @Optional.Method(modid = "ic2")

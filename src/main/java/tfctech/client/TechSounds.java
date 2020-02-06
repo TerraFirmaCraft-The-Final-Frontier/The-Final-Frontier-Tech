@@ -47,16 +47,16 @@ public final class TechSounds
     public static void registerSounds(RegistryEvent.Register<SoundEvent> event)
     {
         event.getRegistry().registerAll(
-                createSoundEvent("rubbertapping.groove.fit"),
-                createSoundEvent("rubbertapping.mount.fit"),
-                createSoundEvent("rubbertapping.bowl.fit"),
-                createSoundEvent("rubbertapping.bowl.grab"),
-                createSoundEvent("rubbertapping.trunk.scratch"),
-                createSoundEvent("wiredrawbench.tongs_fall"),
-                createSoundEvent("wiredrawbench.drawing"),
-                createSoundEvent("fridge.open"),
-                createSoundEvent("fridge.close"),
-                createSoundEvent("induction_smelter.work")
+            createSoundEvent("rubbertapping.groove.fit"),
+            createSoundEvent("rubbertapping.mount.fit"),
+            createSoundEvent("rubbertapping.bowl.fit"),
+            createSoundEvent("rubbertapping.bowl.grab"),
+            createSoundEvent("rubbertapping.trunk.scratch"),
+            createSoundEvent("wiredrawbench.tongs_fall"),
+            createSoundEvent("wiredrawbench.drawing"),
+            createSoundEvent("fridge.open"),
+            createSoundEvent("fridge.close"),
+            createSoundEvent("induction_smelter.work")
         );
     }
 
