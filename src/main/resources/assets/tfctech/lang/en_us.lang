@@ -46,6 +46,10 @@ item.tfctech.latex.rubber.name=Rubber
 ## Glass
 item.tfctech.glass.unfired_blowpipe.name=Unfired Blowpipe
 item.tfctech.glass.blowpipe.name=Blowpipe
+item.tfctech.glass.unfired_mold_block.name=Unfired Block Mold
+item.tfctech.glass.mold_block.name=Block Mold
+item.tfctech.glass.unfired_mold_pane.name=Unfired Pane Mold
+item.tfctech.glass.mold_pane.name=Pane Mold
 item.tfctech.glass.lime.name=Lime
 item.tfctech.glass.potash.name=Potash
 item.tfctech.glass.potash_pot.name=Pot with Potash

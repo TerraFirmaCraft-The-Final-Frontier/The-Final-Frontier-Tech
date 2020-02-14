@@ -23,11 +23,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import mcp.MethodsReturnNonnullByDefault;
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
+import net.dries007.tfc.api.capability.heat.Heat;
 import net.dries007.tfc.api.capability.heat.ItemHeatHandler;
 import net.dries007.tfc.api.capability.size.Size;
 import net.dries007.tfc.api.capability.size.Weight;
 import net.dries007.tfc.objects.fluids.capability.FluidWhitelistHandler;
-import net.dries007.tfc.util.calendar.CalendarTFC;
 import tfctech.objects.fluids.TechFluids;
 import tfctech.objects.items.ItemMiscTech;
 
@@ -64,8 +64,8 @@ public class ItemGlassMolder extends ItemMiscTech
         GlassMolderCapability(ItemStack stack, int capacity, @Nullable NBTTagCompound nbt)
         {
             this.capacity = capacity;
-            this.heatCapacity = 0.35f;
-            this.meltTemp = 1599f;
+            this.heatCapacity = 1;
+            this.meltTemp = Heat.maxVisibleTemperature();
             this.tank = new FluidWhitelistHandler(stack, capacity, Sets.newHashSet(TechFluids.GLASS.get()));
             deserializeNBT(nbt);
         }
@@ -103,17 +103,7 @@ public class ItemGlassMolder extends ItemMiscTech
         @Override
         public NBTTagCompound serializeNBT()
         {
-            NBTTagCompound nbt = new NBTTagCompound();
-            float temp = getTemperature();
-            nbt.setFloat("heat", temp);
-            if (temp <= 0)
-            {
-                nbt.setLong("ticks", -1);
-            }
-            else
-            {
-                nbt.setLong("ticks", this.lastUpdateTick);
-            }
+            NBTTagCompound nbt = super.serializeNBT();
             FluidStack fluidStack = tank.drain(capacity, false);
             if (fluidStack != null)
             {
@@ -125,16 +115,10 @@ public class ItemGlassMolder extends ItemMiscTech
         @Override
         public void deserializeNBT(@Nullable NBTTagCompound nbt)
         {
+            super.deserializeNBT(nbt);
             if (nbt != null)
             {
-                temperature = nbt.getFloat("heat");
-                lastUpdateTick = nbt.getLong("ticks");
                 tank.fill(FluidStack.loadFluidStackFromNBT(nbt.getCompoundTag("tank")), true);
-            }
-            else
-            {
-                temperature = 0;
-                lastUpdateTick = CalendarTFC.PLAYER_TIME.getTicks();
             }
         }
 
@@ -175,8 +159,7 @@ public class ItemGlassMolder extends ItemMiscTech
             int value = tank.fill(fluidStack, doFill);
             if (doFill && value > 0)
             {
-                this.temperature = fluidStack.getFluid().getTemperature(); // giving 273 heat so player has time to craft.
-                this.lastUpdateTick = CalendarTFC.PLAYER_TIME.getTicks();
+                this.setTemperature(fluidStack.getFluid().getTemperature()); // giving 273 heat so player has time to craft.
             }
             return value;
         }
