@@ -18,9 +18,9 @@ public class MachineSound extends PositionedSound implements ITickableSound
         volume = 0.5F;
         repeat = true;
         repeatDelay = 0;
-        xPosF = machine.getPos().getX() + 0.5F;
-        yPosF = machine.getPos().getY() + 0.5F;
-        zPosF = machine.getPos().getZ() + 0.5F;
+        xPosF = machine.getSoundPos().getX() + 0.5F;
+        yPosF = machine.getSoundPos().getY() + 0.5F;
+        zPosF = machine.getSoundPos().getZ() + 0.5F;
         this.machine = machine;
     }
 
@@ -48,6 +48,6 @@ public class MachineSound extends PositionedSound implements ITickableSound
     @Override
     public boolean isDonePlaying()
     {
-        return !machine.isPlaying();
+        return !machine.shouldPlay();
     }
 }

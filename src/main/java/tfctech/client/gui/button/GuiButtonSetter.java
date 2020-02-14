@@ -11,6 +11,7 @@ import tfctech.client.TechGuiHandler;
 public class GuiButtonSetter extends GuiButton
 {
     private boolean isPlus;
+
     public GuiButtonSetter(int buttonId, int x, int y, boolean plus)
     {
         super(buttonId, x, y, 14, 14, "");
@@ -29,7 +30,7 @@ public class GuiButtonSetter extends GuiButton
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            this.drawTexturedModalRect(this.x, this.y,  isPlus ? 14 : 0, 60 + i * 14, this.width, this.height);
+            this.drawTexturedModalRect(this.x, this.y, isPlus ? 14 : 0, 60 + i * 14, this.width, this.height);
             this.mouseDragged(mc, mouseX, mouseY);
         }
     }

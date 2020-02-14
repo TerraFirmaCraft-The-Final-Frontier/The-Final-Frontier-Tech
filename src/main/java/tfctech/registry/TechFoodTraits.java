@@ -1,16 +1,15 @@
 package tfctech.registry;
 
-import net.dries007.tfc.api.capability.food.CapabilityFood;
-import net.dries007.tfc.api.capability.food.IFoodTrait;
+import net.dries007.tfc.api.capability.food.FoodTrait;
 
 public final class TechFoodTraits
 {
-    public static final IFoodTrait.Impl COLD = new IFoodTrait.Impl("cold", 0.25f);
-    public static final IFoodTrait.Impl FROZEN = new IFoodTrait.Impl("frozen", 0.1f);
+    public static FoodTrait COLD;
+    public static FoodTrait FROZEN;
 
-    public static void preInit()
+    public static void init()
     {
-        CapabilityFood.getTraits().put("cold", COLD);
-        CapabilityFood.getTraits().put("frozen", FROZEN);
+        COLD = new FoodTrait("cold", 0.25f);
+        FROZEN = new FoodTrait("frozen", 0.1f);
     }
 }

@@ -10,7 +10,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 
-version = "1.12.2-1.0.0"
+version = "1.12.2-1.2.6"
 group = "tfctech"
 archivesBaseName = "TFCTech-Unofficial"
 
@@ -20,11 +20,12 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.5.2768"
+    version = "1.12.2-14.23.5.2838"
     runDir = "run"
-    mappings = "snapshot_20180814"
+    mappings = "stable_39"
 	
 	replace("@VERSION@",project.version)
+    replace("@FINGERPRINT@", project.findProperty("signSHA1"))
     replaceIn("TFCTech.java")
 }
 
@@ -52,14 +53,23 @@ repositories {
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
+    maven {
+		name = "ic2"
+		url = "http://maven.ic2.player.to/"
+	}
+    maven {
+		url "https://minecraft.curseforge.com/api/maven"
+	}
 }
 
 dependencies {
     deobfProvided "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.8.9"
     deobfProvided "mezz.jei:jei_1.12.2:4.13.1.222"
-	deobfProvided "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
+	compileOnly "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
 	deobfProvided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.12-6"
-    compile files("libs/TerraFirmaCraft-MC1.12.2-0.23.8.75-deobf.jar")
+    compileOnly "gregtechce:gregtech:1.12.2:1.8.5.436"
+    compileOnly 'net.industrial-craft:industrialcraft-2:2.8.170-ex112:api'
+    compile fileTree(include: ["*.jar"], dir: "libs")
 }
 
 processResources {
@@ -85,3 +95,18 @@ processResources {
         include "LICENSE.txt"
     }
 }
+
+task signJar(type: SignJar, dependsOn: reobfJar) {
+    onlyIf { // Skip the task if our secret data isn't available
+        project.hasProperty('keyStore')
+    }
+
+    keyStore = project.findProperty('keyStore')
+    alias = project.findProperty('keyStoreAlias')
+    storePass = project.findProperty('keyStorePass')
+    keyPass = project.findProperty('keyStoreKeyPass')
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
+}
+
+build.dependsOn signJar

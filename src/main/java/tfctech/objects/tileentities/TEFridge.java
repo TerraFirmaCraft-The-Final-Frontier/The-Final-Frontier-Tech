@@ -5,19 +5,28 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import gregtech.api.capability.GregtechCapabilities;
+import ic2.api.energy.tile.IEnergyEmitter;
+import ic2.api.energy.tile.IEnergySink;
 import mcp.MethodsReturnNonnullByDefault;
 import net.dries007.tfc.api.capability.food.CapabilityFood;
 import net.dries007.tfc.api.capability.food.IFood;
@@ -33,9 +42,11 @@ import tfctech.registry.TechFoodTraits;
 
 import static tfctech.objects.blocks.devices.BlockFridge.UPPER;
 
+@SuppressWarnings("WeakerAccess")
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TEFridge extends TEInventory implements ITickable
+@Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "ic2")
+public class TEFridge extends TEInventory implements ITickable, IEnergySink
 {
     private static final float MAX_DEGREE = 90F;
     private static final float DOOR_SPEED = 6F;
@@ -48,6 +59,9 @@ public class TEFridge extends TEInventory implements ITickable
     private MachineEnergyContainer energyContainer;
 
     private int applyTrait = 0;
+
+    private boolean addedToIc2Network = false;
+    private int mainBlock = 0; // 0 - not initialized, 1 = main block, -1 not main block
 
     public TEFridge()
     {
@@ -70,14 +84,24 @@ public class TEFridge extends TEInventory implements ITickable
         return energyContainer.getEnergyStored();
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isMainBlock()
     {
-        if (!hasWorld())
+        if (mainBlock == 0)
         {
-            return false;
+            if (!hasWorld() || world.isAirBlock(pos))
+            {
+                return false;
+            }
+            if (world.getBlockState(pos).getValue(UPPER))
+            {
+                mainBlock = 1;
+            }
+            else
+            {
+                mainBlock = -1;
+            }
         }
-        return world.getBlockState(pos).getValue(UPPER);
+        return mainBlock == 1;
     }
 
     public ItemStack insertItem(int slot, ItemStack stack)
@@ -144,7 +168,18 @@ public class TEFridge extends TEInventory implements ITickable
                 return false;
             }
         }
-        return (capability == CapabilityEnergy.ENERGY && facing == this.getRotation().getOpposite()) || super.hasCapability(capability, facing);
+        if (facing == null || facing == this.getRotation().getOpposite())
+        {
+            if (capability == CapabilityEnergy.ENERGY)
+            {
+                return true;
+            }
+            else if (TechConfig.DEVICES.acceptGTCEEU && Loader.isModLoaded("gregtech") && capability == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER)
+            {
+                return true;
+            }
+        }
+        return super.hasCapability(capability, facing);
     }
 
     @Override
@@ -163,7 +198,134 @@ public class TEFridge extends TEInventory implements ITickable
                 return null;
             }
         }
-        return capability == CapabilityEnergy.ENERGY && facing == this.getRotation().getOpposite() ? (T) this.energyContainer : super.getCapability(capability, facing);
+        if (facing == null || facing == this.getRotation().getOpposite())
+        {
+            if (capability == CapabilityEnergy.ENERGY)
+            {
+                return (T) this.energyContainer;
+            }
+            else if (TechConfig.DEVICES.acceptGTCEEU && Loader.isModLoaded("gregtech") && capability == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER)
+            {
+                return (T) this.energyContainer.getGTCEHandler();
+            }
+        }
+        return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public void onBreakBlock(World world, BlockPos pos, IBlockState state)
+    {
+        if (Loader.isModLoaded("ic2"))
+        {
+            ic2Unload();
+            if (isMainBlock())
+            {
+                TEFridge child = Helpers.getTE(world, pos.down(), TEFridge.class);
+                if (child != null)
+                {
+                    child.ic2Unload();
+                }
+            }
+            else
+            {
+                TEFridge main = Helpers.getTE(world, pos.up(), TEFridge.class);
+                if (main != null)
+                {
+                    main.ic2Unload();
+                }
+            }
+        }
+        super.onBreakBlock(world, pos, state);
+    }
+
+    @Override
+    public void onChunkUnload()
+    {
+        super.onChunkUnload();
+        if (Loader.isModLoaded("ic2"))
+        {
+            ic2Unload();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    @Nonnull
+    public AxisAlignedBB getRenderBoundingBox()
+    {
+        return INFINITE_EXTENT_AABB;
+    }
+
+    @Override
+    public double getDemandedEnergy()
+    {
+        if (!isMainBlock())
+        {
+            TEFridge te = Helpers.getTE(world, pos.up(), TEFridge.class);
+            if (te != null && te.addedToIc2Network)
+            {
+                return Math.ceil(te.energyContainer.receiveEnergy(Integer.MAX_VALUE, true) / (double) TechConfig.DEVICES.ratioIc2);
+            }
+            return 0;
+        }
+        return Math.ceil(energyContainer.receiveEnergy(Integer.MAX_VALUE, true) / (double) TechConfig.DEVICES.ratioIc2);
+    }
+
+    @Override
+    public int getSinkTier()
+    {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public double injectEnergy(EnumFacing facing, double amount, double voltage)
+    {
+        if (!isMainBlock())
+        {
+            TEFridge te = Helpers.getTE(world, pos.up(), TEFridge.class);
+            if (te != null && te.addedToIc2Network)
+            {
+                te.energyContainer.receiveEnergy((int) Math.ceil(amount) * TechConfig.DEVICES.ratioIc2, false);
+            }
+            return 0;
+        }
+        energyContainer.receiveEnergy((int) Math.ceil(amount) * TechConfig.DEVICES.ratioIc2, false);
+        return 0;
+    }
+
+    @Optional.Method(modid = "ic2")
+    public void ic2Unload()
+    {
+        if (!world.isRemote && addedToIc2Network)
+        {
+            MinecraftForge.EVENT_BUS.post(new ic2.api.energy.event.EnergyTileUnloadEvent(this));
+            addedToIc2Network = false;
+        }
+    }
+
+    @Optional.Method(modid = "ic2")
+    public void ic2Load()
+    {
+        if (!world.isRemote && TechConfig.DEVICES.acceptIc2EU && !addedToIc2Network)
+        {
+            MinecraftForge.EVENT_BUS.post(new ic2.api.energy.event.EnergyTileLoadEvent(this));
+            addedToIc2Network = true;
+        }
+    }
+
+    @Optional.Method(modid = "ic2")
+    @Override
+    public boolean acceptsEnergyFrom(IEnergyEmitter iEnergyEmitter, EnumFacing facing)
+    {
+        if (!isMainBlock())
+        {
+            TEFridge te = Helpers.getTE(world, pos.up(), TEFridge.class);
+            if (te == null || !te.addedToIc2Network)
+            {
+                return false;
+            }
+        }
+        return TechConfig.DEVICES.acceptIc2EU && facing == this.getRotation().getOpposite();
     }
 
     public ItemStack getSlot(int slot)
@@ -189,14 +351,6 @@ public class TEFridge extends TEInventory implements ITickable
     public boolean hasStack(int slot)
     {
         return inventory.extractItem(slot, 64, true) != ItemStack.EMPTY;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    @Nonnull
-    public AxisAlignedBB getRenderBoundingBox()
-    {
-        return INFINITE_EXTENT_AABB;
     }
 
     public EnumFacing getRotation()
@@ -243,6 +397,10 @@ public class TEFridge extends TEInventory implements ITickable
     @Override
     public void update()
     {
+        if (Loader.isModLoaded("ic2"))
+        {
+            ic2Load();
+        }
         if (!isMainBlock()) return;
         lastOpen = open;
         if (openingState == 1)

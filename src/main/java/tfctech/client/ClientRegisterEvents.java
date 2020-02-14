@@ -131,36 +131,36 @@ public final class ClientRegisterEvents
         for (Item item : TechItems.getAllMetalItems())
         {
             itemColors.registerItemColorHandler(
-                    (stack, tintIndex) -> {
-                        if (tintIndex == 1 && stack.getItem() instanceof ItemGear)
-                        {
-                            return (new Color(((ItemGear) stack.getItem()).getSleeveMetal().getColor())).brighter().getRGB();
-                        }
-                        return (new Color(((ItemTechMetal) stack.getItem()).getMetal(stack).getColor())).brighter().getRGB();
-                    },
-                    item);
+                (stack, tintIndex) -> {
+                    if (tintIndex == 1 && stack.getItem() instanceof ItemGear)
+                    {
+                        return (new Color(((ItemGear) stack.getItem()).getSleeveMetal().getColor())).brighter().getRGB();
+                    }
+                    return (new Color(((ItemTechMetal) stack.getItem()).getMetal(stack).getColor())).brighter().getRGB();
+                },
+                item);
         }
 
         for (Item item : TechItems.getAllCeramicMoldItems())
         {
             itemColors.registerItemColorHandler(
-                    (stack, tintIndex) -> {
-                        if (tintIndex == 1)
+                (stack, tintIndex) -> {
+                    if (tintIndex == 1)
+                    {
+                        IFluidHandler capFluidHandler = stack.getCapability(FLUID_HANDLER_CAPABILITY, null);
+                        if (capFluidHandler instanceof IMoldHandler)
                         {
-                            IFluidHandler capFluidHandler = stack.getCapability(FLUID_HANDLER_CAPABILITY, null);
-                            if (capFluidHandler instanceof IMoldHandler)
+                            Metal metal = ((IMoldHandler) capFluidHandler).getMetal();
+                            if (metal != null)
                             {
-                                Metal metal = ((IMoldHandler) capFluidHandler).getMetal();
-                                if (metal != null)
-                                {
-                                    return (new Color(metal.getColor())).brighter().getRGB();
-                                }
+                                return (new Color(metal.getColor())).brighter().getRGB();
                             }
-                            return 0xFF000000;
                         }
-                        return -1;
-                    },
-                    item);
+                        return 0xFF000000;
+                    }
+                    return -1;
+                },
+                item);
         }
     }
 }

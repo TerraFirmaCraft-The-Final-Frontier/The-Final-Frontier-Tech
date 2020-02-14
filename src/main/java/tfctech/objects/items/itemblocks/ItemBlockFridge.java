@@ -50,7 +50,7 @@ public class ItemBlockFridge extends ItemBlockTFC
 
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        if(!worldIn.getBlockState(pos).getMaterial().isReplaceable())
+        if (!worldIn.getBlockState(pos).getMaterial().isReplaceable())
         {
             pos = pos.offset(facing);
         }
@@ -61,7 +61,7 @@ public class ItemBlockFridge extends ItemBlockTFC
         ItemStack stack = player.getHeldItem(hand);
         if (player.canPlayerEdit(pos.up(), facing, stack) && player.canPlayerEdit(pos, facing, stack))
         {
-            if(!worldIn.isRemote)
+            if (!worldIn.isRemote)
             {
                 stack.shrink(1);
                 IBlockState lowerState = this.block.getDefaultState().withProperty(BlockFridge.FACING, player.getHorizontalFacing().getOpposite()).withProperty(BlockFridge.UPPER, false);

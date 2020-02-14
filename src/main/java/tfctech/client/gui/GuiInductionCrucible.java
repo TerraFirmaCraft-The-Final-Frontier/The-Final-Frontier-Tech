@@ -8,6 +8,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
+import net.dries007.tfc.api.capability.heat.Heat;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.client.gui.GuiContainerTE;
 import net.dries007.tfc.objects.te.TECrucible;
@@ -15,7 +16,6 @@ import net.dries007.tfc.util.Alloy;
 import tfctech.client.TechGuiHandler;
 import tfctech.objects.tileentities.TEInductionCrucible;
 
-import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MAX_TEMPERATURE;
 import static net.dries007.tfc.api.util.TFCConstants.MOD_ID;
 import static tfctech.TFCTech.MODID;
 
@@ -58,7 +58,7 @@ public class GuiInductionCrucible extends GuiContainerTE<TEInductionCrucible>
 
         // Draw the temperature indicator
         int targetTemperature = tile.getField(0);
-        int temperaturePixels = (int) (51 * Math.min(MAX_TEMPERATURE, targetTemperature) / MAX_TEMPERATURE); //Max temperature is brilliant white in tfc
+        int temperaturePixels = (int) (51 * Math.min(Heat.maxVisibleTemperature(), targetTemperature) / Heat.maxVisibleTemperature()); //Max temperature is brilliant white in tfc
         drawTexturedModalRect(guiLeft + 137, guiTop + 80 - temperaturePixels, 36, 54, 15, 5);
 
         // Draw the energy bar

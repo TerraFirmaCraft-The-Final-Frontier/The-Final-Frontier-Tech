@@ -5,34 +5,45 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import gregtech.api.capability.GregtechCapabilities;
+import ic2.api.energy.tile.IEnergyEmitter;
+import ic2.api.energy.tile.IEnergySink;
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
+import net.dries007.tfc.api.capability.heat.Heat;
 import net.dries007.tfc.api.capability.heat.IItemHeat;
 import net.dries007.tfc.objects.te.TECrucible;
 import tfctech.TFCTech;
 import tfctech.TechConfig;
 import tfctech.client.TechSounds;
 import tfctech.client.audio.IMachineSoundEffect;
-import tfctech.client.audio.MachineSound;
 import tfctech.objects.blocks.devices.BlockElectricForge;
 import tfctech.objects.storage.MachineEnergyContainer;
 
-import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MAX_TEMPERATURE;
 import static net.minecraft.block.BlockHorizontal.FACING;
 import static tfctech.objects.blocks.devices.BlockInductionCrucible.LIT;
 
 @ParametersAreNonnullByDefault
-public class TEInductionCrucible extends TECrucible implements IMachineSoundEffect
+@Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "ic2")
+public class TEInductionCrucible extends TECrucible implements IMachineSoundEffect, IEnergySink
 {
     private MachineEnergyContainer energyContainer;
     private int litTime = 0; //Client "effects" only
+
+    private boolean addedToIc2Network = false;
+    private boolean soundPlay = false;
 
     public TEInductionCrucible()
     {
@@ -40,17 +51,54 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
         energyContainer = new MachineEnergyContainer(TechConfig.DEVICES.inductionCrucibleEnergyCapacity, TechConfig.DEVICES.inductionCrucibleEnergyCapacity, 0);
     }
 
+    @Optional.Method(modid = "ic2")
     @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
+    public void invalidate()
     {
-        return (capability == CapabilityEnergy.ENERGY && facing == world.getBlockState(pos).getValue(FACING)) || super.hasCapability(capability, facing);
+        super.invalidate();
+        if (!world.isRemote && addedToIc2Network)
+        {
+            MinecraftForge.EVENT_BUS.post(new ic2.api.energy.event.EnergyTileUnloadEvent(this));
+            addedToIc2Network = false;
+        }
+    }
+
+    @Optional.Method(modid = "ic2")
+    @Override
+    public void validate()
+    {
+        super.validate();
+        if (!world.isRemote && TechConfig.DEVICES.acceptIc2EU && !addedToIc2Network)
+        {
+            MinecraftForge.EVENT_BUS.post(new ic2.api.energy.event.EnergyTileLoadEvent(this));
+            addedToIc2Network = true;
+        }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
+    public double getDemandedEnergy()
     {
-        return capability == CapabilityEnergy.ENERGY && facing == world.getBlockState(pos).getValue(FACING) ? (T) this.energyContainer : super.getCapability(capability, facing);
+        return Math.ceil(energyContainer.receiveEnergy(Integer.MAX_VALUE, true) / (double) TechConfig.DEVICES.ratioIc2);
+    }
+
+    @Override
+    public int getSinkTier()
+    {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public double injectEnergy(EnumFacing facing, double amount, double voltage)
+    {
+        energyContainer.receiveEnergy((int) Math.ceil(amount) * TechConfig.DEVICES.ratioIc2, false);
+        return 0;
+    }
+
+    @Optional.Method(modid = "ic2")
+    @Override
+    public boolean acceptsEnergyFrom(IEnergyEmitter iEnergyEmitter, EnumFacing facing)
+    {
+        return TechConfig.DEVICES.acceptIc2EU && facing == world.getBlockState(pos).getValue(FACING);
     }
 
     public int getEnergyCapacity()
@@ -63,15 +111,7 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     {
         if (world.isRemote)
         {
-            if (isPlaying())
-            {
-                MachineSound sound = new MachineSound(this);
-                // Play sound on client side
-                if (!Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sound))
-                {
-                    Minecraft.getMinecraft().getSoundHandler().playSound(sound);
-                }
-            }
+            IMachineSoundEffect.super.update();
             return;
         }
         IBlockState state = world.getBlockState(pos);
@@ -81,7 +121,7 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
         int energyUsage = TechConfig.DEVICES.inductionCrucibleEnergyConsumption;
         if ((cap != null || this.getAlloy().removeAlloy(1, true) > 0) && energyContainer.consumeEnergy(energyUsage, false))
         {
-            this.acceptHeat(MAX_TEMPERATURE);
+            this.acceptHeat(Heat.maxVisibleTemperature());
             litTime = 15;
             if (!isLit)
             {
@@ -115,6 +155,41 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     {
         nbt.setTag("energyContainer", energyContainer.serializeNBT());
         return super.writeToNBT(nbt);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
+    {
+        if (facing == null || facing == world.getBlockState(pos).getValue(FACING))
+        {
+            if (capability == CapabilityEnergy.ENERGY)
+            {
+                return true;
+            }
+            else if (TechConfig.DEVICES.acceptGTCEEU && Loader.isModLoaded("gregtech") && capability == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER)
+            {
+                return true;
+            }
+        }
+        return super.hasCapability(capability, facing);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
+    {
+        if (facing == null || facing == world.getBlockState(pos).getValue(FACING))
+        {
+            if (capability == CapabilityEnergy.ENERGY)
+            {
+                return (T) this.energyContainer;
+            }
+            else if (TechConfig.DEVICES.acceptGTCEEU && Loader.isModLoaded("gregtech") && capability == GregtechCapabilities.CAPABILITY_ENERGY_CONTAINER)
+            {
+                return (T) this.energyContainer.getGTCEHandler();
+            }
+        }
+        return super.getCapability(capability, facing);
     }
 
     @Override
@@ -158,6 +233,7 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
         }
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public SoundEvent getSoundEvent()
     {
@@ -165,9 +241,28 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     }
 
     @Override
+    public boolean shouldPlay()
+    {
+        return !this.isInvalid() && world.getBlockState(pos).getValue(LIT);
+    }
+
+    @Override
     public boolean isPlaying()
     {
-        return !this.isInvalid() && this.hasWorld() && world.getBlockState(pos).getValue(LIT);
+        return soundPlay;
+    }
+
+    @Override
+    public void setPlaying(boolean value)
+    {
+        soundPlay = value;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public BlockPos getSoundPos()
+    {
+        return this.getPos();
     }
 
     public int getEnergyStored()

@@ -68,7 +68,7 @@ public class PacketLatexUpdate implements IMessage
             {
                 World world = player.getEntityWorld();
                 TELatexExtractor te = Helpers.getTE(world, message.pos, TELatexExtractor.class);
-                if(te != null)
+                if (te != null)
                 {
                     te.updateClient(message.cutState, message.fluid, message.pot, message.base);
                 }

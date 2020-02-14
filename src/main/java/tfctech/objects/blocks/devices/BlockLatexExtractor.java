@@ -48,10 +48,10 @@ public class BlockLatexExtractor extends Block
     {
         super(Material.IRON);
         setDefaultState(blockState.getBaseState()
-                .withProperty(FACING, NORTH)
-                .withProperty(BASE, false)
-                .withProperty(POT, false)
-                .withProperty(CUT, 0));
+            .withProperty(FACING, NORTH)
+            .withProperty(BASE, false)
+            .withProperty(POT, false)
+            .withProperty(CUT, 0));
         setHardness(2.0F);
         setHarvestLevel("pickaxe", 0);
     }
@@ -84,17 +84,10 @@ public class BlockLatexExtractor extends Block
         if (te != null)
         {
             return state.withProperty(BASE, te.hasBase())
-                    .withProperty(POT, te.hasPot())
-                    .withProperty(CUT, te.cutState());
+                .withProperty(POT, te.hasPot())
+                .withProperty(CUT, te.cutState());
         }
         return super.getActualState(state, worldIn, pos);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
-    {
-        return BlockFaceShape.UNDEFINED;
     }
 
     @SuppressWarnings("deprecation")
@@ -127,6 +120,13 @@ public class BlockLatexExtractor extends Block
             default:
                 return FULL_BLOCK_AABB;
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
+    {
+        return BlockFaceShape.UNDEFINED;
     }
 
     @SuppressWarnings("deprecation")

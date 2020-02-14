@@ -25,7 +25,7 @@ import static tfctech.objects.tileentities.TELatexExtractor.MAX_FLUID;
 
 public class TESRLatexExtractor extends TileEntitySpecialRenderer<TELatexExtractor>
 {
-     @Override
+    @Override
     public void render(TELatexExtractor te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
     {
         if (te.hasWorld())
@@ -37,8 +37,8 @@ public class TESRLatexExtractor extends TileEntitySpecialRenderer<TELatexExtract
 
             //noinspection ConstantConditions
             state = state.withProperty(BASE, te.hasBase())
-                    .withProperty(POT, te.hasPot())
-                    .withProperty(CUT, te.cutState());
+                .withProperty(POT, te.hasPot())
+                .withProperty(CUT, te.cutState());
 
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             BlockRendererDispatcher renderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
@@ -96,7 +96,7 @@ public class TESRLatexExtractor extends TileEntitySpecialRenderer<TELatexExtract
                     break;
             }
             //From bark
-            if(te.cutState() > 1)
+            if (te.cutState() > 1)
             {
                 for (double zPos = 1.075D; zPos <= 1.375D; zPos += 0.075D)
                 {
@@ -180,7 +180,7 @@ public class TESRLatexExtractor extends TileEntitySpecialRenderer<TELatexExtract
             }
 
             //Draws pot contents
-            if(te.hasFluid())
+            if (te.hasFluid())
             {
                 sprite = FluidSpriteCache.getStillSprite(flowing);
 

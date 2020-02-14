@@ -24,6 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import net.dries007.tfc.api.capability.IMoldHandler;
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
+import net.dries007.tfc.api.capability.heat.Heat;
 import net.dries007.tfc.api.capability.heat.ItemHeatHandler;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.objects.fluids.FluidsTFC;
@@ -138,6 +139,7 @@ public class ItemTechMold extends ItemPottery
             if (resource != null)
             {
                 Metal metal = FluidsTFC.getMetalFromFluid(resource.getFluid());
+                //noinspection ConstantConditions,deprecation
                 if (metal != null && ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(true))
                 {
                     int fillAmount = tank.fill(resource, doFill);
@@ -207,7 +209,7 @@ public class ItemTechMold extends ItemPottery
         public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing)
         {
             return capability == FLUID_HANDLER_CAPABILITY
-                    || capability == CapabilityItemHeat.ITEM_HEAT_CAPABILITY;
+                || capability == CapabilityItemHeat.ITEM_HEAT_CAPABILITY;
         }
 
         @Nullable
@@ -231,7 +233,7 @@ public class ItemTechMold extends ItemPottery
             }
             else
             {
-                nbt.setLong("ticks", CalendarTFC.TOTAL_TIME.getTicks());
+                nbt.setLong("ticks", CalendarTFC.PLAYER_TIME.getTicks());
             }
             return tank.writeToNBT(nbt);
         }
@@ -253,9 +255,10 @@ public class ItemTechMold extends ItemPottery
             updateFluidData(tank.getFluid());
         }
 
+        @SuppressWarnings("ConstantConditions")
         private void updateFluidData(FluidStack fluid)
         {
-            meltTemp = CapabilityItemHeat.MAX_TEMPERATURE;
+            meltTemp = Heat.maxVisibleTemperature();
             heatCapacity = 1;
             if (fluid != null)
             {

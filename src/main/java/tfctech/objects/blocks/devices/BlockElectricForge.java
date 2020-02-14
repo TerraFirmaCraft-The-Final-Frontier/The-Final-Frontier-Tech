@@ -45,27 +45,6 @@ public class BlockElectricForge extends BlockHorizontal implements IItemSize
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
-    {
-        if (!player.isSneaking())
-        {
-            if (!world.isRemote)
-            {
-                TechGuiHandler.openGui(world, pos, player, TechGuiHandler.Type.ELECTRIC_FORGE);
-            }
-            return true;
-        }
-        return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public BlockRenderLayer getRenderLayer()
-    {
-        return BlockRenderLayer.CUTOUT_MIPPED;
-    }
-
-    @Override
     @SuppressWarnings("deprecation")
     @Nonnull
     public IBlockState getStateFromMeta(int meta)
@@ -79,10 +58,25 @@ public class BlockElectricForge extends BlockHorizontal implements IItemSize
         return state.getValue(FACING).getHorizontalIndex() + (state.getValue(LIT) ? 4 : 0);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
+    public BlockRenderLayer getRenderLayer()
     {
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+        return BlockRenderLayer.CUTOUT_MIPPED;
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+    {
+        if (!player.isSneaking())
+        {
+            if (!world.isRemote)
+            {
+                TechGuiHandler.openGui(world, pos, player, TechGuiHandler.Type.ELECTRIC_FORGE);
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -105,6 +99,11 @@ public class BlockElectricForge extends BlockHorizontal implements IItemSize
         return new TEElectricForge();
     }
 
+    @Override
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
+    {
+        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+    }
 
     @Nonnull
     @Override

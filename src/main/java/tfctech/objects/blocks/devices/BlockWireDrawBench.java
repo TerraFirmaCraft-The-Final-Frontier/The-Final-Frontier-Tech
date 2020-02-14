@@ -75,6 +75,14 @@ public class BlockWireDrawBench extends BlockHorizontal
 
     @SuppressWarnings("deprecation")
     @Override
+    @SideOnly(Side.CLIENT)
+    public boolean hasCustomBreakingProgress(IBlockState state)
+    {
+        return true;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
@@ -218,6 +226,25 @@ public class BlockWireDrawBench extends BlockHorizontal
     }
 
     @Override
+    protected BlockStateContainer createBlockState()
+    {
+        return new BlockStateContainer(this, FACING, UPPER);
+    }
+
+    @Override
+    public boolean hasTileEntity(IBlockState state)
+    {
+        return state.getValue(UPPER);
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state)
+    {
+        return state.getValue(UPPER) ? new TEWireDrawBench() : null;
+    }
+
+    @Override
     public boolean addLandingEffects(IBlockState state, WorldServer worldObj, BlockPos blockPosition, IBlockState iblockstate, EntityLivingBase entity, int numberOfParticles)
     {
         return true;
@@ -241,32 +268,5 @@ public class BlockWireDrawBench extends BlockHorizontal
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager)
     {
         return true;
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean hasCustomBreakingProgress(IBlockState state)
-    {
-        return true;
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, FACING, UPPER);
-    }
-
-    @Override
-    public boolean hasTileEntity(IBlockState state)
-    {
-        return state.getValue(UPPER);
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(World world, IBlockState state)
-    {
-        return state.getValue(UPPER) ? new TEWireDrawBench() : null;
     }
 }
