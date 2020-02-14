@@ -21,7 +21,7 @@ import net.dries007.tfc.objects.container.IButtonHandler;
 import net.dries007.tfc.objects.inventory.slot.SlotKnappingOutput;
 import net.dries007.tfc.util.SimpleCraftMatrix;
 import tfctech.api.recipes.GlassworkingRecipe;
-import tfctech.objects.items.glassworking.ItemBlowpipe;
+import tfctech.objects.items.glassworking.ItemGlassMolder;
 
 @SuppressWarnings("WeakerAccess")
 @ParametersAreNonnullByDefault
@@ -185,13 +185,13 @@ public class ContainerGlassworking extends Container implements IButtonHandler
     public boolean isSolidified()
     {
         IItemHeat capHeat = stack.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);
-        return capHeat instanceof ItemBlowpipe.BlowpipeCapability && ((ItemBlowpipe.BlowpipeCapability) capHeat).isSolidified();
+        return capHeat instanceof ItemGlassMolder.GlassMolderCapability && ((ItemGlassMolder.GlassMolderCapability) capHeat).isSolidified();
     }
 
     public boolean canWork()
     {
         IItemHeat capHeat = stack.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);
-        return capHeat instanceof ItemBlowpipe.BlowpipeCapability && ((ItemBlowpipe.BlowpipeCapability) capHeat).canWork();
+        return capHeat instanceof ItemGlassMolder.GlassMolderCapability && ((ItemGlassMolder.GlassMolderCapability) capHeat).canWork();
     }
 
     private void addContainerSlots()
@@ -203,18 +203,14 @@ public class ContainerGlassworking extends Container implements IButtonHandler
     {
         matrix.setAll(false);
         requiresReset = true;
-        IItemHeat capHeat = stack.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);
-        if (capHeat instanceof ItemBlowpipe.BlowpipeCapability)
-        {
-            ((ItemBlowpipe.BlowpipeCapability) capHeat).consumeFluid();
-        }
+        ItemStack emptyBlowpipe = new ItemStack(stack.getItem());
         if (this.isOffhand)
         {
-            this.player.setHeldItem(EnumHand.OFF_HAND, stack);
+            this.player.setHeldItem(EnumHand.OFF_HAND, emptyBlowpipe);
         }
         else
         {
-            this.player.setHeldItem(EnumHand.MAIN_HAND, stack);
+            this.player.setHeldItem(EnumHand.MAIN_HAND, emptyBlowpipe);
         }
     }
 

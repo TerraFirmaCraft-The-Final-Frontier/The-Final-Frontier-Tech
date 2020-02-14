@@ -34,6 +34,7 @@ import tfctech.objects.blocks.TechBlocks;
 import tfctech.objects.items.ceramics.ItemFluidBowl;
 import tfctech.objects.items.ceramics.ItemTechMold;
 import tfctech.objects.items.glassworking.ItemBlowpipe;
+import tfctech.objects.items.glassworking.ItemGlassMolder;
 import tfctech.objects.items.metal.ItemGroove;
 import tfctech.objects.items.metal.ItemTechMetal;
 
@@ -63,6 +64,14 @@ public final class TechItems
     public static final ItemPottery UNFIRED_BLOWPIPE = getNull();
     @GameRegistry.ObjectHolder("glass/blowpipe")
     public static final ItemBlowpipe BLOWPIPE = getNull();
+    @GameRegistry.ObjectHolder("glass/unfired_mold_block")
+    public static final ItemPottery UNFIRED_MOLD_BLOCK = getNull();
+    @GameRegistry.ObjectHolder("glass/mold_block")
+    public static final ItemGlassMolder MOLD_BLOCK = getNull();
+    @GameRegistry.ObjectHolder("glass/unfired_mold_pane")
+    public static final ItemPottery UNFIRED_MOLD_PANE = getNull();
+    @GameRegistry.ObjectHolder("glass/mold_pane")
+    public static final ItemGlassMolder MOLD_PANE = getNull();
     @GameRegistry.ObjectHolder("glass/lime")
     public static final ItemMiscTech LIME = getNull();
     @GameRegistry.ObjectHolder("glass/potash")
@@ -131,6 +140,10 @@ public final class TechItems
 
         simpleItems.add(register(r, "glass/unfired_blowpipe", new ItemPottery(), CT_MISC));
         simpleItems.add(register(r, "glass/blowpipe", new ItemBlowpipe(), CT_MISC));
+        simpleItems.add(register(r, "glass/unfired_mold_block", new ItemPottery(), CT_MISC));
+        simpleItems.add(register(r, "glass/mold_block", new ItemGlassMolder(ItemGlassMolder.BLOCK_TANK), CT_MISC));
+        simpleItems.add(register(r, "glass/unfired_mold_pane", new ItemPottery(), CT_MISC));
+        simpleItems.add(register(r, "glass/mold_pane", new ItemGlassMolder(ItemGlassMolder.PANE_TANK), CT_MISC));
         simpleItems.add(register(r, "glass/wood_dust", new ItemMiscTech(Size.SMALL, Weight.LIGHT, "dustWood"), CT_MISC));
         simpleItems.add(register(r, "glass/wood_dust_pot", new ItemPottery(), CT_MISC));
         simpleItems.add(register(r, "glass/potash_pot", new ItemPottery()

@@ -63,7 +63,9 @@ public final class TechRecipes
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE)), new ItemStack(TechItems.MOLD_RACKWHEEL_PIECE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_rackwheel"),
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.WOOD_DUST_POT)), new ItemStack(TechItems.POTASH_POT), 500f, Metal.Tier.TIER_I).setRegistryName("potash_pot"),
             new HeatRecipeSimple(IIngredient.of("rockFlux"), new ItemStack(TechItems.LIME, 2), 600f, Metal.Tier.TIER_I).setRegistryName("lime"),
-            new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_BLOWPIPE)), new ItemStack(TechItems.BLOWPIPE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_blowpipe")
+            new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_BLOWPIPE)), new ItemStack(TechItems.BLOWPIPE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_blowpipe"),
+            new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_MOLD_PANE)), new ItemStack(TechItems.MOLD_PANE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_pane"),
+            new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_MOLD_BLOCK)), new ItemStack(TechItems.MOLD_BLOCK), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_block")
         );
     }
 
@@ -120,7 +122,9 @@ public final class TechRecipes
 
         r.registerAll(
             new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE), "XXXXX", "X XXX", "X  XX", "XX  X", "XXXXX").setRegistryName("clay_rackwheel_piece"),
-            new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_BLOWPIPE), " X X ", " X X ", " X X ", " X X ", " X X ").setRegistryName("clay_blowpipe")
+            new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_BLOWPIPE), " X X ", " X X ", " X X ", " X X ", " X X ").setRegistryName("clay_blowpipe"),
+            new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_MOLD_PANE), "XXXXX", "X   X", "X   X", "X   X", "XXXXX").setRegistryName("clay_mold_pane"),
+            new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_MOLD_BLOCK), "X   X", "X   X", "X   X", "X   X", "XXXXX").setRegistryName("clay_mold_block")
         );
     }
 
