@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import net.dries007.tfc.api.capability.metal.IMetalItem;
 import net.dries007.tfc.api.capability.size.Size;
 import net.dries007.tfc.api.capability.size.Weight;
 import net.dries007.tfc.api.registries.TFCRegistries;
@@ -60,28 +61,25 @@ public final class TechItems
     @GameRegistry.ObjectHolder("latex/rubber")
     public static final ItemMiscHeatable RUBBER = getNull();
 
-    @GameRegistry.ObjectHolder("glass/unfired_blowpipe")
-    public static final ItemPottery UNFIRED_BLOWPIPE = getNull();
-    @GameRegistry.ObjectHolder("glass/blowpipe")
-    public static final ItemBlowpipe BLOWPIPE = getNull();
-    @GameRegistry.ObjectHolder("glass/unfired_mold_block")
+    // Glassworking
+    @GameRegistry.ObjectHolder("ceramics/unfired/glass_block")
     public static final ItemPottery UNFIRED_MOLD_BLOCK = getNull();
-    @GameRegistry.ObjectHolder("glass/mold_block")
+    @GameRegistry.ObjectHolder("ceramics/mold/glass_block")
     public static final ItemGlassMolder MOLD_BLOCK = getNull();
-    @GameRegistry.ObjectHolder("glass/unfired_mold_pane")
+    @GameRegistry.ObjectHolder("ceramics/unfired/glass_pane")
     public static final ItemPottery UNFIRED_MOLD_PANE = getNull();
-    @GameRegistry.ObjectHolder("glass/mold_pane")
+    @GameRegistry.ObjectHolder("ceramics/mold/glass_pane")
     public static final ItemGlassMolder MOLD_PANE = getNull();
-    @GameRegistry.ObjectHolder("glass/lime")
+    @GameRegistry.ObjectHolder("powder/lime")
     public static final ItemMiscTech LIME = getNull();
-    @GameRegistry.ObjectHolder("glass/potash")
+    @GameRegistry.ObjectHolder("powder/potash")
     public static final ItemMiscTech POTASH = getNull();
-    @GameRegistry.ObjectHolder("glass/potash_pot")
+    @GameRegistry.ObjectHolder("pot_potash")
     public static final ItemPottery POTASH_POT = getNull();
-    @GameRegistry.ObjectHolder("glass/wood_dust")
-    public static final ItemMiscTech WOOD_DUST = getNull();
-    @GameRegistry.ObjectHolder("glass/wood_dust_pot")
-    public static final ItemPottery WOOD_DUST_POT = getNull();
+    @GameRegistry.ObjectHolder("powder/wood")
+    public static final ItemMiscTech WOOD_POWDER = getNull();
+    @GameRegistry.ObjectHolder("pot_wood")
+    public static final ItemPottery WOOD_POWDER_POT = getNull();
 
 
     @GameRegistry.ObjectHolder("metal/iron_draw_plate")
@@ -138,15 +136,8 @@ public final class TechItems
         IForgeRegistry<Item> r = event.getRegistry();
         ImmutableList.Builder<Item> simpleItems = ImmutableList.builder();
 
-        simpleItems.add(register(r, "glass/unfired_blowpipe", new ItemPottery(), CT_MISC));
-        simpleItems.add(register(r, "glass/blowpipe", new ItemBlowpipe(), CT_MISC));
-        simpleItems.add(register(r, "glass/unfired_mold_block", new ItemPottery(), CT_MISC));
-        simpleItems.add(register(r, "glass/mold_block", new ItemGlassMolder(ItemGlassMolder.BLOCK_TANK), CT_MISC));
-        simpleItems.add(register(r, "glass/unfired_mold_pane", new ItemPottery(), CT_MISC));
-        simpleItems.add(register(r, "glass/mold_pane", new ItemGlassMolder(ItemGlassMolder.PANE_TANK), CT_MISC));
-        simpleItems.add(register(r, "glass/wood_dust", new ItemMiscTech(Size.SMALL, Weight.LIGHT, "dustWood"), CT_MISC));
-        simpleItems.add(register(r, "glass/wood_dust_pot", new ItemPottery(), CT_MISC));
-        simpleItems.add(register(r, "glass/potash_pot", new ItemPottery()
+        simpleItems.add(register(r, "pot_wood", new ItemPottery(), CT_MISC));
+        simpleItems.add(register(r, "pot_potash", new ItemPottery()
         {
             @Nonnull
             @Override
@@ -161,8 +152,9 @@ public final class TechItems
                 return true;
             }
         }, CT_MISC));
-        simpleItems.add(register(r, "glass/potash", new ItemMiscTech(Size.SMALL, Weight.LIGHT, "dustPotash"), CT_MISC));
-        simpleItems.add(register(r, "glass/lime", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.2f, 2000f, "dustLime"), CT_MISC));
+        simpleItems.add(register(r, "powder/potash", new ItemMiscTech(Size.SMALL, Weight.LIGHT, "dustPotash"), CT_MISC));
+        simpleItems.add(register(r, "powder/lime", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.2f, 2000f, "dustLime"), CT_MISC));
+        simpleItems.add(register(r, "powder/wood", new ItemMiscTech(Size.SMALL, Weight.LIGHT, "dustWood"), CT_MISC));
 
         simpleItems.add(register(r, "latex/vulcanizing_agents", new ItemMiscTech(Size.SMALL, Weight.LIGHT), CT_MISC));
         simpleItems.add(register(r, "latex/rubber_mix", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.8f, 800f), CT_MISC));
@@ -173,10 +165,14 @@ public final class TechItems
 
         //Unfired is simple
         simpleItems.add(register(r, "ceramics/unfired/rackwheel_piece", new ItemPottery(), CT_MISC));
+        simpleItems.add(register(r, "ceramics/unfired/glass_block", new ItemPottery(), CT_MISC));
+        simpleItems.add(register(r, "ceramics/unfired/glass_pane", new ItemPottery(), CT_MISC));
 
         allSimpleItems = simpleItems.build();
 
         ImmutableList.Builder<Item> ceramicItems = ImmutableList.builder();
+        ceramicItems.add(register(r, "ceramics/mold/glass_block", new ItemGlassMolder(ItemGlassMolder.BLOCK_TANK), CT_MISC));
+        ceramicItems.add(register(r, "ceramics/mold/glass_pane", new ItemGlassMolder(ItemGlassMolder.PANE_TANK), CT_MISC));
         ceramicItems.add(register(r, "ceramics/mold/rackwheel_piece", new ItemTechMold(ItemTechMetal.ItemType.RACKWHEEL_PIECE), CT_MISC));
         allCeramicMoldItems = ceramicItems.build();
 
@@ -211,6 +207,10 @@ public final class TechItems
             metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_rod", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.ROD), CT_METAL));
             metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_bolt", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.BOLT), CT_METAL));
             metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_screw", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.SCREW), CT_METAL));
+            if (metal.getTier().isAtLeast(Metal.Tier.TIER_III))
+            {
+                metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_blowpipe", new ItemBlowpipe(metal), CT_METAL));
+            }
         }
 
         allMetalItems = metalItems.build();
@@ -223,8 +223,16 @@ public final class TechItems
         //Register oredict for metal item components
         for (Item metalItem : allMetalItems)
         {
-            ItemTechMetal techMetal = (ItemTechMetal) metalItem;
-            OreDictionary.registerOre(OreDictionaryHelper.toString(techMetal.getType(), techMetal.getMetal(ItemStack.EMPTY)), new ItemStack(metalItem, 1, 0));
+            if (metalItem instanceof ItemTechMetal)
+            {
+                ItemTechMetal techMetal = (ItemTechMetal) metalItem;
+                OreDictionary.registerOre(OreDictionaryHelper.toString(techMetal.getType(), techMetal.getMetal(ItemStack.EMPTY)), new ItemStack(metalItem, 1, 0));
+            }
+            else
+            {
+                Metal metal = ((IMetalItem) metalItem).getMetal(ItemStack.EMPTY);
+                OreDictionary.registerOre(OreDictionaryHelper.toString("blowpipe"), new ItemStack(metalItem, 1, 0));
+            }
         }
 
         for (Item item : allSimpleItems)

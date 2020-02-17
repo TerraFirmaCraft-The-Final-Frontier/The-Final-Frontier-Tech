@@ -44,23 +44,22 @@ item.tfctech.latex.rubber_mix.name=Rubber Mix
 item.tfctech.latex.rubber.name=Rubber
 
 ## Glass
-item.tfctech.glass.unfired_blowpipe.name=Unfired Blowpipe
-item.tfctech.glass.blowpipe.name=Blowpipe
-item.tfctech.glass.unfired_mold_block.name=Unfired Block Mold
-item.tfctech.glass.mold_block.name=Block Mold
-item.tfctech.glass.unfired_mold_pane.name=Unfired Pane Mold
-item.tfctech.glass.mold_pane.name=Pane Mold
-item.tfctech.glass.lime.name=Lime
-item.tfctech.glass.potash.name=Potash
-item.tfctech.glass.potash_pot.name=Pot with Potash
-item.tfctech.glass.wood_dust.name=Wood Dust
-item.tfctech.glass.wood_dust_pot.name=Pot with Wood Dust
+item.tfctech.ceramics.unfired.glass_block.name=Unfired Glass Block Mold
+item.tfctech.ceramics.mold.glass_block.name=Glass Block Mold
+item.tfctech.ceramics.unfired.glass_pane.name=Unfired Glass Pane Mold
+item.tfctech.ceramics.mold.glass_pane.name=Glass Pane Mold
+item.tfctech.powder.lime.name=Lime
+item.tfctech.powder.potash.name=Potash
+item.tfctech.powder.wood_dust.name=Wood Powder
+item.tfctech.pot_potash.name=Pot with Potash
+item.tfctech.pot_wood.name=Pot with Wood Powder
 
 ## Wiredraw
 item.tfctech.wiredraw.leather_belt.name=Leather Belt
 item.tfctech.wiredraw.winch.name=Winch
 
 ## Metal
+item.tfctech.metalitem.blowpipe.name=%s Blowpipe
 item.tfctech.metalitem.bowl_mount.name=%s Bowl Mount
 item.tfctech.metalitem.draw_plate.name=%s Draw Plate
 item.tfctech.metalitem.groove.name=%s Groove

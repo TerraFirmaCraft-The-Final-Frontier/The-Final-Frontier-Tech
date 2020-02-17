@@ -7,18 +7,23 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -26,6 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import net.dries007.tfc.api.capability.IMoldHandler;
+import net.dries007.tfc.api.capability.metal.IMetalItem;
 import net.dries007.tfc.api.types.Metal;
 import tfctech.client.render.teisr.TEISRTechDevices;
 import tfctech.client.render.tesr.TESRFridge;
@@ -33,6 +39,8 @@ import tfctech.client.render.tesr.TESRLatexExtractor;
 import tfctech.client.render.tesr.TESRWireDrawBench;
 import tfctech.objects.blocks.TechBlocks;
 import tfctech.objects.items.TechItems;
+import tfctech.objects.items.glassworking.ItemBlowpipe;
+import tfctech.objects.items.glassworking.ItemGlassMolder;
 import tfctech.objects.items.metal.ItemGear;
 import tfctech.objects.items.metal.ItemTechMetal;
 import tfctech.objects.tileentities.TEFridge;
@@ -40,6 +48,7 @@ import tfctech.objects.tileentities.TELatexExtractor;
 import tfctech.objects.tileentities.TEWireDrawBench;
 
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
 import static tfctech.TFCTech.MODID;
 
 @SideOnly(Side.CLIENT)
@@ -81,13 +90,41 @@ public final class ClientRegisterEvents
         // Metals
         for (Item item : TechItems.getAllMetalItems())
         {
-            ItemTechMetal metalItem = (ItemTechMetal) item;
-            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(new ResourceLocation(MODID, "metal/" + metalItem.getType().name().toLowerCase()), "inventory"));
-            if (((ItemTechMetal) item).getType() == ItemTechMetal.ItemType.WIRE)
+            if (item instanceof ItemTechMetal)
             {
-                for (int i = 1; i <= 4; i++)
-                    ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(new ResourceLocation(MODID, "metal/" + metalItem.getType().name().toLowerCase()), "inventory"));
+                ItemTechMetal metalItem = (ItemTechMetal) item;
+                ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(new ResourceLocation(MODID, "metal/" + metalItem.getType().name().toLowerCase()), "inventory"));
+                if (((ItemTechMetal) item).getType() == ItemTechMetal.ItemType.WIRE)
+                {
+                    for (int i = 1; i <= 4; i++)
+                        ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(new ResourceLocation(MODID, "metal/" + metalItem.getType().name().toLowerCase()), "inventory"));
 
+                }
+            }
+            else if (item instanceof ItemBlowpipe)
+            {
+                // todo fix this
+                final ModelResourceLocation EMPTY = new ModelResourceLocation(new ResourceLocation(MODID, "metal/blowpipe_empty"), "inventory");
+                final ModelResourceLocation FILLED = new ModelResourceLocation(new ResourceLocation(MODID, "metal/blowpipe_filled"), "inventory");
+                ModelLoader.setCustomModelResourceLocation(item, 0, EMPTY);
+                ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition()
+                {
+                    @Override
+                    @Nonnull
+                    public ModelResourceLocation getModelLocation(@Nonnull ItemStack stack)
+                    {
+                        IFluidHandlerItem cap = stack.getCapability(FLUID_HANDLER_ITEM_CAPABILITY, null);
+                        if (cap instanceof ItemGlassMolder.GlassMolderCapability)
+                        {
+                            FluidStack fluid = ((ItemGlassMolder.GlassMolderCapability) cap).getFluid();
+                            if (fluid != null)
+                            {
+                                return FILLED;
+                            }
+                        }
+                        return EMPTY;
+                    }
+                });
             }
         }
 
@@ -136,7 +173,21 @@ public final class ClientRegisterEvents
                     {
                         return (new Color(((ItemGear) stack.getItem()).getSleeveMetal().getColor())).brighter().getRGB();
                     }
-                    return (new Color(((ItemTechMetal) stack.getItem()).getMetal(stack).getColor())).brighter().getRGB();
+                    else if (tintIndex == 1 && stack.getItem() instanceof ItemBlowpipe)
+                    {
+                        IFluidHandlerItem cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                        if (cap instanceof ItemGlassMolder.GlassMolderCapability)
+                        {
+                            FluidStack fluid = ((ItemGlassMolder.GlassMolderCapability) cap).getFluid();
+                            if (fluid != null)
+                            {
+                                return fluid.getFluid().getColor();
+                            }
+                        }
+                        return -1;
+                    }
+                    //noinspection ConstantConditions
+                    return (new Color(((IMetalItem) stack.getItem()).getMetal(stack).getColor())).brighter().getRGB();
                 },
                 item);
         }
@@ -154,6 +205,16 @@ public final class ClientRegisterEvents
                             if (metal != null)
                             {
                                 return (new Color(metal.getColor())).brighter().getRGB();
+                            }
+                        }
+                        else if (stack.getItem() instanceof ItemGlassMolder)
+                        {
+                            IFluidHandlerItem cap = stack.getCapability(FLUID_HANDLER_ITEM_CAPABILITY, null);
+                            if (cap instanceof ItemGlassMolder.GlassMolderCapability && ((ItemGlassMolder.GlassMolderCapability) cap).getFluid() != null)
+                            {
+                                FluidStack fluidStack = ((ItemGlassMolder.GlassMolderCapability) cap).getFluid();
+                                //noinspection ConstantConditions
+                                return fluidStack.getFluid().getColor();
                             }
                         }
                         return 0xFF000000;

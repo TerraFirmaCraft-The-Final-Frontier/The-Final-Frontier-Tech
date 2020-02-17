@@ -2,11 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "tfctech:glass/potash_pot"
+      "item": "tfctech:pot_potash"
     }
   ],
   "result": {
-    "item": "tfctech:glass/potash",
+    "item": "tfctech:powder/potash",
     "count": 4
   }
 }

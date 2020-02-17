@@ -1,0 +1,45 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "particle": "tfc:blocks/metal/wrought_iron",
+      "bricks": "tfc:blocks/metal/wrought_iron",
+      "firebox": "tfc:blocks/metal/wrought_iron"
+    },
+    "model": "tfctech:smeltery_firebox"
+  },
+  "variants": {
+    "lit": {
+      "true": {
+        "textures": {
+          "bricks": "tfc:blocks/metal/wrought_iron"
+        }
+      },
+      "false": {
+        "textures": {
+          "bricks": "tfc:blocks/metal/wrought_iron"
+        }
+      }
+    },
+    "facing": {
+      "south": {
+        "y": 180
+      },
+      "east": {
+        "y": 90
+      },
+      "north": {},
+      "west": {
+        "y": 270
+      }
+    },
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
+    "normal": [
+      {}
+    ]
+  }
+}
