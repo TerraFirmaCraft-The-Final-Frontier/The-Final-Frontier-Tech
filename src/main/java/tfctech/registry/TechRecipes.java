@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
@@ -40,6 +41,7 @@ import tfctech.api.recipes.SmelteryRecipe;
 import tfctech.api.recipes.WireDrawingRecipe;
 import tfctech.objects.fluids.TechFluids;
 import tfctech.objects.items.TechItems;
+import tfctech.objects.items.glassworking.ItemBlowpipe;
 import tfctech.objects.items.metal.ItemTechMetal;
 
 import static tfctech.TFCTech.MODID;
@@ -61,9 +63,8 @@ public final class TechRecipes
         event.getRegistry().registerAll(
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.RUBBER_MIX)), new ItemStack(TechItems.RUBBER), 600f, Metal.Tier.TIER_I).setRegistryName("rubber"),
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE)), new ItemStack(TechItems.MOLD_RACKWHEEL_PIECE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_rackwheel"),
-            new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.WOOD_DUST_POT)), new ItemStack(TechItems.POTASH_POT), 500f, Metal.Tier.TIER_I).setRegistryName("potash_pot"),
+            new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.WOOD_POWDER_POT)), new ItemStack(TechItems.POTASH_POT), 500f, Metal.Tier.TIER_I).setRegistryName("potash_pot"),
             new HeatRecipeSimple(IIngredient.of("rockFlux"), new ItemStack(TechItems.LIME, 2), 600f, Metal.Tier.TIER_I).setRegistryName("lime"),
-            new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_BLOWPIPE)), new ItemStack(TechItems.BLOWPIPE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_blowpipe"),
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_MOLD_PANE)), new ItemStack(TechItems.MOLD_PANE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_pane"),
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_MOLD_BLOCK)), new ItemStack(TechItems.MOLD_BLOCK), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_block")
         );
@@ -73,7 +74,7 @@ public final class TechRecipes
     public static void onRegisterQuernRecipeEvent(RegistryEvent.Register<QuernRecipe> event)
     {
         event.getRegistry().registerAll(
-            new QuernRecipe(IIngredient.of("logWood"), new ItemStack(TechItems.WOOD_DUST, 6)).setRegistryName("wood_dust")
+            new QuernRecipe(IIngredient.of("logWood"), new ItemStack(TechItems.WOOD_POWDER, 6)).setRegistryName("wood_dust")
         );
     }
 
@@ -86,31 +87,56 @@ public final class TechRecipes
 
         r.register(new AnvilRecipe(new ResourceLocation(MODID, "iron_tongs"), IIngredient.of(ItemMetal.get(Metal.WROUGHT_IRON, Metal.ItemType.INGOT)), new ItemStack(TechItems.IRON_TONGS), Metal.Tier.TIER_III, null, ForgeRule.HIT_LAST, ForgeRule.DRAW_SECOND_LAST, ForgeRule.BEND_THIRD_LAST));
         r.register(new AnvilRecipe(new ResourceLocation(MODID, "iron_draw_plate"), IIngredient.of(ItemMetal.get(Metal.WROUGHT_IRON, Metal.ItemType.INGOT)), new ItemStack(TechItems.IRON_DRAW_PLATE), Metal.Tier.TIER_III, null, ForgeRule.PUNCH_LAST, ForgeRule.PUNCH_SECOND_LAST, ForgeRule.HIT_ANY));
-        r.register(new AnvilRecipe(new ResourceLocation(MODID, "steel_draw_plate"), IIngredient.of(ItemMetal.get(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "steel")), Metal.ItemType.INGOT)), new ItemStack(TechItems.STEEL_DRAW_PLATE), Metal.Tier.TIER_III, null, ForgeRule.PUNCH_LAST, ForgeRule.PUNCH_SECOND_LAST, ForgeRule.HIT_ANY));
-        r.register(new AnvilRecipe(new ResourceLocation(MODID, "black_steel_draw_plate"), IIngredient.of(ItemMetal.get(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "black_steel")), Metal.ItemType.INGOT)), new ItemStack(TechItems.BLACK_STEEL_DRAW_PLATE), Metal.Tier.TIER_III, null, ForgeRule.PUNCH_LAST, ForgeRule.PUNCH_SECOND_LAST, ForgeRule.HIT_ANY));
-
+        r.register(new AnvilRecipe(new ResourceLocation(MODID, "steel_draw_plate"), IIngredient.of(ItemMetal.get(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "steel")), Metal.ItemType.INGOT)), new ItemStack(TechItems.STEEL_DRAW_PLATE), Metal.Tier.TIER_IV, null, ForgeRule.PUNCH_LAST, ForgeRule.PUNCH_SECOND_LAST, ForgeRule.HIT_ANY));
+        r.register(new AnvilRecipe(new ResourceLocation(MODID, "black_steel_draw_plate"), IIngredient.of(ItemMetal.get(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "black_steel")), Metal.ItemType.INGOT)), new ItemStack(TechItems.BLACK_STEEL_DRAW_PLATE), Metal.Tier.TIER_V, null, ForgeRule.PUNCH_LAST, ForgeRule.PUNCH_SECOND_LAST, ForgeRule.HIT_ANY));
 
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
             //noinspection deprecation
             if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
                 continue;
+            IIngredient<ItemStack> ingredient;
             //Register all wires
-            IIngredient<ItemStack> ingredient = IIngredient.of(new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.STRIP)));
-            ItemStack output = new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.WIRE), 1, 4); //using meta as stage selector
-            if (!output.isEmpty())
+            Item item = ItemTechMetal.get(metal, ItemTechMetal.ItemType.STRIP);
+            if (item != null)
             {
-                //noinspection ConstantConditions
-                r.register(new AnvilRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_wire"), ingredient, output, metal.getTier(), null, ForgeRule.DRAW_LAST, ForgeRule.DRAW_NOT_LAST));
+                ingredient = IIngredient.of(new ItemStack(item));
+                Item outputItem = ItemTechMetal.get(metal, ItemTechMetal.ItemType.WIRE);
+                if (outputItem != null)
+                {
+                    ItemStack output = new ItemStack(outputItem, 1, 4); //using meta as stage selector
+                    if (!output.isEmpty())
+                    {
+                        //noinspection ConstantConditions
+                        r.register(new AnvilRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_wire"), ingredient, output, metal.getTier(), null, ForgeRule.DRAW_LAST, ForgeRule.DRAW_NOT_LAST));
+                    }
+                }
             }
 
             //Register all long rods
             ingredient = IIngredient.of(new ItemStack(ItemMetal.get(metal, Metal.ItemType.INGOT)));
-            output = new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.LONG_ROD));
-            if (!output.isEmpty())
+            item = ItemTechMetal.get(metal, ItemTechMetal.ItemType.LONG_ROD);
+            if (item != null)
             {
-                //noinspection ConstantConditions
-                r.register(new AnvilRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_long_rod"), ingredient, output, metal.getTier(), null, ForgeRule.HIT_LAST, ForgeRule.HIT_SECOND_LAST, ForgeRule.HIT_THIRD_LAST));
+                ItemStack output = new ItemStack(item);
+                if (!output.isEmpty())
+                {
+                    //noinspection ConstantConditions
+                    r.register(new AnvilRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_long_rod"), ingredient, output, metal.getTier(), null, ForgeRule.HIT_LAST, ForgeRule.HIT_SECOND_LAST, ForgeRule.HIT_THIRD_LAST));
+                }
+            }
+
+            //Register all blowpipes
+            ingredient = IIngredient.of(new ItemStack(ItemMetal.get(metal, Metal.ItemType.SHEET)));
+            item = ItemBlowpipe.get(metal);
+            if (item != null)
+            {
+                ItemStack output = new ItemStack(item);
+                if (!output.isEmpty())
+                {
+                    //noinspection ConstantConditions
+                    r.register(new AnvilRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_blowpipe"), ingredient, output, metal.getTier(), null, ForgeRule.BEND_LAST, ForgeRule.BEND_SECOND_LAST));
+                }
             }
         }
     }
@@ -122,7 +148,6 @@ public final class TechRecipes
 
         r.registerAll(
             new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE), "XXXXX", "X XXX", "X  XX", "XX  X", "XXXXX").setRegistryName("clay_rackwheel_piece"),
-            new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_BLOWPIPE), " X X ", " X X ", " X X ", " X X ", " X X ").setRegistryName("clay_blowpipe"),
             new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_MOLD_PANE), "XXXXX", "X   X", "X   X", "X   X", "XXXXX").setRegistryName("clay_mold_pane"),
             new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_MOLD_BLOCK), "X   X", "X   X", "X   X", "X   X", "XXXXX").setRegistryName("clay_mold_block")
         );

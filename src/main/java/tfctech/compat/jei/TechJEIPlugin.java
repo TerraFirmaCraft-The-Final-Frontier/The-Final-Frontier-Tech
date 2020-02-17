@@ -9,6 +9,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import net.dries007.tfc.api.registries.TFCRegistries;
 import net.dries007.tfc.compat.jei.wrappers.SimpleRecipeWrapper;
 import tfctech.client.gui.GuiGlassworking;
 import tfctech.client.gui.GuiSmelteryCauldron;
@@ -18,7 +19,7 @@ import tfctech.compat.jei.categories.WireDrawingCategory;
 import tfctech.compat.jei.wrappers.GlassworkingRecipeWrapper;
 import tfctech.compat.jei.wrappers.SmelteryRecipeWrapper;
 import tfctech.objects.blocks.TechBlocks;
-import tfctech.objects.items.TechItems;
+import tfctech.objects.items.glassworking.ItemBlowpipe;
 import tfctech.registry.TechRegistries;
 
 import static tfctech.TFCTech.MODID;
@@ -59,7 +60,13 @@ public class TechJEIPlugin implements IModPlugin
             .collect(Collectors.toList());
 
         registry.addRecipes(glassList, GLASSWORKING_UID);
-        registry.addRecipeCatalyst(new ItemStack(TechItems.BLOWPIPE), GLASSWORKING_UID);
+        TFCRegistries.METALS.getValuesCollection().forEach(metal -> {
+            ItemBlowpipe blowpipe = ItemBlowpipe.get(metal);
+            if (blowpipe != null)
+            {
+                registry.addRecipeCatalyst(new ItemStack(blowpipe), GLASSWORKING_UID);
+            }
+        });
 
         // Smeltery
         List<SmelteryRecipeWrapper> smelteryList = TechRegistries.SMELTERY.getValuesCollection()

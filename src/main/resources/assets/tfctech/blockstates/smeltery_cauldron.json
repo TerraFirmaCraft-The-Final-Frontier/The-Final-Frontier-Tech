@@ -1,0 +1,32 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "cauldron": "tfc:blocks/metal/wrought_iron",
+      "particle": "tfc:blocks/metal/wrought_iron"
+    },
+    "model": "tfctech:smeltery_cauldron"
+  },
+  "variants": {
+    "facing": {
+      "south": {
+        "y": 180
+      },
+      "east": {
+        "y": 90
+      },
+      "north": {},
+      "west": {
+        "y": 270
+      }
+    },
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
+    "normal": [
+      {}
+    ]
+  }
+}

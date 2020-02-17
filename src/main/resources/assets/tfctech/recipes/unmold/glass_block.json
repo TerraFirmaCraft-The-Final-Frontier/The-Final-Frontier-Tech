@@ -2,7 +2,7 @@
   "type": "tfctech:unmoldglass_recipe",
   "ingredients": [
     {
-      "item": "tfctech:glass/mold_block"
+      "item": "tfctech:ceramics/mold/glass_block"
     }
   ],
   "result": {

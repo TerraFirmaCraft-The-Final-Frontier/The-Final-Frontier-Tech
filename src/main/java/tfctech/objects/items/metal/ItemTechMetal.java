@@ -27,6 +27,7 @@ public class ItemTechMetal extends ItemTFC implements IMetalItem
 {
     private static final Map<Metal, EnumMap<ItemType, ItemTechMetal>> TABLE = new HashMap<>();
 
+    @Nullable
     public static ItemTechMetal get(Metal metal, ItemTechMetal.ItemType type)
     {
         return (ItemTechMetal) ((EnumMap) TABLE.get(metal)).get(type);
