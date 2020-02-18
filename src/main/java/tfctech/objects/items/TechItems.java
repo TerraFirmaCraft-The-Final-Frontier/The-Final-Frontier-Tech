@@ -78,8 +78,10 @@ public final class TechItems
     public static final ItemPottery POTASH_POT = getNull();
     @GameRegistry.ObjectHolder("powder/wood")
     public static final ItemMiscTech WOOD_POWDER = getNull();
-    @GameRegistry.ObjectHolder("pot_wood")
-    public static final ItemPottery WOOD_POWDER_POT = getNull();
+    @GameRegistry.ObjectHolder("powder/ash")
+    public static final ItemMiscTech ASH = getNull();
+    @GameRegistry.ObjectHolder("pot_ash")
+    public static final ItemPottery ASH_POT = getNull();
 
 
     @GameRegistry.ObjectHolder("metal/iron_draw_plate")
@@ -136,7 +138,7 @@ public final class TechItems
         IForgeRegistry<Item> r = event.getRegistry();
         ImmutableList.Builder<Item> simpleItems = ImmutableList.builder();
 
-        simpleItems.add(register(r, "pot_wood", new ItemPottery(), CT_MISC));
+        simpleItems.add(register(r, "pot_ash", new ItemPottery(), CT_MISC));
         simpleItems.add(register(r, "pot_potash", new ItemPottery()
         {
             @Nonnull
@@ -153,8 +155,9 @@ public final class TechItems
             }
         }, CT_MISC));
         simpleItems.add(register(r, "powder/potash", new ItemMiscTech(Size.SMALL, Weight.LIGHT, "dustPotash"), CT_MISC));
-        simpleItems.add(register(r, "powder/lime", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.2f, 2000f, "dustLime"), CT_MISC));
-        simpleItems.add(register(r, "powder/wood", new ItemMiscTech(Size.SMALL, Weight.LIGHT, "dustWood"), CT_MISC));
+        simpleItems.add(register(r, "powder/lime", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.22f, 2000f, "dustLime"), CT_MISC));
+        simpleItems.add(register(r, "powder/wood", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.22f, 2000f, "dustWood"), CT_MISC));
+        simpleItems.add(register(r, "powder/ash", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.22f, 2000f, "dustAsh"), CT_MISC));
 
         simpleItems.add(register(r, "latex/vulcanizing_agents", new ItemMiscTech(Size.SMALL, Weight.LIGHT), CT_MISC));
         simpleItems.add(register(r, "latex/rubber_mix", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.8f, 800f), CT_MISC));
@@ -207,7 +210,7 @@ public final class TechItems
             metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_rod", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.ROD), CT_METAL));
             metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_bolt", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.BOLT), CT_METAL));
             metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_screw", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.SCREW), CT_METAL));
-            if (metal.getTier().isAtLeast(Metal.Tier.TIER_III))
+            if (metal.getTier().isAtLeast(Metal.Tier.TIER_III) && metal.getToolMetal() != null)
             {
                 metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_blowpipe", new ItemBlowpipe(metal), CT_METAL));
             }
@@ -255,6 +258,7 @@ public final class TechItems
                 OreDictionary.registerOre("sandSilica", x);
             }
         });
+
     }
 
     private static boolean isSilica(BlockRockVariant block)

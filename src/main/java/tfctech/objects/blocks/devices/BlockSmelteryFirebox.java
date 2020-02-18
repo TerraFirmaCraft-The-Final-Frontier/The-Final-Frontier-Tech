@@ -92,7 +92,7 @@ public class BlockSmelteryFirebox extends BlockHorizontal implements IBellowsCon
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        return FULL_BLOCK_AABB; // todo
+        return FULL_BLOCK_AABB;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class BlockSmelteryFirebox extends BlockHorizontal implements IBellowsCon
     @SuppressWarnings("deprecation")
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
     {
-        return BlockFaceShape.UNDEFINED;
+        return face == EnumFacing.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
 
     @Override

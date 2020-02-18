@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMap;
@@ -103,10 +104,8 @@ public final class ClientRegisterEvents
             }
             else if (item instanceof ItemBlowpipe)
             {
-                // todo fix this
                 final ModelResourceLocation EMPTY = new ModelResourceLocation(new ResourceLocation(MODID, "metal/blowpipe_empty"), "inventory");
                 final ModelResourceLocation FILLED = new ModelResourceLocation(new ResourceLocation(MODID, "metal/blowpipe_filled"), "inventory");
-                ModelLoader.setCustomModelResourceLocation(item, 0, EMPTY);
                 ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition()
                 {
                     @Override
@@ -125,6 +124,7 @@ public final class ClientRegisterEvents
                         return EMPTY;
                     }
                 });
+                ModelBakery.registerItemVariants(item, EMPTY, FILLED);
             }
         }
 

@@ -27,7 +27,6 @@ import net.dries007.tfc.api.recipes.heat.HeatRecipeSimple;
 import net.dries007.tfc.api.recipes.knapping.KnappingRecipe;
 import net.dries007.tfc.api.recipes.knapping.KnappingRecipeSimple;
 import net.dries007.tfc.api.recipes.knapping.KnappingType;
-import net.dries007.tfc.api.recipes.quern.QuernRecipe;
 import net.dries007.tfc.api.registries.TFCRegistries;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.api.util.TFCConstants;
@@ -46,6 +45,7 @@ import tfctech.objects.items.metal.ItemTechMetal;
 
 import static tfctech.TFCTech.MODID;
 
+@SuppressWarnings({"ConstantConditions", "unused"})
 @Mod.EventBusSubscriber(modid = MODID)
 public final class TechRecipes
 {
@@ -63,18 +63,11 @@ public final class TechRecipes
         event.getRegistry().registerAll(
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.RUBBER_MIX)), new ItemStack(TechItems.RUBBER), 600f, Metal.Tier.TIER_I).setRegistryName("rubber"),
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE)), new ItemStack(TechItems.MOLD_RACKWHEEL_PIECE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_rackwheel"),
-            new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.WOOD_POWDER_POT)), new ItemStack(TechItems.POTASH_POT), 500f, Metal.Tier.TIER_I).setRegistryName("potash_pot"),
+            new HeatRecipeSimple(IIngredient.of("dustWood"), new ItemStack(TechItems.ASH), 850f, Metal.Tier.TIER_I).setRegistryName("ash"),
+            new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.ASH_POT)), new ItemStack(TechItems.POTASH_POT), 500f, Metal.Tier.TIER_I).setRegistryName("potash_pot"),
             new HeatRecipeSimple(IIngredient.of("rockFlux"), new ItemStack(TechItems.LIME, 2), 600f, Metal.Tier.TIER_I).setRegistryName("lime"),
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_MOLD_PANE)), new ItemStack(TechItems.MOLD_PANE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_pane"),
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_MOLD_BLOCK)), new ItemStack(TechItems.MOLD_BLOCK), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_block")
-        );
-    }
-
-    @SubscribeEvent
-    public static void onRegisterQuernRecipeEvent(RegistryEvent.Register<QuernRecipe> event)
-    {
-        event.getRegistry().registerAll(
-            new QuernRecipe(IIngredient.of("logWood"), new ItemStack(TechItems.WOOD_POWDER, 6)).setRegistryName("wood_dust")
         );
     }
 
@@ -172,7 +165,19 @@ public final class TechRecipes
             new SmelteryRecipe.Builder()
                 .addInput(IIngredient.of("dustPotash")).addInput(IIngredient.of("sandSilica")).addInput(IIngredient.of("dustLime"))
                 .setOutput(new FluidStack(TechFluids.GLASS.get(), 1000), 800).build()
-                .setRegistryName(new ResourceLocation(MODID, "glass"))
+                .setRegistryName(new ResourceLocation(MODID, "glass")),
+            new SmelteryRecipe.Builder()
+                .addInput(IIngredient.of("blockGlass"))
+                .setOutput(new FluidStack(TechFluids.GLASS.get(), 1000), 800).build()
+                .setRegistryName(new ResourceLocation(MODID, "glass_block")),
+            new SmelteryRecipe.Builder()
+                .addInput(IIngredient.of("paneGlass"))
+                .setOutput(new FluidStack(TechFluids.GLASS.get(), 375), 800).build()
+                .setRegistryName(new ResourceLocation(MODID, "glass_pane")),
+            new SmelteryRecipe.Builder()
+                .addInput(IIngredient.of(Items.GLASS_BOTTLE))
+                .setOutput(new FluidStack(TechFluids.GLASS.get(), 250), 800).build()
+                .setRegistryName(new ResourceLocation(MODID, "glass_bottle"))
         );
     }
 

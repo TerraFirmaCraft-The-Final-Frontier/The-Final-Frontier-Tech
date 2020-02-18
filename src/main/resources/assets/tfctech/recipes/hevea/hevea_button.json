@@ -2,11 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "tfctech:pot_potash"
+      "item": "tfc:wood/planks/hevea"
     }
   ],
   "result": {
-    "item": "tfctech:powder/potash",
+    "item": "tfc:wood/button/hevea",
     "count": 1
   }
 }

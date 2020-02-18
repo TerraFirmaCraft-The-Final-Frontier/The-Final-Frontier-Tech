@@ -3,19 +3,19 @@
   "ingredients": [
     {
       "type": "forge:ore_dict",
-      "ore": "dustWood"
+      "ore": "dustAsh"
     },
     {
       "type": "forge:ore_dict",
-      "ore": "dustWood"
+      "ore": "dustAsh"
     },
     {
       "type": "forge:ore_dict",
-      "ore": "dustWood"
+      "ore": "dustAsh"
     },
     {
       "type": "forge:ore_dict",
-      "ore": "dustWood"
+      "ore": "dustAsh"
     },
     {
       "item": "tfc:ceramics/fired/pot"
@@ -43,7 +43,7 @@
     ]
   ],
   "result": {
-    "item": "tfctech:pot_wood",
+    "item": "tfctech:pot_ash",
     "count": 1
   }
 }
