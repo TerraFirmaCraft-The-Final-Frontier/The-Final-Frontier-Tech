@@ -18,13 +18,13 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.api.capability.metal.IMetalItem;
 import net.dries007.tfc.api.capability.size.Size;
 import net.dries007.tfc.api.capability.size.Weight;
 import net.dries007.tfc.api.registries.TFCRegistries;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.api.types.Rock;
-import net.dries007.tfc.api.util.TFCConstants;
 import net.dries007.tfc.objects.ToolMaterialsTFC;
 import net.dries007.tfc.objects.blocks.BlocksTFC;
 import net.dries007.tfc.objects.blocks.stone.BlockRockVariant;
@@ -185,15 +185,15 @@ public final class TechItems
         metalItems.add(register(r, "metal/iron_bowl_mount", ItemTechMetal.ItemType.create(Metal.WROUGHT_IRON, ItemTechMetal.ItemType.BOWL_MOUNT), CT_METAL));
 
         metalItems.add(register(r, "metal/iron_draw_plate", ItemTechMetal.ItemType.create(Metal.WROUGHT_IRON, ItemTechMetal.ItemType.DRAW_PLATE).setMaxDamage(ToolMaterialsTFC.WROUGHT_IRON.getMaxUses()).setMaxStackSize(1), CT_METAL));
-        metalItems.add(register(r, "metal/steel_draw_plate", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "steel")), ItemTechMetal.ItemType.DRAW_PLATE).setMaxDamage(ToolMaterialsTFC.STEEL.getMaxUses()).setMaxStackSize(1), CT_METAL));
-        metalItems.add(register(r, "metal/black_steel_draw_plate", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "black_steel")), ItemTechMetal.ItemType.DRAW_PLATE).setMaxDamage(ToolMaterialsTFC.BLACK_STEEL.getMaxUses()).setMaxStackSize(1), CT_METAL));
+        metalItems.add(register(r, "metal/steel_draw_plate", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TerraFirmaCraft.MOD_ID, "steel")), ItemTechMetal.ItemType.DRAW_PLATE).setMaxDamage(ToolMaterialsTFC.STEEL.getMaxUses()).setMaxStackSize(1), CT_METAL));
+        metalItems.add(register(r, "metal/black_steel_draw_plate", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TerraFirmaCraft.MOD_ID, "black_steel")), ItemTechMetal.ItemType.DRAW_PLATE).setMaxDamage(ToolMaterialsTFC.BLACK_STEEL.getMaxUses()).setMaxStackSize(1), CT_METAL));
         metalItems.add(register(r, "metal/iron_tongs", ItemTechMetal.ItemType.create(Metal.WROUGHT_IRON, ItemTechMetal.ItemType.TONGS).setMaxStackSize(1), CT_MISC));
 
-        metalItems.add(register(r, "metal/copper_inductor", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "copper")), ItemTechMetal.ItemType.INDUCTOR), CT_METAL));
+        metalItems.add(register(r, "metal/copper_inductor", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TerraFirmaCraft.MOD_ID, "copper")), ItemTechMetal.ItemType.INDUCTOR), CT_METAL));
 
-        metalItems.add(register(r, "metal/tin_sleeve", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "tin")), ItemTechMetal.ItemType.SLEEVE), CT_METAL));
-        metalItems.add(register(r, "metal/brass_sleeve", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "brass")), ItemTechMetal.ItemType.SLEEVE), CT_METAL));
-        metalItems.add(register(r, "metal/steel_sleeve", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "steel")), ItemTechMetal.ItemType.SLEEVE), CT_METAL));
+        metalItems.add(register(r, "metal/tin_sleeve", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TerraFirmaCraft.MOD_ID, "tin")), ItemTechMetal.ItemType.SLEEVE), CT_METAL));
+        metalItems.add(register(r, "metal/brass_sleeve", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TerraFirmaCraft.MOD_ID, "brass")), ItemTechMetal.ItemType.SLEEVE), CT_METAL));
+        metalItems.add(register(r, "metal/steel_sleeve", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TerraFirmaCraft.MOD_ID, "steel")), ItemTechMetal.ItemType.SLEEVE), CT_METAL));
 
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {

@@ -2,10 +2,11 @@ package tfctech.objects.items.metal;
 
 import net.minecraft.util.ResourceLocation;
 
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.api.registries.TFCRegistries;
 import net.dries007.tfc.api.types.Metal;
-import net.dries007.tfc.api.util.TFCConstants;
 
+@SuppressWarnings("WeakerAccess")
 public class ItemGear extends ItemTechMetal
 {
     public ItemGear(Metal metal, ItemType type)
@@ -21,13 +22,13 @@ public class ItemGear extends ItemTechMetal
             case TIER_0:
             case TIER_I:
             case TIER_II:
-                return TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "tin"));
+                return TFCRegistries.METALS.getValue(new ResourceLocation(TerraFirmaCraft.MOD_ID, "tin"));
             case TIER_III:
             case TIER_IV:
-                return TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "brass"));
+                return TFCRegistries.METALS.getValue(new ResourceLocation(TerraFirmaCraft.MOD_ID, "brass"));
             case TIER_V:
             case TIER_VI:
-                return TFCRegistries.METALS.getValue(new ResourceLocation(TFCConstants.MOD_ID, "steel"));
+                return TFCRegistries.METALS.getValue(new ResourceLocation(TerraFirmaCraft.MOD_ID, "steel"));
         }
     }
 }
