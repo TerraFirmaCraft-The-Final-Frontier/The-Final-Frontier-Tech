@@ -9,8 +9,11 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-
-version = "1.12.2-1.2.6"
+if (System.getenv('VERSION') != null) {
+    version = System.getenv('VERSION')
+} else {
+    version = "MC1.12.2-1.2.6"
+}
 group = "tfctech"
 archivesBaseName = "TFCTech-Unofficial"
 
