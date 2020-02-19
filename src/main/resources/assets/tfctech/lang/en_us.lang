@@ -50,9 +50,10 @@ item.tfctech.ceramics.unfired.glass_pane.name=Unfired Glass Pane Mold
 item.tfctech.ceramics.mold.glass_pane.name=Glass Pane Mold
 item.tfctech.powder.lime.name=Lime
 item.tfctech.powder.potash.name=Potash
-item.tfctech.powder.wood_dust.name=Wood Powder
+item.tfctech.powder.wood.name=Sawdust
+item.tfctech.powder.ash.name=Ash
 item.tfctech.pot_potash.name=Pot with Potash
-item.tfctech.pot_wood.name=Pot with Wood Powder
+item.tfctech.pot_ash.name=Pot with Ash Powder
 
 ## Wiredraw
 item.tfctech.wiredraw.leather_belt.name=Leather Belt

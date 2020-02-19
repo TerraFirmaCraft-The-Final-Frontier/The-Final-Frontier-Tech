@@ -9,8 +9,11 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-
-version = "1.12.2-1.2.6"
+if (System.getenv('VERSION') != null) {
+    version = System.getenv('VERSION')
+} else {
+    version = "MC1.12.2-1.2.6"
+}
 group = "tfctech"
 archivesBaseName = "TFCTech-Unofficial"
 
@@ -63,8 +66,8 @@ repositories {
 }
 
 dependencies {
-    deobfProvided "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.8.9"
-    deobfProvided "mezz.jei:jei_1.12.2:4.13.1.222"
+    deobfProvided "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.11.505"
+    deobfProvided "mezz.jei:jei_1.12.2:4.15.0.291"
 	compileOnly "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
 	deobfProvided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.12-6"
     compileOnly "gregtechce:gregtech:1.12.2:1.8.5.436"
@@ -94,6 +97,10 @@ processResources {
     from('.') {
         include "LICENSE.txt"
     }
+}
+
+project.tasks.withType(Jar) { jarTask -> // For all jar tasks
+    jarTask.appendix = "MC" + project.minecraft.version
 }
 
 task signJar(type: SignJar, dependsOn: reobfJar) {

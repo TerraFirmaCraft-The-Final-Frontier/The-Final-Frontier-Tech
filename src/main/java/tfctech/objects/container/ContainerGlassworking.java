@@ -12,9 +12,12 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemStackHandler;
 
 import mcp.MethodsReturnNonnullByDefault;
+import net.dries007.tfc.Constants;
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
 import net.dries007.tfc.api.capability.heat.IItemHeat;
 import net.dries007.tfc.objects.container.IButtonHandler;
@@ -203,7 +206,17 @@ public class ContainerGlassworking extends Container implements IButtonHandler
     {
         matrix.setAll(false);
         requiresReset = true;
-        ItemStack emptyBlowpipe = new ItemStack(stack.getItem());
+        ItemStack emptyBlowpipe = stack;
+        IFluidHandlerItem cap = emptyBlowpipe.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        if (cap instanceof ItemGlassMolder.GlassMolderCapability)
+        {
+            ((ItemGlassMolder.GlassMolderCapability) cap).empty();
+        }
+        emptyBlowpipe.attemptDamageItem(1, Constants.RNG, null);
+        if (emptyBlowpipe.getItemDamage() >= emptyBlowpipe.getMaxDamage())
+        {
+            emptyBlowpipe = ItemStack.EMPTY;
+        }
         if (this.isOffhand)
         {
             this.player.setHeldItem(EnumHand.OFF_HAND, emptyBlowpipe);

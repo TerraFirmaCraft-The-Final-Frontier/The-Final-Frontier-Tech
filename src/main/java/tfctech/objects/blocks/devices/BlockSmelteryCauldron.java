@@ -72,7 +72,7 @@ public class BlockSmelteryCauldron extends BlockHorizontal implements IItemSize
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        return FULL_BLOCK_AABB; // todo
+        return FULL_BLOCK_AABB;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class BlockSmelteryCauldron extends BlockHorizontal implements IItemSize
     @SuppressWarnings("deprecation")
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
     {
-        return BlockFaceShape.UNDEFINED;
+        return face == EnumFacing.UP ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
 
     @Override

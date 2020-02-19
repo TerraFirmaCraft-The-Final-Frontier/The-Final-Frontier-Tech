@@ -190,5 +190,10 @@ public class ItemGlassMolder extends ItemMiscTech
         {
             return this.tank.getContainer();
         }
+
+        public void empty()
+        {
+            tank.drain(capacity, true);
+        }
     }
 }

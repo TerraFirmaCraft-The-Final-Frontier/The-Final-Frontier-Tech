@@ -116,27 +116,30 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
         }
         IBlockState state = world.getBlockState(pos);
         boolean isLit = state.getValue(LIT);
-        ItemStack stack = inventory.getStackInSlot(SLOT_INPUT);
-        IItemHeat cap = stack.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);
-        int energyUsage = TechConfig.DEVICES.inductionCrucibleEnergyConsumption;
-        if ((cap != null || this.getAlloy().removeAlloy(1, true) > 0) && energyContainer.consumeEnergy(energyUsage, false))
+        for (int i = SLOT_INPUT_START; i <= SLOT_INPUT_END; i++)
         {
-            this.acceptHeat(Heat.maxVisibleTemperature());
-            litTime = 15;
-            if (!isLit)
+            ItemStack stack = inventory.getStackInSlot(i);
+            IItemHeat cap = stack.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);
+            int energyUsage = TechConfig.DEVICES.inductionCrucibleEnergyConsumption;
+            if ((cap != null || this.getAlloy().removeAlloy(1, true) > 0) && energyContainer.consumeEnergy(energyUsage, false))
             {
-                isLit = true;
-                state = state.withProperty(BlockElectricForge.LIT, true);
-                world.setBlockState(pos, state, 2);
+                this.acceptHeat(Heat.maxVisibleTemperature());
+                litTime = 15;
+                if (!isLit)
+                {
+                    state = state.withProperty(BlockElectricForge.LIT, true);
+                    world.setBlockState(pos, state, 2);
+                }
+                break;
             }
-        }
-        if (--litTime <= 0)
-        {
-            litTime = 0;
-            if (isLit)
+            if (--litTime <= 0)
             {
-                state = state.withProperty(BlockElectricForge.LIT, false);
-                world.setBlockState(pos, state, 2);
+                litTime = 0;
+                if (isLit)
+                {
+                    state = state.withProperty(BlockElectricForge.LIT, false);
+                    world.setBlockState(pos, state, 2);
+                }
             }
         }
         super.update();

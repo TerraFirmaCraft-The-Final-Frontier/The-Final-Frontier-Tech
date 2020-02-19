@@ -11,7 +11,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 
-import net.dries007.tfc.api.util.TFCConstants;
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.button.GuiButtonKnapping;
 import net.dries007.tfc.client.gui.GuiContainerTFC;
 import tfctech.objects.container.ContainerGlassworking;
@@ -20,7 +20,7 @@ import static tfctech.TFCTech.MODID;
 
 public class GuiGlassworking extends GuiContainerTFC
 {
-    private static final ResourceLocation BG_TEXTURE = new ResourceLocation(TFCConstants.MOD_ID, "textures/gui/knapping.png");
+    private static final ResourceLocation BG_TEXTURE = new ResourceLocation(TerraFirmaCraft.MOD_ID, "textures/gui/knapping.png");
     private static final ResourceLocation GLASS_TEXTURE = new ResourceLocation(MODID, "textures/gui/glassworking/button.png");
     private static final ResourceLocation GLASS_DISABLED_TEXTURE = new ResourceLocation(MODID, "textures/gui/glassworking/disabled.png");
 

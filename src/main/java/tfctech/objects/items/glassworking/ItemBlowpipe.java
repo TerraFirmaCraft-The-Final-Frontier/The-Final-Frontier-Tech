@@ -39,6 +39,9 @@ public class ItemBlowpipe extends ItemGlassMolder implements IMetalItem
         {
             TABLE.put(metal, this);
         }
+        setMaxStackSize(1);
+        //noinspection ConstantConditions
+        setMaxDamage(metal.getToolMetal().getMaxUses() / 2);
     }
 
     @Override

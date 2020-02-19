@@ -3,7 +3,6 @@ package tfctech;
 import org.apache.logging.log4j.Logger;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -18,13 +17,12 @@ import tfctech.objects.items.TechItems;
 import tfctech.registry.TechFoodTraits;
 
 @SuppressWarnings("WeakerAccess")
-@Mod(modid = TFCTech.MODID, name = TFCTech.NAME, version = TFCTech.VERSION, dependencies = TFCTech.DEPENDENCIES, certificateFingerprint = TFCTech.SIGNING_KEY)
+@Mod(modid = TFCTech.MODID, name = TFCTech.NAME, version = TFCTech.VERSION, dependencies = TFCTech.DEPENDENCIES)
 public class TFCTech
 {
     public static final String MODID = "tfctech";
     public static final String NAME = "TFCTech Unofficial";
     public static final String VERSION = "@VERSION@";
-    public static final String SIGNING_KEY = "@FINGERPRINT@";
     public static final String DEPENDENCIES = "required-after:tfc;after:ic2;after:gregtech";
 
     @Mod.Instance
@@ -48,15 +46,6 @@ public class TFCTech
     }
 
     private SimpleNetworkWrapper network;
-
-    @EventHandler
-    public void onFingerprintViolation(FMLFingerprintViolationEvent event)
-    {
-        if (!event.isDirectory())
-        {
-            signedBuild = false;
-        }
-    }
 
     @EventHandler
     public void init(FMLInitializationEvent event)
