@@ -99,6 +99,10 @@ processResources {
     }
 }
 
+project.tasks.withType(Jar) { jarTask -> // For all jar tasks
+    jarTask.appendix = "MC" + project.minecraft.version
+}
+
 task signJar(type: SignJar, dependsOn: reobfJar) {
     onlyIf { // Skip the task if our secret data isn't available
         project.hasProperty('keyStore')
