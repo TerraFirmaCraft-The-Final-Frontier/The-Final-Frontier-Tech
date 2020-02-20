@@ -2,9 +2,13 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "particle": "tfc:blocks/metal/wrought_iron",
-      "bricks": "tfc:blocks/metal/wrought_iron",
-      "firebox": "tfc:blocks/metal/wrought_iron"
+		"back": "tfctech:blocks/devices/smeltery_firebox/back",
+		"top": "tfctech:blocks/devices/smeltery_firebox/top",
+		"side": "tfctech:blocks/devices/smeltery_firebox/side",
+		"bottom": "tfctech:blocks/devices/smeltery_firebox/bottom",
+		"chute": "tfctech:blocks/devices/smeltery_firebox/chute",
+		"gate_bricks": "tfctech:blocks/devices/smeltery_firebox/gate_bricks",
+		"particle": "tfctech:blocks/devices/smeltery_firebox/back"
     },
     "model": "tfctech:smeltery_firebox"
   },
@@ -12,12 +16,12 @@
     "lit": {
       "true": {
         "textures": {
-          "bricks": "tfc:blocks/metal/wrought_iron"
+          "gate_bricks": "tfctech:blocks/devices/smeltery_firebox/gate_bricks"
         }
       },
       "false": {
         "textures": {
-          "bricks": "tfc:blocks/metal/wrought_iron"
+          "gate_bricks": "tfctech:blocks/devices/smeltery_firebox/gate_bricks"
         }
       }
     },
