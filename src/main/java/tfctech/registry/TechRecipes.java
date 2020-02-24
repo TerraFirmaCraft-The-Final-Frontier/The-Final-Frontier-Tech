@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryModifiable;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.api.recipes.WeldingRecipe;
@@ -33,6 +35,7 @@ import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.objects.inventory.ingredient.IIngredient;
 import net.dries007.tfc.objects.items.metal.ItemMetal;
 import net.dries007.tfc.objects.recipes.ShapelessDamageRecipe;
+import net.dries007.tfc.util.OreDictionaryHelper;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.forge.ForgeRule;
 import tfctech.api.recipes.GlassworkingRecipe;
@@ -49,6 +52,25 @@ import static tfctech.TFCTech.MODID;
 @Mod.EventBusSubscriber(modid = MODID)
 public final class TechRecipes
 {
+
+    @SubscribeEvent
+    public static void onRecipeRegister(RegistryEvent.Register<IRecipe> event)
+    {
+        // Removing glass recipes
+        IForgeRegistryModifiable modRegistry = (IForgeRegistryModifiable) event.getRegistry();
+        modRegistry.remove(new ResourceLocation("minecraft:glass_pane"));
+
+        List<ItemStack> removeList = new ArrayList<>();
+        FurnaceRecipes.instance().getSmeltingList().keySet().forEach(stack -> {
+            ItemStack result = FurnaceRecipes.instance().getSmeltingResult(stack);
+            if (OreDictionaryHelper.doesStackMatchOre(result, "blockGlass"))
+            {
+                removeList.add(result);
+            }
+        });
+        removeList.forEach(stack -> FurnaceRecipes.instance().getSmeltingList().remove(stack));
+    }
+
     @SubscribeEvent
     public static void onRegisterBarrelRecipeEvent(RegistryEvent.Register<BarrelRecipe> event)
     {
@@ -69,6 +91,10 @@ public final class TechRecipes
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_MOLD_PANE)), new ItemStack(TechItems.MOLD_PANE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_pane"),
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_MOLD_BLOCK)), new ItemStack(TechItems.MOLD_BLOCK), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_block")
         );
+
+        // Removing glass recipes
+        IForgeRegistryModifiable modRegistry = (IForgeRegistryModifiable) event.getRegistry();
+        modRegistry.remove(new ResourceLocation(TerraFirmaCraft.MOD_ID, "glass"));
     }
 
     @SubscribeEvent

@@ -3,11 +3,11 @@
   "ingredients": [
     {
       "type": "forge:ore_dict",
-      "ore": "dustGraphitePowder"
+      "ore": "dustGraphite"
     },
     {
       "type": "forge:ore_dict",
-      "ore": "dustKaolinitePowder"
+      "ore": "dustKaolinite"
     },
     {
       "type": "forge:ore_dict",
@@ -15,7 +15,7 @@
     },
     {
       "type": "forge:ore_dict",
-      "ore": "dustSulfurPowder"
+      "ore": "dustSulfur"
     }
   ],
   "result": {
