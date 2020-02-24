@@ -159,6 +159,16 @@ jei.category.tfctech.wire_drawing=Wire Drawing
 jei.category.tfctech.smeltery=Smeltery
 jei.category.tfctech.glassworking=Glassworking
 
+# JEI Information
+jei.information.tfctech.wood_powder=To obtain Sawdust, you need to harvest logs using a saw. There's a 50% chance to drop and also another 50% chance the log is consumed in the process.
+jei.information.tfctech.groove=Used to get latex, right click a hevea tree log with a hammer in your toolbar to place. Complete the latex tapping by placing a bowl mount, an empty bowl and right clicking with a knife to open a vein of flowing latex.
+jei.information.tfctech.latex=To get latex, you need a rubber tapper. Right click a Wrought Iron Groove (with a hammer on toolbar) on any hevea tree log, then place a bowl mount, an empty bowl and open a vein of fluid latex by right clicking with a knife.
+jei.information.tfctech.fridge=Consumes energy to cool down your foods effectively slowing down decay. Efficiency rises when the door is kept closed and has sufficient energy.
+jei.information.tfctech.wiredraw=Used to draw out wires. Right click to pull metal wires through the draw plate. Draw plate needs to be at least the same tier of the wire.
+jei.information.tfctech.crucible=Melt and mix metal using the power of electricity!
+jei.information.tfctech.forge=Heat metal items using the power of electricity!
+jei.information.tfctech.fill_mold=Right click an empty mold into any container holding molten glass.
+
 # Waila/Hwyla/TOP
 waila.tfctech.wiredraw.progress=Progress: %d%%
 waila.tfctech.fridge.efficiency=Efficiency: %d%%

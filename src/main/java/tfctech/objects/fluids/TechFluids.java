@@ -22,7 +22,7 @@ public final class TechFluids
     public static void registerFluids()
     {
         LATEX = registerFluid(new Fluid("latex", LAVA_STILL, LAVA_FLOW, 0xFFF8F8F8));
-        GLASS = registerFluid(new Fluid("glass", LAVA_STILL, LAVA_FLOW, 0xFFF3965F));
+        GLASS = registerFluid(new Fluid("glass", LAVA_STILL, LAVA_FLOW, 0xFFED97B5));
 
         setFluidTemperatures();
     }

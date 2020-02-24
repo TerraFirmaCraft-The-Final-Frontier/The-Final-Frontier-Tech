@@ -209,7 +209,7 @@ public class ItemTechMold extends ItemPottery
         public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing)
         {
             return capability == FLUID_HANDLER_CAPABILITY
-                || capability == CapabilityItemHeat.ITEM_HEAT_CAPABILITY;
+                    || capability == CapabilityItemHeat.ITEM_HEAT_CAPABILITY;
         }
 
         @Nullable

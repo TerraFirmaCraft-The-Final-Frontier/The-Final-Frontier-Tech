@@ -19,6 +19,7 @@ public class SmelteryRecipe extends IForgeRegistryEntry.Impl<SmelteryRecipe>
     {
         return TechRegistries.SMELTERY.getValuesCollection().stream().filter(x -> x.isValidInput(ingredients)).findFirst().orElse(null);
     }
+
     private IIngredient<ItemStack>[] ingredients;
     private FluidStack outputFluid;
     private float meltTemp;

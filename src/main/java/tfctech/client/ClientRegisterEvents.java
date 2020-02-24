@@ -52,6 +52,7 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
 import static tfctech.TFCTech.MODID;
 
+@SuppressWarnings("unused")
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = MODID)
 public final class ClientRegisterEvents
@@ -130,7 +131,38 @@ public final class ClientRegisterEvents
 
         // Molds
         for (Item item : TechItems.getAllCeramicMoldItems())
-            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString()));
+        {
+            final ModelResourceLocation EMPTY = new ModelResourceLocation(new ResourceLocation(item.getRegistryName().toString() + "_empty"), "inventory");
+            final ModelResourceLocation FILLED = new ModelResourceLocation(new ResourceLocation(item.getRegistryName().toString()), "inventory");
+            ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition()
+            {
+                @Override
+                @Nonnull
+                public ModelResourceLocation getModelLocation(@Nonnull ItemStack stack)
+                {
+                    IFluidHandlerItem cap = stack.getCapability(FLUID_HANDLER_ITEM_CAPABILITY, null);
+                    IFluidHandler moldCap = stack.getCapability(FLUID_HANDLER_CAPABILITY, null);
+                    if (cap instanceof ItemGlassMolder.GlassMolderCapability)
+                    {
+                        FluidStack fluid = ((ItemGlassMolder.GlassMolderCapability) cap).getFluid();
+                        if (fluid != null)
+                        {
+                            return FILLED;
+                        }
+                    }
+                    else if (moldCap instanceof IMoldHandler)
+                    {
+                        Metal metal = ((IMoldHandler) moldCap).getMetal();
+                        if (metal != null)
+                        {
+                            return FILLED;
+                        }
+                    }
+                    return EMPTY;
+                }
+            });
+            ModelBakery.registerItemVariants(item, EMPTY, FILLED);
+        }
 
         // Ignored states
         ModelLoader.setCustomStateMapper(TechBlocks.WIRE_DRAW_BENCH, new IStateMapper()
@@ -168,60 +200,60 @@ public final class ClientRegisterEvents
         for (Item item : TechItems.getAllMetalItems())
         {
             itemColors.registerItemColorHandler(
-                (stack, tintIndex) -> {
-                    if (tintIndex == 1 && stack.getItem() instanceof ItemGear)
-                    {
-                        return (new Color(((ItemGear) stack.getItem()).getSleeveMetal().getColor())).brighter().getRGB();
-                    }
-                    else if (tintIndex == 1 && stack.getItem() instanceof ItemBlowpipe)
-                    {
-                        IFluidHandlerItem cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-                        if (cap instanceof ItemGlassMolder.GlassMolderCapability)
+                    (stack, tintIndex) -> {
+                        if (tintIndex == 1 && stack.getItem() instanceof ItemGear)
                         {
-                            FluidStack fluid = ((ItemGlassMolder.GlassMolderCapability) cap).getFluid();
-                            if (fluid != null)
-                            {
-                                return fluid.getFluid().getColor();
-                            }
+                            return (new Color(((ItemGear) stack.getItem()).getSleeveMetal().getColor())).brighter().getRGB();
                         }
-                        return -1;
-                    }
-                    //noinspection ConstantConditions
-                    return (new Color(((IMetalItem) stack.getItem()).getMetal(stack).getColor())).brighter().getRGB();
-                },
-                item);
+                        else if (tintIndex == 1 && stack.getItem() instanceof ItemBlowpipe)
+                        {
+                            IFluidHandlerItem cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                            if (cap instanceof ItemGlassMolder.GlassMolderCapability)
+                            {
+                                FluidStack fluid = ((ItemGlassMolder.GlassMolderCapability) cap).getFluid();
+                                if (fluid != null)
+                                {
+                                    return fluid.getFluid().getColor();
+                                }
+                            }
+                            return -1;
+                        }
+                        //noinspection ConstantConditions
+                        return (new Color(((IMetalItem) stack.getItem()).getMetal(stack).getColor())).brighter().getRGB();
+                    },
+                    item);
         }
 
         for (Item item : TechItems.getAllCeramicMoldItems())
         {
             itemColors.registerItemColorHandler(
-                (stack, tintIndex) -> {
-                    if (tintIndex == 1)
-                    {
-                        IFluidHandler capFluidHandler = stack.getCapability(FLUID_HANDLER_CAPABILITY, null);
-                        if (capFluidHandler instanceof IMoldHandler)
+                    (stack, tintIndex) -> {
+                        if (tintIndex == 1)
                         {
-                            Metal metal = ((IMoldHandler) capFluidHandler).getMetal();
-                            if (metal != null)
+                            IFluidHandler capFluidHandler = stack.getCapability(FLUID_HANDLER_CAPABILITY, null);
+                            if (capFluidHandler instanceof IMoldHandler)
                             {
-                                return (new Color(metal.getColor())).brighter().getRGB();
+                                Metal metal = ((IMoldHandler) capFluidHandler).getMetal();
+                                if (metal != null)
+                                {
+                                    return (new Color(metal.getColor())).brighter().getRGB();
+                                }
                             }
-                        }
-                        else if (stack.getItem() instanceof ItemGlassMolder)
-                        {
-                            IFluidHandlerItem cap = stack.getCapability(FLUID_HANDLER_ITEM_CAPABILITY, null);
-                            if (cap instanceof ItemGlassMolder.GlassMolderCapability && ((ItemGlassMolder.GlassMolderCapability) cap).getFluid() != null)
+                            else if (stack.getItem() instanceof ItemGlassMolder)
                             {
-                                FluidStack fluidStack = ((ItemGlassMolder.GlassMolderCapability) cap).getFluid();
-                                //noinspection ConstantConditions
-                                return fluidStack.getFluid().getColor();
+                                IFluidHandlerItem cap = stack.getCapability(FLUID_HANDLER_ITEM_CAPABILITY, null);
+                                if (cap instanceof ItemGlassMolder.GlassMolderCapability && ((ItemGlassMolder.GlassMolderCapability) cap).getFluid() != null)
+                                {
+                                    FluidStack fluidStack = ((ItemGlassMolder.GlassMolderCapability) cap).getFluid();
+                                    //noinspection ConstantConditions
+                                    return fluidStack.getFluid().getColor();
+                                }
                             }
+                            return 0xFF000000;
                         }
-                        return 0xFF000000;
-                    }
-                    return -1;
-                },
-                item);
+                        return -1;
+                    },
+                    item);
         }
     }
 }

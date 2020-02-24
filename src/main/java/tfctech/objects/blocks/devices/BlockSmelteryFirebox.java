@@ -69,15 +69,15 @@ public class BlockSmelteryFirebox extends BlockHorizontal implements IBellowsCon
     public IBlockState getStateFromMeta(int meta)
     {
         return this.getDefaultState()
-            .withProperty(FACING, EnumFacing.byHorizontalIndex(meta % 4))
-            .withProperty(LIT, meta / 4 % 2 != 0);
+                .withProperty(FACING, EnumFacing.byHorizontalIndex(meta % 4))
+                .withProperty(LIT, meta / 4 % 2 != 0);
     }
 
     @Override
     public int getMetaFromState(IBlockState state)
     {
         return state.getValue(FACING).getHorizontalIndex()
-            + (state.getValue(LIT) ? 4 : 0);
+                + (state.getValue(LIT) ? 4 : 0);
     }
 
     @Override

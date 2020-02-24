@@ -37,8 +37,8 @@ public class TESRLatexExtractor extends TileEntitySpecialRenderer<TELatexExtract
 
             //noinspection ConstantConditions
             state = state.withProperty(BASE, te.hasBase())
-                .withProperty(POT, te.hasPot())
-                .withProperty(CUT, te.cutState());
+                    .withProperty(POT, te.hasPot())
+                    .withProperty(CUT, te.cutState());
 
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             BlockRendererDispatcher renderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
