@@ -79,6 +79,10 @@ public class UnmoldGlassRecipe extends ShapelessOreRecipe
 
     @Override
     @Nonnull
+    public ItemStack getRecipeOutput() { return ItemStack.EMPTY; }
+
+    @Override
+    @Nonnull
     public ItemStack getCraftingResult(InventoryCrafting inv)
     {
         ItemStack moldStack = null;

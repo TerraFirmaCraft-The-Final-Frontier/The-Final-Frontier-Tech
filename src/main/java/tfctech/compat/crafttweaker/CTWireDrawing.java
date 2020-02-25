@@ -59,9 +59,9 @@ public class CTWireDrawing
         ItemStack item = (ItemStack) output.getInternal();
         List<WireDrawingRecipe> removeList = new ArrayList<>();
         TechRegistries.WIRE_DRAWING.getValuesCollection()
-            .stream()
-            .filter(x -> x.getOutputs().get(0).isItemEqual(item))
-            .forEach(removeList::add);
+                .stream()
+                .filter(x -> x.getOutputs().get(0).isItemEqual(item))
+                .forEach(removeList::add);
         for (WireDrawingRecipe rem : removeList)
         {
             CraftTweakerAPI.apply(new IAction()

@@ -92,7 +92,7 @@ public class BlockFridge extends BlockHorizontal
         {
             Vec3d itemPos = items[i];
             AxisAlignedBB offsetAABB = new AxisAlignedBB(itemPos.x, itemPos.y, itemPos.z, itemPos.x, itemPos.y, itemPos.z).grow(0.1D)
-                .offset(bottomPos).grow(0.002D);
+                    .offset(bottomPos).grow(0.002D);
             if (offsetAABB.calculateIntercept(startPos, endPos) != null)
             {
                 return i;

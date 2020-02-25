@@ -60,6 +60,15 @@ public class ItemBlowpipe extends ItemGlassMolder implements IMetalItem
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
+    @Override
+    @Nonnull
+    public String getItemStackDisplayName(@Nonnull ItemStack stack)
+    {
+        //noinspection ConstantConditions
+        String metalName = (new TextComponentTranslation("tfc.types.metal." + metal.getRegistryName().getPath().toLowerCase())).getFormattedText();
+        return (new TextComponentTranslation("item.tfctech.metalitem.blowpipe.name", metalName)).getFormattedText();
+    }
+
     @Nullable
     @Override
     public Metal getMetal(ItemStack itemStack)
@@ -71,14 +80,5 @@ public class ItemBlowpipe extends ItemGlassMolder implements IMetalItem
     public int getSmeltAmount(ItemStack itemStack)
     {
         return 200;
-    }
-
-    @Override
-    @Nonnull
-    public String getItemStackDisplayName(@Nonnull ItemStack stack)
-    {
-        //noinspection ConstantConditions
-        String metalName = (new TextComponentTranslation("tfc.types.metal." + metal.getRegistryName().getPath().toLowerCase())).getFormattedText();
-        return (new TextComponentTranslation("item.tfctech.metalitem.blowpipe.name", metalName)).getFormattedText();
     }
 }

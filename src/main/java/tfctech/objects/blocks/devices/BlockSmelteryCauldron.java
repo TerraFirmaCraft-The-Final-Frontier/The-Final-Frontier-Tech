@@ -51,7 +51,7 @@ public class BlockSmelteryCauldron extends BlockHorizontal implements IItemSize
     public IBlockState getStateFromMeta(int meta)
     {
         return this.getDefaultState()
-            .withProperty(FACING, EnumFacing.byHorizontalIndex(meta % 4));
+                .withProperty(FACING, EnumFacing.byHorizontalIndex(meta % 4));
     }
 
     @Override

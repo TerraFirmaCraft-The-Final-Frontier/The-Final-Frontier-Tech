@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryModifiable;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.api.recipes.WeldingRecipe;
@@ -33,6 +35,7 @@ import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.objects.inventory.ingredient.IIngredient;
 import net.dries007.tfc.objects.items.metal.ItemMetal;
 import net.dries007.tfc.objects.recipes.ShapelessDamageRecipe;
+import net.dries007.tfc.util.OreDictionaryHelper;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.forge.ForgeRule;
 import tfctech.api.recipes.GlassworkingRecipe;
@@ -49,11 +52,30 @@ import static tfctech.TFCTech.MODID;
 @Mod.EventBusSubscriber(modid = MODID)
 public final class TechRecipes
 {
+
+    @SubscribeEvent
+    public static void onRecipeRegister(RegistryEvent.Register<IRecipe> event)
+    {
+        // Removing glass recipes
+        IForgeRegistryModifiable modRegistry = (IForgeRegistryModifiable) event.getRegistry();
+        modRegistry.remove(new ResourceLocation("minecraft:glass_pane"));
+
+        List<ItemStack> removeList = new ArrayList<>();
+        FurnaceRecipes.instance().getSmeltingList().keySet().forEach(stack -> {
+            ItemStack result = FurnaceRecipes.instance().getSmeltingResult(stack);
+            if (OreDictionaryHelper.doesStackMatchOre(result, "blockGlass"))
+            {
+                removeList.add(result);
+            }
+        });
+        removeList.forEach(stack -> FurnaceRecipes.instance().getSmeltingList().remove(stack));
+    }
+
     @SubscribeEvent
     public static void onRegisterBarrelRecipeEvent(RegistryEvent.Register<BarrelRecipe> event)
     {
         event.getRegistry().registerAll(
-            new BarrelRecipe(IIngredient.of(TechFluids.LATEX.get(), 100), IIngredient.of(new ItemStack(TechItems.VULCANIZING_AGENTS)), null, new ItemStack(TechItems.RUBBER_MIX, 6), 8 * ICalendar.TICKS_IN_HOUR).setRegistryName("rubber_mix")
+                new BarrelRecipe(IIngredient.of(TechFluids.LATEX.get(), 100), IIngredient.of(new ItemStack(TechItems.VULCANIZING_AGENTS)), null, new ItemStack(TechItems.RUBBER_MIX, 6), 8 * ICalendar.TICKS_IN_HOUR).setRegistryName("rubber_mix")
         );
     }
 
@@ -61,14 +83,18 @@ public final class TechRecipes
     public static void onRegisterHeatRecipeEvent(RegistryEvent.Register<HeatRecipe> event)
     {
         event.getRegistry().registerAll(
-            new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.RUBBER_MIX)), new ItemStack(TechItems.RUBBER), 600f, Metal.Tier.TIER_I).setRegistryName("rubber"),
-            new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE)), new ItemStack(TechItems.MOLD_RACKWHEEL_PIECE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_rackwheel"),
-            new HeatRecipeSimple(IIngredient.of("dustWood"), new ItemStack(TechItems.ASH), 850f, Metal.Tier.TIER_I).setRegistryName("ash"),
-            new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.ASH_POT)), new ItemStack(TechItems.POTASH_POT), 500f, Metal.Tier.TIER_I).setRegistryName("potash_pot"),
-            new HeatRecipeSimple(IIngredient.of("rockFlux"), new ItemStack(TechItems.LIME, 2), 600f, Metal.Tier.TIER_I).setRegistryName("lime"),
-            new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_MOLD_PANE)), new ItemStack(TechItems.MOLD_PANE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_pane"),
-            new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_MOLD_BLOCK)), new ItemStack(TechItems.MOLD_BLOCK), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_block")
+                new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.RUBBER_MIX)), new ItemStack(TechItems.RUBBER), 600f, Metal.Tier.TIER_I).setRegistryName("rubber"),
+                new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE)), new ItemStack(TechItems.MOLD_RACKWHEEL_PIECE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_rackwheel"),
+                new HeatRecipeSimple(IIngredient.of("dustWood"), new ItemStack(TechItems.ASH), 850f, Metal.Tier.TIER_I).setRegistryName("ash"),
+                new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.ASH_POT)), new ItemStack(TechItems.POTASH_POT), 500f, Metal.Tier.TIER_I).setRegistryName("potash_pot"),
+                new HeatRecipeSimple(IIngredient.of("rockFlux"), new ItemStack(TechItems.LIME, 2), 600f, Metal.Tier.TIER_I).setRegistryName("lime"),
+                new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_MOLD_PANE)), new ItemStack(TechItems.MOLD_PANE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_pane"),
+                new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_MOLD_BLOCK)), new ItemStack(TechItems.MOLD_BLOCK), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_block")
         );
+
+        // Removing glass recipes
+        IForgeRegistryModifiable modRegistry = (IForgeRegistryModifiable) event.getRegistry();
+        modRegistry.remove(new ResourceLocation(TerraFirmaCraft.MOD_ID, "glass"));
     }
 
     @SubscribeEvent
@@ -140,9 +166,9 @@ public final class TechRecipes
         IForgeRegistry<KnappingRecipe> r = event.getRegistry();
 
         r.registerAll(
-            new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE), "XXXXX", "X XXX", "X  XX", "XX  X", "XXXXX").setRegistryName("clay_rackwheel_piece"),
-            new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_MOLD_PANE), "XXXXX", "X   X", "X   X", "X   X", "XXXXX").setRegistryName("clay_mold_pane"),
-            new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_MOLD_BLOCK), "X   X", "X   X", "X   X", "X   X", "XXXXX").setRegistryName("clay_mold_block")
+                new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE), "XXXXX", "X XXX", "X  XX", "XX  X", "XXXXX").setRegistryName("clay_rackwheel_piece"),
+                new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_MOLD_PANE), "XXXXX", "X   X", "X   X", "X   X", "XXXXX").setRegistryName("clay_mold_pane"),
+                new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_MOLD_BLOCK), "X   X", "X   X", "X   X", "X   X", "XXXXX").setRegistryName("clay_mold_block")
         );
     }
 
@@ -152,8 +178,8 @@ public final class TechRecipes
         IForgeRegistry<GlassworkingRecipe> r = event.getRegistry();
 
         r.registerAll(
-            new GlassworkingRecipe(new ItemStack(Items.GLASS_BOTTLE),
-                " X X ", " X X ", "X   X", "X   X", " XXX ").setRegistryName(MODID, "glass_bottle")
+                new GlassworkingRecipe(new ItemStack(Items.GLASS_BOTTLE),
+                        " X X ", " X X ", "X   X", "X   X", " XXX ").setRegistryName(MODID, "glass_bottle")
         );
     }
 
@@ -162,22 +188,22 @@ public final class TechRecipes
     {
         IForgeRegistry<SmelteryRecipe> r = event.getRegistry();
         r.registerAll(
-            new SmelteryRecipe.Builder()
-                .addInput(IIngredient.of("dustPotash")).addInput(IIngredient.of("sandSilica")).addInput(IIngredient.of("dustLime"))
-                .setOutput(new FluidStack(TechFluids.GLASS.get(), 1000), 800).build()
-                .setRegistryName(new ResourceLocation(MODID, "glass")),
-            new SmelteryRecipe.Builder()
-                .addInput(IIngredient.of("blockGlass"))
-                .setOutput(new FluidStack(TechFluids.GLASS.get(), 1000), 800).build()
-                .setRegistryName(new ResourceLocation(MODID, "glass_block")),
-            new SmelteryRecipe.Builder()
-                .addInput(IIngredient.of("paneGlass"))
-                .setOutput(new FluidStack(TechFluids.GLASS.get(), 375), 800).build()
-                .setRegistryName(new ResourceLocation(MODID, "glass_pane")),
-            new SmelteryRecipe.Builder()
-                .addInput(IIngredient.of(Items.GLASS_BOTTLE))
-                .setOutput(new FluidStack(TechFluids.GLASS.get(), 250), 800).build()
-                .setRegistryName(new ResourceLocation(MODID, "glass_bottle"))
+                new SmelteryRecipe.Builder()
+                        .addInput(IIngredient.of("dustPotash")).addInput(IIngredient.of("sandSilica")).addInput(IIngredient.of("dustLime"))
+                        .setOutput(new FluidStack(TechFluids.GLASS.get(), 1000), 800).build()
+                        .setRegistryName(new ResourceLocation(MODID, "glass")),
+                new SmelteryRecipe.Builder()
+                        .addInput(IIngredient.of("blockGlass"))
+                        .setOutput(new FluidStack(TechFluids.GLASS.get(), 1000), 800).build()
+                        .setRegistryName(new ResourceLocation(MODID, "glass_block")),
+                new SmelteryRecipe.Builder()
+                        .addInput(IIngredient.of("paneGlass"))
+                        .setOutput(new FluidStack(TechFluids.GLASS.get(), 375), 800).build()
+                        .setRegistryName(new ResourceLocation(MODID, "glass_pane")),
+                new SmelteryRecipe.Builder()
+                        .addInput(IIngredient.of(Items.GLASS_BOTTLE))
+                        .setOutput(new FluidStack(TechFluids.GLASS.get(), 250), 800).build()
+                        .setRegistryName(new ResourceLocation(MODID, "glass_bottle"))
         );
     }
 

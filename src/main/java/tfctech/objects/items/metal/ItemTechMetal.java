@@ -13,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-import net.dries007.tfc.api.capability.forge.ForgeableHandler;
+import net.dries007.tfc.api.capability.forge.ForgeableHeatableHandler;
 import net.dries007.tfc.api.capability.metal.IMetalItem;
 import net.dries007.tfc.api.capability.size.Size;
 import net.dries007.tfc.api.capability.size.Weight;
@@ -103,7 +103,7 @@ public class ItemTechMetal extends ItemTFC implements IMetalItem
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt)
     {
-        return new ForgeableHandler(nbt, metal.getSpecificHeat(), metal.getMeltTemp());
+        return new ForgeableHeatableHandler(nbt, metal.getSpecificHeat(), metal.getMeltTemp());
     }
 
     @Nonnull
@@ -123,7 +123,7 @@ public class ItemTechMetal extends ItemTFC implements IMetalItem
     {
         BOWL_MOUNT(100),
         DRAW_PLATE(100),
-        GROOVE(50, ItemGroove::new),
+        GROOVE(50, false, ItemGroove::new),
         INDUCTOR(200),
         TONGS(200),
         STRIP(50),
@@ -132,10 +132,10 @@ public class ItemTechMetal extends ItemTFC implements IMetalItem
         BOLT(25),
         SCREW(25),
         SLEEVE(100),
-        RACKWHEEL_PIECE(100),
+        RACKWHEEL_PIECE(100, true),
         RACKWHEEL(400),
-        GEAR(400, ItemGear::new),
-        WIRE(50, ItemWire::new);
+        GEAR(400, false, ItemGear::new),
+        WIRE(50, false, ItemWire::new);
 
         public static Item create(Metal metal, ItemType type)
         {
@@ -143,22 +143,34 @@ public class ItemTechMetal extends ItemTFC implements IMetalItem
         }
 
         private final int smeltAmount;
+        private final boolean hasMold;
         private final BiFunction<Metal, ItemType, Item> supplier;
 
         ItemType(int smeltAmount)
         {
-            this(smeltAmount, ItemTechMetal::new);
+            this(smeltAmount, false);
         }
 
-        ItemType(int smeltAmount, @Nonnull BiFunction<Metal, ItemType, Item> supplier)
+        ItemType(int smeltAmount, boolean hasMold)
+        {
+            this(smeltAmount, hasMold, ItemTechMetal::new);
+        }
+
+        ItemType(int smeltAmount, boolean hasMold, @Nonnull BiFunction<Metal, ItemType, Item> supplier)
         {
             this.smeltAmount = smeltAmount;
+            this.hasMold = hasMold;
             this.supplier = supplier;
         }
 
         public int getSmeltAmount()
         {
             return smeltAmount;
+        }
+
+        public boolean hasMold()
+        {
+            return hasMold;
         }
     }
 }

@@ -90,7 +90,7 @@ public class UnmoldRecipe extends ShapelessOreRecipe
 
     @Override
     @Nonnull
-    public ItemStack getRecipeOutput() { return new ItemStack(ItemTechMetal.get(Metal.WROUGHT_IRON, type)); } //Used only for showing in JEI
+    public ItemStack getRecipeOutput() { return ItemStack.EMPTY; }
 
     @Override
     @Nonnull
@@ -201,6 +201,7 @@ public class UnmoldRecipe extends ShapelessOreRecipe
         Metal m = moldHandler.getMetal();
         if (m != null)
         {
+            //noinspection ConstantConditions
             ItemStack output = new ItemStack(ItemTechMetal.get(m, type));
             IItemHeat heat = output.getCapability(ITEM_HEAT_CAPABILITY, null);
             if (heat != null)

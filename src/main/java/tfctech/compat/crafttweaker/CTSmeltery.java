@@ -37,8 +37,8 @@ public class CTSmeltery
         if (output == null) throw new IllegalArgumentException("Output not allowed to be empty");
         FluidStack fluid = (FluidStack) output.getInternal();
         List<SmelteryRecipe> removeList = TechRegistries.SMELTERY.getValuesCollection()
-            .stream().filter(x -> x.getOutput().isFluidEqual(fluid))
-            .collect(Collectors.toList());
+                .stream().filter(x -> x.getOutput().isFluidEqual(fluid))
+                .collect(Collectors.toList());
         for (SmelteryRecipe rem : removeList)
         {
             CraftTweakerAPI.apply(new IAction()

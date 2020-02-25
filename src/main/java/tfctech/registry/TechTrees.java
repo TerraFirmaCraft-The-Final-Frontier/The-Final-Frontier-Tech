@@ -23,8 +23,8 @@ public final class TechTrees
     public static void onPreRegisterTrees(TFCRegistryEvent.RegisterPreBlock<Tree> event)
     {
         event.getRegistry().registerAll(
-            new Tree.Builder(new ResourceLocation(TerraFirmaCraft.MOD_ID, "hevea"), 140f, 350f, 7f, 27f, GEN_TALL)
-                .setDensity(0.1f, 0.6f).setRadius(2).setGrowthTime(10).setBurnInfo(762f, 2000).build()
+                new Tree.Builder(new ResourceLocation(TerraFirmaCraft.MOD_ID, "hevea"), 140f, 350f, 7f, 27f, GEN_TALL)
+                        .setDensity(0.1f, 0.6f).setRadius(2).setGrowthTime(10).setBurnInfo(762f, 2000).build()
         );
     }
 }
