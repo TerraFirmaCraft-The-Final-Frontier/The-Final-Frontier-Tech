@@ -117,7 +117,7 @@ public class UnmoldGlassRecipe extends ShapelessOreRecipe
                 ItemGlassMolder.GlassMolderCapability cap = (ItemGlassMolder.GlassMolderCapability) moldCap;
                 if (cap.isSolidified())
                 {
-                    return getRecipeOutput();
+                    return this.output.copy();
                 }
             }
         }

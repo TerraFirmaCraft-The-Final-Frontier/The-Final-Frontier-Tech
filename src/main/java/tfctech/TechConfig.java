@@ -14,9 +14,13 @@ import static tfctech.TFCTech.MODID;
 @Mod.EventBusSubscriber(modid = MODID)
 public final class TechConfig
 {
-    @Config.Comment("General configuration")
+    @Config.Comment("Devices configuration")
     @Config.LangKey("config." + MODID + ".devices")
     public static Devices DEVICES = new Devices();
+
+    @Config.Comment("Tweaks")
+    @Config.LangKey("config." + MODID + ".tweaks")
+    public static Tweaks TWEAKS = new Tweaks();
 
     @SubscribeEvent
     public static void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event)
@@ -25,6 +29,13 @@ public final class TechConfig
         {
             ConfigManager.sync(MODID, Config.Type.INSTANCE);
         }
+    }
+
+    public static class Tweaks
+    {
+        @Config.Comment({"Should TFCTech remove TFC and vanilla glass recipes?"})
+        @Config.LangKey("config." + MODID + ".tweaks.removeGlassRecipes")
+        public boolean removeGlassRecipes = true;
     }
 
     public static class Devices

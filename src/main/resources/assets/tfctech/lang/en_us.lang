@@ -103,6 +103,13 @@ config.tfctech.tooltip=Settings for TFCTech
 config.tfctech.devices=Devices Configuration
 config.tfctech.devices.tooltip=General device configuration.
 
+config.tfctech.tweaks=Tweaks
+config.tfctech.tweaks.tooltip=General tweaks to other mods/vanilla
+
+### Tweaks
+config.tfctech.tweaks.removeGlassRecipes=Remove Glass Recipes
+config.tfctech.tweaks.removeGlassRecipes.tooltip=Should TFCTech remove TFC and vanilla glass recipes?
+
 ### Compatibility
 config.tfctech.devices.acceptIc2EU=Accept IC2 EU
 config.tfctech.devices.acceptIc2EU.tooltip=Should TFCTech machines accepts IC2 EU?

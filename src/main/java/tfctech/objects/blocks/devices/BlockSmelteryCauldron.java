@@ -7,6 +7,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -37,12 +38,15 @@ import tfctech.objects.tileentities.TESmelteryCauldron;
 @ParametersAreNonnullByDefault
 public class BlockSmelteryCauldron extends BlockHorizontal implements IItemSize
 {
+    public static final PropertyBool LIT = PropertyBool.create("lit");
+
     public BlockSmelteryCauldron()
     {
         super(Material.IRON);
         setHardness(3.0F);
         setSoundType(SoundType.STONE);
         setHarvestLevel("pickaxe", 0);
+        setDefaultState(getBlockState().getBaseState().withProperty(LIT, false).withProperty(FACING, EnumFacing.NORTH));
     }
 
     @Override
@@ -51,13 +55,15 @@ public class BlockSmelteryCauldron extends BlockHorizontal implements IItemSize
     public IBlockState getStateFromMeta(int meta)
     {
         return this.getDefaultState()
-                .withProperty(FACING, EnumFacing.byHorizontalIndex(meta % 4));
+                .withProperty(FACING, EnumFacing.byHorizontalIndex(meta % 4))
+                .withProperty(LIT, meta / 4 % 2 != 0);
     }
 
     @Override
     public int getMetaFromState(IBlockState state)
     {
-        return state.getValue(FACING).getHorizontalIndex();
+        return state.getValue(FACING).getHorizontalIndex()
+                + (state.getValue(LIT) ? 4 : 0);
     }
 
     @Override
@@ -147,7 +153,7 @@ public class BlockSmelteryCauldron extends BlockHorizontal implements IItemSize
     @Override
     protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, FACING);
+        return new BlockStateContainer(this, LIT, FACING);
     }
 
     @Override

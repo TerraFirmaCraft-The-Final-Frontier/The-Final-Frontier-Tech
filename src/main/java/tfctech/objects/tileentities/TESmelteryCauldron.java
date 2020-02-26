@@ -26,6 +26,8 @@ import net.dries007.tfc.objects.te.TEInventory;
 import net.dries007.tfc.util.Helpers;
 import tfctech.api.recipes.SmelteryRecipe;
 
+import static tfctech.objects.blocks.devices.BlockSmelteryCauldron.LIT;
+
 @SuppressWarnings("WeakerAccess")
 @ParametersAreNonnullByDefault
 public class TESmelteryCauldron extends TEInventory implements ITickable, IFluidHandlerSidedCallback, IFluidTankCallback, ITileFields
@@ -59,6 +61,15 @@ public class TESmelteryCauldron extends TEInventory implements ITickable, IFluid
                 {
                     temp = 0;
                 }
+                IBlockState state = world.getBlockState(pos);
+                if (temp > 0 && !state.getValue(LIT))
+                {
+                    world.setBlockState(pos, state.withProperty(LIT, true));
+                }
+                else if (temp <= 0 && state.getValue(LIT))
+                {
+                    world.setBlockState(pos, state.withProperty(LIT, false));
+                }
                 List<ItemStack> input = new ArrayList<>();
                 for (int i = 0; i < 8; i++)
                 {
@@ -68,14 +79,15 @@ public class TESmelteryCauldron extends TEInventory implements ITickable, IFluid
                 SmelteryRecipe recipe = SmelteryRecipe.get(input.toArray(new ItemStack[0]));
                 if (recipe != null)
                 {
-                    if (recipe.getMeltTemp() <= temp)
+                    FluidStack output = recipe.getOutput();
+                    if (recipe.getMeltTemp() <= temp && tank.fill(output, false) >= output.amount)
                     {
                         recipe.consumeInputs(input);
                         for (int i = 0; i < 8; i++)
                         {
                             inventory.setStackInSlot(i, input.get(i));
                         }
-                        tank.fillInternal(recipe.getOutput(), true);
+                        tank.fillInternal(output, true);
                         temp -= ConfigTFC.GENERAL.temperatureModifierHeating * 150;
                         if (firebox != null)
                         {

@@ -22,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import mcp.MethodsReturnNonnullByDefault;
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
 import net.dries007.tfc.api.capability.heat.Heat;
 import net.dries007.tfc.api.capability.heat.ItemHeatHandler;
@@ -129,14 +130,14 @@ public class ItemGlassMolder extends ItemMiscTech
             FluidStack fluid = tank.drain(capacity, false);
             if (fluid != null)
             {
-                String fluidDesc = TextFormatting.DARK_GREEN + fluid.getLocalizedName();
+                String fluidDesc = TextFormatting.DARK_GREEN + fluid.getLocalizedName() + TextFormatting.WHITE;
                 if (isSolidified())
                 {
-                    fluidDesc += I18n.format("tfc.tooltip.solid");
+                    fluidDesc += I18n.format(TerraFirmaCraft.MOD_ID + ".tooltip.solid");
                 }
                 else if (canWork())
                 {
-                    fluidDesc += I18n.format("tfc.tooltip.liquid");
+                    fluidDesc += I18n.format(TerraFirmaCraft.MOD_ID + ".tooltip.liquid");
                 }
                 tooltip.add(fluidDesc);
             }

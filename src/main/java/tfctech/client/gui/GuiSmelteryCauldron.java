@@ -2,10 +2,14 @@ package tfctech.client.gui;
 
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 
+import net.dries007.tfc.TerraFirmaCraft;
+import net.dries007.tfc.api.capability.heat.Heat;
 import net.dries007.tfc.client.gui.GuiContainerTE;
 import tfctech.client.TechGuiHandler;
 import tfctech.objects.tileentities.TESmelteryCauldron;
@@ -53,6 +57,17 @@ public class GuiSmelteryCauldron extends GuiContainerTE<TESmelteryCauldron>
         List<String> tooltip = TechGuiHandler.Drawing.getFluidTooltip(tile.getFluid(), relX, relY, 141, 16);
         if (tooltip != null)
         {
+            String formatted = Heat.getTooltip(tile.getTemp());
+            formatted += TextFormatting.WHITE;
+            if (tile.isSolidified())
+            {
+                formatted += I18n.format(TerraFirmaCraft.MOD_ID + ".tooltip.solid");
+            }
+            else
+            {
+                formatted += I18n.format(TerraFirmaCraft.MOD_ID + ".tooltip.liquid");
+            }
+            tooltip.add(formatted);
             this.drawHoveringText(tooltip, mouseX, mouseY, fontRenderer);
         }
     }
