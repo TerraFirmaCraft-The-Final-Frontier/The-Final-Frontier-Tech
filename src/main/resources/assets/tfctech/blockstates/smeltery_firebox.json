@@ -7,7 +7,7 @@
 		"side2": "tfctech:blocks/devices/smeltery_firebox/side2",
 		"bottom": "tfctech:blocks/devices/smeltery_firebox/bottom",
 		"chute": "tfctech:blocks/devices/smeltery_firebox/chute",
-		"bricks": "tfctech:blocks/devices/smeltery_firebox/gate_bricks",
+		"gate_bricks": "tfctech:blocks/devices/smeltery_firebox/gate_bricks",
 		"side1": "tfctech:blocks/devices/smeltery_firebox/side1",
 		"particle": "tfctech:blocks/devices/smeltery_firebox/top"
     },
@@ -17,7 +17,7 @@
     "lit": {
       "true": {
         "textures": {
-          "gate_bricks": "tfctech:blocks/devices/smeltery_firebox/gate_bricks"
+          "gate_bricks": "tfctech:blocks/devices/smeltery_firebox/gate_bricks_lit"
         }
       },
       "false": {
