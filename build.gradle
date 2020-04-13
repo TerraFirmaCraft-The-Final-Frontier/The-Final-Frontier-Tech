@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 if (System.getenv('VERSION') != null) {
     version = System.getenv('VERSION')
 } else {
-    version = "MC1.12.2-1.2.6"
+    version = "1.2.9"
 }
 group = "tfctech"
 archivesBaseName = "TFCTech-Unofficial"

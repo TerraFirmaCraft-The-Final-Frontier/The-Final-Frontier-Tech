@@ -95,6 +95,11 @@ tooltip.tfctech.smeltery.invalid=Smeltery structure not formed
 ## Status
 tooltip.tfctech.wiredraw.low_tier=Drawing Plate is too low tier!
 
+## GUIs
+tooltip.tfctech.gui.energy_format=%s RF/%s RF
+tooltip.tfctech.gui.electric_forge.temperature_format=%s ºC
+
+
 #Config
 config.tfctech=TFCTech
 config.tfctech.tooltip=Settings for TFCTech

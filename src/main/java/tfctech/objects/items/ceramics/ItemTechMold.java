@@ -18,7 +18,7 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.FluidTankPropertiesWrapper;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -139,8 +139,8 @@ public class ItemTechMold extends ItemPottery
             if (resource != null)
             {
                 Metal metal = FluidsTFC.getMetalFromFluid(resource.getFluid());
-                //noinspection ConstantConditions,deprecation
-                if (metal != null && ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(true))
+                //noinspection ConstantConditions
+                if (metal != null && ObfuscationReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(true))
                 {
                     int fillAmount = tank.fill(resource, doFill);
                     if (fillAmount == tank.getFluidAmount())

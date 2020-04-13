@@ -3,6 +3,7 @@ package tfctech.client.gui;
 import java.io.IOException;
 
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
@@ -40,7 +41,7 @@ public class GuiElectricForge extends GuiContainerTE<TEElectricForge>
         if (mouseX >= guiLeft + 153 && mouseX <= guiLeft + 153 + 18 && mouseY >= guiTop + 6 && mouseY <= guiTop + 6 + 59)
         {
             int energy = tile.getField(1);
-            drawHoveringText(String.format("%s RF/%s RF", energy, tile.getEnergyCapacity()), mouseX, mouseY);
+            drawHoveringText(I18n.format("tooltip.tfctech.gui.energy_format", energy, tile.getEnergyCapacity()), mouseX, mouseY);
         }
         super.renderHoveredToolTip(mouseX, mouseY);
     }
@@ -70,13 +71,13 @@ public class GuiElectricForge extends GuiContainerTE<TEElectricForge>
         drawTexturedModalRect(guiLeft + 8, guiTop + 66 - temperaturePixels, 36, 54, 15, 5);
 
         // Draw the energy bar
-        int energyPixels = 59 * tile.getField(1) / tile.getEnergyCapacity();
-        int emptyPixels = 59 - energyPixels;
+        int energyPixels = 60 * tile.getField(1) / tile.getEnergyCapacity();
+        int emptyPixels = 60 - energyPixels;
         drawTexturedModalRect(guiLeft + 153, guiTop + 6, 0, 0, 18, emptyPixels);
         drawTexturedModalRect(guiLeft + 153, guiTop + 6 + emptyPixels, 18, emptyPixels, 18, energyPixels);
 
         //Draw the temperature value (for higher than brilliant white)
-        String temp = String.format("%s C", targetTemperature);
+        String temp = I18n.format("tooltip.tfctech.gui.electric_forge.temperature_format", targetTemperature);
         int x = guiLeft + 41 - fontRenderer.getStringWidth(temp) / 2;
         int y = guiTop + 15;
         fontRenderer.drawString(temp, x, y, 0x000000);

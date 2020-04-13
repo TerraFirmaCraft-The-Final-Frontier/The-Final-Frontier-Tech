@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
@@ -109,8 +109,7 @@ public class TechJEIPlugin implements IModPlugin
         List<CastingRecipeWrapper> castingList = new ArrayList<>();
         TFCRegistries.METALS.getValuesCollection()
                 .forEach(metal -> {
-                    //noinspection deprecation
-                    if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(true))
+                    if (ObfuscationReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(true))
                     {
                         for (ItemTechMetal.ItemType type : ItemTechMetal.ItemType.values())
                         {

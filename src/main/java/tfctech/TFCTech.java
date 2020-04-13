@@ -13,7 +13,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import tfctech.client.TechGuiHandler;
 import tfctech.network.PacketLatexUpdate;
 import tfctech.network.PacketTileEntityUpdate;
-import tfctech.objects.items.TechItems;
 import tfctech.registry.TechFoodTraits;
 
 @SuppressWarnings("WeakerAccess")
@@ -23,7 +22,7 @@ public class TFCTech
     public static final String MODID = "tfctech";
     public static final String NAME = "TFCTech Unofficial";
     public static final String VERSION = "@VERSION@";
-    public static final String DEPENDENCIES = "required-after:tfc@[0.29.4,);after:ic2;after:gregtech";
+    public static final String DEPENDENCIES = "required-after:tfc@[1.0.0,);after:ic2;after:gregtech";
 
     @Mod.Instance
     private static TFCTech instance = null;
@@ -54,7 +53,6 @@ public class TFCTech
         FMLInterModComms.sendMessage("waila", "register", "tfctech.compat.waila.WailaPlugin.callbackRegister");
         FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "tfctech.compat.waila.TOPPlugin");
         TechFoodTraits.init();
-        TechItems.init();
     }
 
     @EventHandler

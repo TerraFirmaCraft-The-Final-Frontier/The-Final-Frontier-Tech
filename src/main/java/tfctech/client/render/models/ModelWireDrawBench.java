@@ -290,7 +290,7 @@ public class ModelWireDrawBench extends ModelBase
             float r = ((wireColor >> 16) & 0xFF) / 255F;
             float g = ((wireColor >> 8) & 0xFF) / 255F;
             float b = (wireColor & 0xFF) / 255F;
-            float a = ((wireColor >> 24) & 0xFF) / 255F;
+            float a = 0xFF; // ignore alpha, make it always 100%
 
             GlStateManager.color(r, g, b, a);
             this.wire.render(f5);

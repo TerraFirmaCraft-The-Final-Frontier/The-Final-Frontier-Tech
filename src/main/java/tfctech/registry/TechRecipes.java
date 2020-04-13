@@ -15,8 +15,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryModifiable;
@@ -118,8 +118,7 @@ public final class TechRecipes
 
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
-            //noinspection deprecation
-            if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
+            if (ObfuscationReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
                 continue;
             IIngredient<ItemStack> ingredient;
             //Register all wires
@@ -175,7 +174,7 @@ public final class TechRecipes
         r.registerAll(
                 new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE), "XXXXX", "X XXX", "X  XX", "XX  X", "XXXXX").setRegistryName("clay_rackwheel_piece"),
                 new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_MOLD_PANE), "XXXXX", "X   X", "X   X", "X   X", "XXXXX").setRegistryName("clay_mold_pane"),
-                new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_MOLD_BLOCK), "X   X", "X   X", "X   X", "X   X", "XXXXX").setRegistryName("clay_mold_block")
+                new KnappingRecipeSimple(KnappingType.CLAY, true, new ItemStack(TechItems.UNFIRED_MOLD_BLOCK), "X   X", "X   X", "X   X", "X   X", " XXX ").setRegistryName("clay_mold_block")
         );
     }
 
@@ -221,8 +220,7 @@ public final class TechRecipes
         //Register all wires
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
-            //noinspection deprecation
-            if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
+            if (ObfuscationReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
                 continue;
             for (int i = 4; i > 0; i--)
             {
@@ -249,8 +247,7 @@ public final class TechRecipes
         // Tier V-VI = Steel sleeve
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
-            //noinspection deprecation
-            if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
+            if (ObfuscationReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
                 continue;
             IIngredient<ItemStack> ingredient1 = IIngredient.of(new ItemStack(ItemTechMetal.get(metal, ItemTechMetal.ItemType.RACKWHEEL)));
             IIngredient<ItemStack> ingredient2;
@@ -295,8 +292,7 @@ public final class TechRecipes
         ResourceLocation groupScrew = new ResourceLocation(MODID, "screw");
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
-            //noinspection deprecation
-            if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
+            if (ObfuscationReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
                 continue;
 
             /*

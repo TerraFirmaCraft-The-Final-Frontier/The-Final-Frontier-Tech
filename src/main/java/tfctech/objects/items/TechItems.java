@@ -12,9 +12,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -197,8 +197,7 @@ public final class TechItems
 
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
-            //noinspection deprecation
-            if (ReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
+            if (ObfuscationReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
                 continue;
             //noinspection ConstantConditions
             metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_strip", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.STRIP), CT_METAL));
@@ -245,12 +244,14 @@ public final class TechItems
                 OreDictionary.registerOre(((ItemMiscTech) item).getOreDictionary(), item);
             }
         }
+        // This is probably safe since block registers first than items across all mods
+        registerTFCOreDict();
     }
 
     /**
-     * Add missing ore dictionary to TFC
+     * Register new ore dictionaries to TFC
      */
-    public static void init()
+    private static void registerTFCOreDict()
     {
         BlocksTFC.getAllBlockRockVariants().forEach(x -> {
             if (x.getType() == Rock.Type.SAND && isSilica(x))

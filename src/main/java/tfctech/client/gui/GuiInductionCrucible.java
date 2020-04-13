@@ -1,5 +1,6 @@
 package tfctech.client.gui;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 
@@ -21,7 +22,7 @@ public class GuiInductionCrucible extends GuiCrucible
         if (mouseX >= guiLeft + 8 && mouseX <= guiLeft + 8 + 16 && mouseY >= guiTop + 79 && mouseY <= guiTop + 79 + 57)
         {
             int energy = tile.getField(1);
-            drawHoveringText(String.format("%s RF/%s RF", energy, ((TEInductionCrucible) tile).getEnergyCapacity()), mouseX, mouseY);
+            drawHoveringText(I18n.format("tooltip.tfctech.gui.energy_format", energy, ((TEInductionCrucible) tile).getEnergyCapacity()), mouseX, mouseY);
         }
         super.renderHoveredToolTip(mouseX, mouseY);
     }
@@ -33,8 +34,8 @@ public class GuiInductionCrucible extends GuiCrucible
 
         // Draw the energy bar
         mc.getTextureManager().bindTexture(TechGuiHandler.GUI_ELEMENTS);
-        int energyPixels = 59 * tile.getField(1) / ((TEInductionCrucible) tile).getEnergyCapacity();
-        int emptyPixels = 59 - energyPixels;
+        int energyPixels = 60 * tile.getField(1) / ((TEInductionCrucible) tile).getEnergyCapacity();
+        int emptyPixels = 60 - energyPixels;
         drawTexturedModalRect(guiLeft + 7, guiTop + 78, 0, 0, 18, emptyPixels);
         drawTexturedModalRect(guiLeft + 7, guiTop + 78 + emptyPixels, 18, emptyPixels, 18, energyPixels);
     }
