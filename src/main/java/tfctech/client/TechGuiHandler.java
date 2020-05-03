@@ -113,7 +113,7 @@ public class TechGuiHandler implements IGuiHandler
         SMELTERY_FIREBOX,
         GLASSWORKING;
 
-        private static Type[] values = values();
+        private static final Type[] values = values();
 
         @Nonnull
         public static Type valueOf(int id)

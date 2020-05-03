@@ -51,9 +51,9 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     public static final int SLOT_INPUT_MAX = 8;
     public static final int SLOT_EXTRA_MIN = 9;
     public static final int SLOT_EXTRA_MAX = 11;
-    private HeatRecipe[] cachedRecipes = new HeatRecipe[9];
+    private final HeatRecipe[] cachedRecipes = new HeatRecipe[9];
+    private final MachineEnergyContainer energyContainer;
     private float targetTemperature = 0.0F;
-    private MachineEnergyContainer energyContainer;
     private int litTime = 0;
     private boolean soundPlay = false;
 

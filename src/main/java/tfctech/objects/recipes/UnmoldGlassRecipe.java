@@ -35,7 +35,7 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 public class UnmoldGlassRecipe extends ShapelessOreRecipe
 {
     /* This is return chance, not break chance */
-    private float chance;
+    private final float chance;
 
     public UnmoldGlassRecipe(ResourceLocation group, NonNullList<Ingredient> input, @Nonnull ItemStack result, float chance)
     {

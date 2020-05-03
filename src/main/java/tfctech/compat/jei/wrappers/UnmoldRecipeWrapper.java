@@ -16,8 +16,8 @@ import tfctech.objects.items.metal.ItemTechMetal;
 
 public class UnmoldRecipeWrapper implements IRecipeWrapper
 {
-    private ItemStack mold;
-    private ItemStack output;
+    private final ItemStack mold;
+    private final ItemStack output;
 
     public UnmoldRecipeWrapper(Metal metal, ItemTechMetal.ItemType type)
     {

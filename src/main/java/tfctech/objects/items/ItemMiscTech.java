@@ -9,7 +9,7 @@ import net.dries007.tfc.objects.items.ItemMisc;
 @SuppressWarnings("WeakerAccess")
 public class ItemMiscTech extends ItemMisc
 {
-    private String oreDictionary;
+    private final String oreDictionary;
 
     public ItemMiscTech(Size size, Weight weight, String oreDictionary)
     {

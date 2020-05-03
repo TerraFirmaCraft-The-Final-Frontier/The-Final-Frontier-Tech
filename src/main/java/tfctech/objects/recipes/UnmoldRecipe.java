@@ -38,9 +38,9 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 @SuppressWarnings("WeakerAccess")
 public class UnmoldRecipe extends ShapelessOreRecipe
 {
-    private ItemTechMetal.ItemType type;
+    private final ItemTechMetal.ItemType type;
     /* This is return chance, not break chance */
-    private float chance;
+    private final float chance;
 
     public UnmoldRecipe(ResourceLocation group, NonNullList<Ingredient> input, @Nonnull ItemTechMetal.ItemType type, float chance)
     {

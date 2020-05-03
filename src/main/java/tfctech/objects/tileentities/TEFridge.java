@@ -50,14 +50,11 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
 {
     private static final float MAX_DEGREE = 90F;
     private static final float DOOR_SPEED = 6F;
-
+    private final MachineEnergyContainer energyContainer;
     private float open = 0.0F;
     private float lastOpen = 0.0F;
     private int openingState = 0;
-
     private float efficiency = 0.0F;
-    private MachineEnergyContainer energyContainer;
-
     private int applyTrait = 0;
 
     private boolean addedToIc2Network = false;

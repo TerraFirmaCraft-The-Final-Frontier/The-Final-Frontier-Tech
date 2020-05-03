@@ -37,8 +37,8 @@ public class CTSmeltery
         if (output == null) throw new IllegalArgumentException("Output not allowed to be empty");
         FluidStack fluid = (FluidStack) output.getInternal();
         List<SmelteryRecipe> removeList = TechRegistries.SMELTERY.getValuesCollection()
-                .stream().filter(x -> x.getOutput().isFluidEqual(fluid))
-                .collect(Collectors.toList());
+            .stream().filter(x -> x.getOutput().isFluidEqual(fluid))
+            .collect(Collectors.toList());
         for (SmelteryRecipe rem : removeList)
         {
             CraftTweakerAPI.apply(new IAction()
@@ -46,7 +46,7 @@ public class CTSmeltery
                 @Override
                 public void apply()
                 {
-                    IForgeRegistryModifiable modRegistry = (IForgeRegistryModifiable) TechRegistries.SMELTERY;
+                    IForgeRegistryModifiable<SmelteryRecipe> modRegistry = (IForgeRegistryModifiable<SmelteryRecipe>) TechRegistries.SMELTERY;
                     modRegistry.remove(rem.getRegistryName());
                 }
 
@@ -71,7 +71,7 @@ public class CTSmeltery
                 @Override
                 public void apply()
                 {
-                    IForgeRegistryModifiable modRegistry = (IForgeRegistryModifiable) TechRegistries.SMELTERY;
+                    IForgeRegistryModifiable<SmelteryRecipe> modRegistry = (IForgeRegistryModifiable<SmelteryRecipe>) TechRegistries.SMELTERY;
                     modRegistry.remove(recipe.getRegistryName());
                 }
 
@@ -102,6 +102,7 @@ public class CTSmeltery
         {
             if (input == null)
                 throw new IllegalArgumentException("Input must be non-null");
+            //noinspection rawtypes
             IIngredient ingredient = CTHelper.getInternalIngredient(input);
             //noinspection unchecked
             this.internal.addInput(ingredient);

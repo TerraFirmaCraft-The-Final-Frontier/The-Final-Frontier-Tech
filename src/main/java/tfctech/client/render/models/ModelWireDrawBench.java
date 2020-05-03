@@ -18,36 +18,36 @@ import net.dries007.tfc.api.types.Metal;
 public class ModelWireDrawBench extends ModelBase
 {
     private static final float P = 0.0625F;
-    private static ModelRenderer[] DRAW_PLATES = new ModelRenderer[3];
+    private static final ModelRenderer[] DRAW_PLATES = new ModelRenderer[3];
 
-    private ModelRenderer Leg1;
-    private ModelRenderer Leg2;
-    private ModelRenderer Tabletop;
-    private ModelRenderer Support1;
-    private ModelRenderer Support2;
-    private ModelRenderer Stop1;
-    private ModelRenderer Stop2;
+    private final ModelRenderer Leg1;
+    private final ModelRenderer Leg2;
+    private final ModelRenderer Tabletop;
+    private final ModelRenderer Support1;
+    private final ModelRenderer Support2;
+    private final ModelRenderer Stop1;
+    private final ModelRenderer Stop2;
 
-    private ModelRenderer Barrel;
-    private ModelRenderer Shaft;
-    private ModelRenderer Holder;
-    private ModelRenderer Handle1;
-    private ModelRenderer Handle2;
+    private final ModelRenderer Barrel;
+    private final ModelRenderer Shaft;
+    private final ModelRenderer Holder;
+    private final ModelRenderer Handle1;
+    private final ModelRenderer Handle2;
 
-    private ModelRenderer Belt;
-    private ModelRenderer Belt0;
-    private ModelRenderer Belt1;
-    private ModelRenderer Belt2;
-    private ModelRenderer Belt3;
-    private ModelRenderer Ring1;
-    private ModelRenderer Ring2;
-    private ModelRenderer Ring3;
-    private ModelRenderer Ring4;
-    private ModelRenderer Tongs1;
-    private ModelRenderer Tongs2;
-    private ModelRenderer Tongs3;
+    private final ModelRenderer Belt;
+    private final ModelRenderer Belt0;
+    private final ModelRenderer Belt1;
+    private final ModelRenderer Belt2;
+    private final ModelRenderer Belt3;
+    private final ModelRenderer Ring1;
+    private final ModelRenderer Ring2;
+    private final ModelRenderer Ring3;
+    private final ModelRenderer Ring4;
+    private final ModelRenderer Tongs1;
+    private final ModelRenderer Tongs2;
+    private final ModelRenderer Tongs3;
 
-    private ModelRenderer wire;
+    private final ModelRenderer wire;
 
     private float progress;
 
@@ -176,8 +176,9 @@ public class ModelWireDrawBench extends ModelBase
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
+    public void render(@Nullable Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
+        //noinspection ConstantConditions
         super.render(entity, f, f1, f2, f3, f4, f5);
 
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);

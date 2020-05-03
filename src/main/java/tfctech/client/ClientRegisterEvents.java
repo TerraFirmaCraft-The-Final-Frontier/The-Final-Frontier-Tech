@@ -200,60 +200,60 @@ public final class ClientRegisterEvents
         for (Item item : TechItems.getAllMetalItems())
         {
             itemColors.registerItemColorHandler(
-                    (stack, tintIndex) -> {
-                        if (tintIndex == 1 && stack.getItem() instanceof ItemGear)
+                (stack, tintIndex) -> {
+                    if (tintIndex == 1 && stack.getItem() instanceof ItemGear)
+                    {
+                        return (new Color(((ItemGear) stack.getItem()).getSleeveMetal().getColor())).brighter().getRGB();
+                    }
+                    else if (tintIndex == 1 && stack.getItem() instanceof ItemBlowpipe)
+                    {
+                        IFluidHandlerItem cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                        if (cap instanceof ItemGlassMolder.GlassMolderCapability)
                         {
-                            return (new Color(((ItemGear) stack.getItem()).getSleeveMetal().getColor())).brighter().getRGB();
-                        }
-                        else if (tintIndex == 1 && stack.getItem() instanceof ItemBlowpipe)
-                        {
-                            IFluidHandlerItem cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-                            if (cap instanceof ItemGlassMolder.GlassMolderCapability)
+                            FluidStack fluid = ((ItemGlassMolder.GlassMolderCapability) cap).getFluid();
+                            if (fluid != null)
                             {
-                                FluidStack fluid = ((ItemGlassMolder.GlassMolderCapability) cap).getFluid();
-                                if (fluid != null)
-                                {
-                                    return fluid.getFluid().getColor();
-                                }
+                                return fluid.getFluid().getColor();
                             }
-                            return -1;
                         }
-                        //noinspection ConstantConditions
-                        return (new Color(((IMetalItem) stack.getItem()).getMetal(stack).getColor())).brighter().getRGB();
-                    },
-                    item);
+                        return -1;
+                    }
+                    //noinspection ConstantConditions
+                    return (new Color(((IMetalItem) stack.getItem()).getMetal(stack).getColor())).brighter().getRGB();
+                },
+                item);
         }
 
         for (Item item : TechItems.getAllCeramicMoldItems())
         {
             itemColors.registerItemColorHandler(
-                    (stack, tintIndex) -> {
-                        if (tintIndex == 1)
+                (stack, tintIndex) -> {
+                    if (tintIndex == 1)
+                    {
+                        IFluidHandler capFluidHandler = stack.getCapability(FLUID_HANDLER_CAPABILITY, null);
+                        if (capFluidHandler instanceof IMoldHandler)
                         {
-                            IFluidHandler capFluidHandler = stack.getCapability(FLUID_HANDLER_CAPABILITY, null);
-                            if (capFluidHandler instanceof IMoldHandler)
+                            Metal metal = ((IMoldHandler) capFluidHandler).getMetal();
+                            if (metal != null)
                             {
-                                Metal metal = ((IMoldHandler) capFluidHandler).getMetal();
-                                if (metal != null)
-                                {
-                                    return (new Color(metal.getColor())).brighter().getRGB();
-                                }
+                                return (new Color(metal.getColor())).brighter().getRGB();
                             }
-                            else if (stack.getItem() instanceof ItemGlassMolder)
-                            {
-                                IFluidHandlerItem cap = stack.getCapability(FLUID_HANDLER_ITEM_CAPABILITY, null);
-                                if (cap instanceof ItemGlassMolder.GlassMolderCapability && ((ItemGlassMolder.GlassMolderCapability) cap).getFluid() != null)
-                                {
-                                    FluidStack fluidStack = ((ItemGlassMolder.GlassMolderCapability) cap).getFluid();
-                                    //noinspection ConstantConditions
-                                    return fluidStack.getFluid().getColor();
-                                }
-                            }
-                            return 0xFF000000;
                         }
-                        return -1;
-                    },
-                    item);
+                        else if (stack.getItem() instanceof ItemGlassMolder)
+                        {
+                            IFluidHandlerItem cap = stack.getCapability(FLUID_HANDLER_ITEM_CAPABILITY, null);
+                            if (cap instanceof ItemGlassMolder.GlassMolderCapability && ((ItemGlassMolder.GlassMolderCapability) cap).getFluid() != null)
+                            {
+                                FluidStack fluidStack = ((ItemGlassMolder.GlassMolderCapability) cap).getFluid();
+                                //noinspection ConstantConditions
+                                return fluidStack.getFluid().getColor();
+                            }
+                        }
+                        return 0xFF000000;
+                    }
+                    return -1;
+                },
+                item);
         }
     }
 }

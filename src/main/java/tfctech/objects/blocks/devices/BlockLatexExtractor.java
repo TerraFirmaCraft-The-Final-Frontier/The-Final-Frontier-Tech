@@ -48,10 +48,10 @@ public class BlockLatexExtractor extends Block
     {
         super(Material.IRON);
         setDefaultState(blockState.getBaseState()
-                .withProperty(FACING, NORTH)
-                .withProperty(BASE, false)
-                .withProperty(POT, false)
-                .withProperty(CUT, 0));
+            .withProperty(FACING, NORTH)
+            .withProperty(BASE, false)
+            .withProperty(POT, false)
+            .withProperty(CUT, 0));
         setHardness(2.0F);
         setHarvestLevel("pickaxe", 0);
     }
@@ -84,8 +84,8 @@ public class BlockLatexExtractor extends Block
         if (te != null)
         {
             return state.withProperty(BASE, te.hasBase())
-                    .withProperty(POT, te.hasPot())
-                    .withProperty(CUT, te.cutState());
+                .withProperty(POT, te.hasPot())
+                .withProperty(CUT, te.cutState());
         }
         return super.getActualState(state, worldIn, pos);
     }

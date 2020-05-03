@@ -1,5 +1,6 @@
 package tfctech.objects.items;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
@@ -14,7 +15,8 @@ import net.dries007.tfc.api.capability.size.Weight;
 public class ItemMiscHeatable extends ItemMiscTech
 {
 
-    private float heatCapacity, meltTemp;
+    private final float heatCapacity;
+    private final float meltTemp;
 
     public ItemMiscHeatable(Size size, Weight weight, float heatCapacity, float meltTemp)
     {
@@ -32,7 +34,7 @@ public class ItemMiscHeatable extends ItemMiscTech
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt)
+    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt)
     {
         return new ItemHeatHandler(nbt, heatCapacity, meltTemp);
     }

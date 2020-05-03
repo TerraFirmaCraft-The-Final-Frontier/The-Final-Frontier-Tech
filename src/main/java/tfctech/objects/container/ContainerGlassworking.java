@@ -34,9 +34,9 @@ public class ContainerGlassworking extends Container implements IButtonHandler
     private final SimpleCraftMatrix matrix;
     private final ItemStack stack;
     private final EntityPlayer player;
+    private final int itemDragIndex;
+    private final boolean isOffhand;
     private int itemIndex;
-    private int itemDragIndex;
-    private boolean isOffhand;
     private boolean requiresReset;
 
     public ContainerGlassworking(InventoryPlayer playerInv, ItemStack stack)

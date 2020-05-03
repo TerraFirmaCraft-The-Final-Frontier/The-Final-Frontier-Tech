@@ -78,15 +78,15 @@ public class BlockSmelteryFirebox extends BlockHorizontal implements IBellowsCon
     public IBlockState getStateFromMeta(int meta)
     {
         return this.getDefaultState()
-                .withProperty(FACING, EnumFacing.byHorizontalIndex(meta % 4))
-                .withProperty(LIT, meta / 4 % 2 != 0);
+            .withProperty(FACING, EnumFacing.byHorizontalIndex(meta % 4))
+            .withProperty(LIT, meta / 4 % 2 != 0);
     }
 
     @Override
     public int getMetaFromState(IBlockState state)
     {
         return state.getValue(FACING).getHorizontalIndex()
-                + (state.getValue(LIT) ? 4 : 0);
+            + (state.getValue(LIT) ? 4 : 0);
     }
 
     @Override
@@ -117,6 +117,43 @@ public class BlockSmelteryFirebox extends BlockHorizontal implements IBellowsCon
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rng)
+    {
+        if (!state.getValue(LIT)) return;
+
+        if (rng.nextInt(24) == 0)
+        {
+            world.playSound((float) pos.getX() + 0.5F, (float) pos.getY() + 0.5F, (float) pos.getZ() + 0.5F, SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + rng.nextFloat(), rng.nextFloat() * 0.7F + 0.3F, false);
+        }
+        if (rng.nextFloat() < 0.4f)
+        {
+            double x = pos.getX() + 0.5;
+            double y = pos.getY() + 0.35;
+            double z = pos.getZ() + 0.5;
+            switch (state.getValue(FACING))
+            {
+                case NORTH:
+                    z -= 0.6f;
+                    break;
+                case SOUTH:
+                    z += 0.6f;
+                    break;
+                case WEST:
+                    x += 0.6f;
+                    break;
+                case EAST:
+                    x += 0.6f;
+                    break;
+            }
+
+            world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0.0D, 0.2D, 0.0D);
+            if (rng.nextFloat() > 0.75)
+                world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, x, y, z, 0.0D, 0.1D, 0.0D);
+        }
     }
 
     @Override
@@ -211,43 +248,6 @@ public class BlockSmelteryFirebox extends BlockHorizontal implements IBellowsCon
         if (firebox != null)
         {
             firebox.onAirIntake(airAmount);
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rng)
-    {
-        if (!state.getValue(LIT)) return;
-
-        if (rng.nextInt(24) == 0)
-        {
-            world.playSound((double) ((float) pos.getX() + 0.5F), (double) ((float) pos.getY() + 0.5F), (double) ((float) pos.getZ() + 0.5F), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + rng.nextFloat(), rng.nextFloat() * 0.7F + 0.3F, false);
-        }
-        if (rng.nextFloat() < 0.4f)
-        {
-            double x = pos.getX() + 0.5;
-            double y = pos.getY() + 0.35;
-            double z = pos.getZ() + 0.5;
-            switch (state.getValue(FACING))
-            {
-                case NORTH:
-                    z -= 0.6f;
-                    break;
-                case SOUTH:
-                    z += 0.6f;
-                    break;
-                case WEST:
-                    x += 0.6f;
-                    break;
-                case EAST:
-                    x += 0.6f;
-                    break;
-            }
-
-            world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0.0D, 0.2D, 0.0D);
-            if (rng.nextFloat() > 0.75)
-                world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, x, y, z, 0.0D, 0.1D, 0.0D);
         }
     }
 

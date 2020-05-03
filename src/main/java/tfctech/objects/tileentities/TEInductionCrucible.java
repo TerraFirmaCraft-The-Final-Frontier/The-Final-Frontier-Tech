@@ -39,7 +39,7 @@ import static tfctech.objects.blocks.devices.BlockInductionCrucible.LIT;
 @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "ic2")
 public class TEInductionCrucible extends TECrucible implements IMachineSoundEffect, IEnergySink
 {
-    private MachineEnergyContainer energyContainer;
+    private final MachineEnergyContainer energyContainer;
     private int litTime = 0; //Client "effects" only
 
     private boolean addedToIc2Network = false;

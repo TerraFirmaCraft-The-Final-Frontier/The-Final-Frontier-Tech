@@ -23,11 +23,11 @@ public class TFCTech
     public static final String NAME = "TFCTech Unofficial";
     public static final String VERSION = "@VERSION@";
     public static final String DEPENDENCIES = "required-after:tfc@[1.0.0,);after:ic2;after:gregtech";
-
+    private static final boolean signedBuild = true;
+    @SuppressWarnings("FieldMayBeFinal")
     @Mod.Instance
     private static TFCTech instance = null;
     private static Logger logger;
-    private static boolean signedBuild = true;
 
     public static SimpleNetworkWrapper getNetwork()
     {
@@ -49,8 +49,6 @@ public class TFCTech
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        //Waila/Hwyla/TOP initialization (if present)
-        FMLInterModComms.sendMessage("waila", "register", "tfctech.compat.waila.WailaPlugin.callbackRegister");
         FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "tfctech.compat.waila.TOPPlugin");
         TechFoodTraits.init();
     }

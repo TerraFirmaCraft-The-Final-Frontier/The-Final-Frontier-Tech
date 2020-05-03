@@ -149,7 +149,7 @@ public final class TechItems
             }
 
             @Override
-            public boolean hasContainerItem(ItemStack stack)
+            public boolean hasContainerItem(@Nonnull ItemStack stack)
             {
                 return true;
             }
@@ -267,10 +267,10 @@ public final class TechItems
         //noinspection ConstantConditions
         String rockName = block.getRock().getRegistryName().getPath().toLowerCase();
         return rockName.equalsIgnoreCase("chert") ||
-                rockName.equalsIgnoreCase("granite") ||
-                rockName.equalsIgnoreCase("quartzite") ||
-                rockName.equalsIgnoreCase("rhyolite") ||
-                rockName.equalsIgnoreCase("phyllite");
+            rockName.equalsIgnoreCase("granite") ||
+            rockName.equalsIgnoreCase("quartzite") ||
+            rockName.equalsIgnoreCase("rhyolite") ||
+            rockName.equalsIgnoreCase("phyllite");
     }
 
     private static <T extends Block> ItemBlock createItemBlock(T block, Function<T, ItemBlock> producer)

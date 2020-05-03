@@ -50,8 +50,8 @@ public class CTGlassworking
         if (output == null) throw new IllegalArgumentException("Output not allowed to be empty");
         ItemStack item = (ItemStack) output.getInternal();
         List<GlassworkingRecipe> removeList = TechRegistries.GLASSWORKING.getValuesCollection()
-                .stream().filter(x -> x.getOutput().isItemEqual(item))
-                .collect(Collectors.toList());
+            .stream().filter(x -> x.getOutput().isItemEqual(item))
+            .collect(Collectors.toList());
         for (GlassworkingRecipe rem : removeList)
         {
             CraftTweakerAPI.apply(new IAction()
@@ -59,7 +59,7 @@ public class CTGlassworking
                 @Override
                 public void apply()
                 {
-                    IForgeRegistryModifiable modRegistry = (IForgeRegistryModifiable) TechRegistries.GLASSWORKING;
+                    IForgeRegistryModifiable<GlassworkingRecipe> modRegistry = (IForgeRegistryModifiable<GlassworkingRecipe>) TechRegistries.GLASSWORKING;
                     modRegistry.remove(rem.getRegistryName());
                 }
 
@@ -84,7 +84,7 @@ public class CTGlassworking
                 @Override
                 public void apply()
                 {
-                    IForgeRegistryModifiable modRegistry = (IForgeRegistryModifiable) TechRegistries.GLASSWORKING;
+                    IForgeRegistryModifiable<GlassworkingRecipe> modRegistry = (IForgeRegistryModifiable<GlassworkingRecipe>) TechRegistries.GLASSWORKING;
                     modRegistry.remove(recipe.getRegistryName());
                 }
 

@@ -15,8 +15,8 @@ import tfctech.objects.items.metal.ItemTechMetal;
 
 public class CastingRecipeWrapper extends net.dries007.tfc.compat.jei.wrappers.CastingRecipeWrapper
 {
-    private ItemStack mold;
-    private FluidStack input;
+    private final ItemStack mold;
+    private final FluidStack input;
 
     public CastingRecipeWrapper(Metal metal, ItemTechMetal.ItemType type)
     {

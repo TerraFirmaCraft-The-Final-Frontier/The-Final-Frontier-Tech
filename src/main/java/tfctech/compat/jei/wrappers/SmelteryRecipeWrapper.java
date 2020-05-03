@@ -19,7 +19,7 @@ import tfctech.api.recipes.SmelteryRecipe;
 @ParametersAreNonnullByDefault
 public class SmelteryRecipeWrapper implements IRecipeWrapper
 {
-    private SmelteryRecipe recipe;
+    private final SmelteryRecipe recipe;
 
     public SmelteryRecipeWrapper(SmelteryRecipe recipe)
     {
@@ -47,6 +47,7 @@ public class SmelteryRecipeWrapper implements IRecipeWrapper
         float x = 44f;
         float y = 3f;
         String text = Heat.getTooltip(recipe.getMeltTemp());
+        //noinspection ConstantConditions
         x = x - minecraft.fontRenderer.getStringWidth(text) / 2.0f;
         minecraft.fontRenderer.drawString(text, x, y, 0xFFFFFF, false);
     }

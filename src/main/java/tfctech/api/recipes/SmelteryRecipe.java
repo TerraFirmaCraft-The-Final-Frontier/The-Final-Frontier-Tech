@@ -82,10 +82,10 @@ public class SmelteryRecipe extends IForgeRegistryEntry.Impl<SmelteryRecipe>
         return true;
     }
 
-    public static class Builder<T extends Builder>
+    public static class Builder
     {
-        private SmelteryRecipe recipe;
-        private List<IIngredient<ItemStack>> listInput;
+        private final SmelteryRecipe recipe;
+        private final List<IIngredient<ItemStack>> listInput;
 
         public Builder()
         {

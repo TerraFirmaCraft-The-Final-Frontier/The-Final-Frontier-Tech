@@ -10,7 +10,7 @@ import tfctech.client.TechGuiHandler;
 
 public class GuiButtonSetter extends GuiButton
 {
-    private boolean isPlus;
+    private final boolean isPlus;
 
     public GuiButtonSetter(int buttonId, int x, int y, boolean plus)
     {

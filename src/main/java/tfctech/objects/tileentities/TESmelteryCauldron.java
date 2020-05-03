@@ -33,9 +33,8 @@ import static tfctech.objects.blocks.devices.BlockSmelteryCauldron.LIT;
 public class TESmelteryCauldron extends TEInventory implements ITickable, IFluidHandlerSidedCallback, IFluidTankCallback, ITileFields
 {
     public static final int FLUID_CAPACITY = 4000;
+    private final FluidTank tank = new FluidTankCallback(this, 0, FLUID_CAPACITY);
     private float temp;
-    private FluidTank tank = new FluidTankCallback(this, 0, FLUID_CAPACITY);
-
     private int reload;
 
     public TESmelteryCauldron()
