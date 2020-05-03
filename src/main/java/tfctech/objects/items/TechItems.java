@@ -228,7 +228,18 @@ public final class TechItems
             if (metalItem instanceof ItemTechMetal)
             {
                 ItemTechMetal techMetal = (ItemTechMetal) metalItem;
-                OreDictionary.registerOre(OreDictionaryHelper.toString(techMetal.getType(), techMetal.getMetal(ItemStack.EMPTY)), new ItemStack(metalItem, 1, 0));
+                if(techMetal.getType() == ItemTechMetal.ItemType.ROD)
+                {
+                    OreDictionary.registerOre(OreDictionaryHelper.toString("stick", techMetal.getMetal(ItemStack.EMPTY)), new ItemStack(metalItem, 1, 0));
+                }
+                else if(techMetal.getType() == ItemTechMetal.ItemType.LONG_ROD)
+                {
+                    OreDictionary.registerOre(OreDictionaryHelper.toString("stick", "long", techMetal.getMetal(ItemStack.EMPTY)), new ItemStack(metalItem, 1, 0));
+                }
+                else
+                {
+                    OreDictionary.registerOre(OreDictionaryHelper.toString(techMetal.getType(), techMetal.getMetal(ItemStack.EMPTY)), new ItemStack(metalItem, 1, 0));
+                }
             }
             else
             {

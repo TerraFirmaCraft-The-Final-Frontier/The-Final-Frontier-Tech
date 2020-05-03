@@ -30,6 +30,7 @@ import tfctech.TechConfig;
 import tfctech.client.TechSounds;
 import tfctech.client.audio.IMachineSoundEffect;
 import tfctech.objects.blocks.devices.BlockElectricForge;
+import tfctech.objects.blocks.devices.BlockInductionCrucible;
 import tfctech.objects.storage.MachineEnergyContainer;
 
 import static net.minecraft.block.BlockHorizontal.FACING;
@@ -246,7 +247,12 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     @Override
     public boolean shouldPlay()
     {
-        return !this.isInvalid() && world.getBlockState(pos).getValue(LIT);
+        if(!this.isInvalid())
+        {
+            return false;
+        }
+        IBlockState state = world.getBlockState(pos);
+        return state.getBlock() instanceof BlockInductionCrucible && world.getBlockState(pos).getValue(BlockElectricForge.LIT);
     }
 
     @Override

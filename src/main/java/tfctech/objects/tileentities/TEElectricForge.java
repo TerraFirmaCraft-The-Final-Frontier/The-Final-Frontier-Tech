@@ -31,6 +31,7 @@ import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
 import net.dries007.tfc.api.capability.heat.IItemHeat;
 import net.dries007.tfc.api.capability.metal.IMetalItem;
 import net.dries007.tfc.api.recipes.heat.HeatRecipe;
+import net.dries007.tfc.objects.blocks.property.ILightableBlock;
 import net.dries007.tfc.objects.te.ITileFields;
 import net.dries007.tfc.objects.te.TEInventory;
 import tfctech.TFCTech;
@@ -278,7 +279,12 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     @Override
     public boolean shouldPlay()
     {
-        return !this.isInvalid() && world.getBlockState(pos).getValue(LIT);
+        if(!this.isInvalid())
+        {
+            return false;
+        }
+        IBlockState state = world.getBlockState(pos);
+        return state.getBlock() instanceof BlockElectricForge && world.getBlockState(pos).getValue(LIT);
     }
 
     @Override
