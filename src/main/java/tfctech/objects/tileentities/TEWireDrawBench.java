@@ -245,4 +245,10 @@ public class TEWireDrawBench extends TEInventory implements ITickable
     {
         return hasDrawPlate() && hasWire() && !working && progress < 100;
     }
+
+    @Override
+    public int getSlotLimit(int slot)
+    {
+        return 1;
+    }
 }
