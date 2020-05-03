@@ -110,6 +110,7 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     @Override
     public void update()
     {
+        super.update();
         if (world.isRemote)
         {
             IMachineSoundEffect.super.update();
@@ -117,33 +118,37 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
         }
         IBlockState state = world.getBlockState(pos);
         boolean isLit = state.getValue(LIT);
-        for (int i = SLOT_INPUT_START; i <= SLOT_INPUT_END; i++)
+        int energyUsage = TechConfig.DEVICES.inductionCrucibleEnergyConsumption;
+        boolean acceptHeat = this.getAlloy().removeAlloy(1, true) > 0;
+        if(!acceptHeat)
         {
-            ItemStack stack = inventory.getStackInSlot(i);
-            IItemHeat cap = stack.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);
-            int energyUsage = TechConfig.DEVICES.inductionCrucibleEnergyConsumption;
-            if ((cap != null || this.getAlloy().removeAlloy(1, true) > 0) && energyContainer.consumeEnergy(energyUsage, false))
+            for (int i = SLOT_INPUT_START; i <= SLOT_INPUT_END; i++)
             {
-                this.acceptHeat(Heat.maxVisibleTemperature());
-                litTime = 15;
-                if (!isLit)
+                ItemStack stack = inventory.getStackInSlot(i);
+                IItemHeat cap = stack.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);
+                if (cap != null)
                 {
-                    state = state.withProperty(BlockElectricForge.LIT, true);
-                    world.setBlockState(pos, state, 2);
-                }
-                break;
-            }
-            if (--litTime <= 0)
-            {
-                litTime = 0;
-                if (isLit)
-                {
-                    state = state.withProperty(BlockElectricForge.LIT, false);
-                    world.setBlockState(pos, state, 2);
+                    acceptHeat = true;
+                    break;
                 }
             }
         }
-        super.update();
+        if(acceptHeat && energyContainer.consumeEnergy(energyUsage, false))
+        {
+            this.acceptHeat(Heat.maxVisibleTemperature());
+            litTime = 15;
+            if (!isLit)
+            {
+                state = state.withProperty(BlockElectricForge.LIT, true);
+                world.setBlockState(pos, state, 2);
+                isLit = true;
+            }
+        }
+        if (litTime > 0 && --litTime <= 0 && isLit)
+        {
+            state = state.withProperty(BlockElectricForge.LIT, false);
+            world.setBlockState(pos, state, 2);
+        }
     }
 
     @Override
