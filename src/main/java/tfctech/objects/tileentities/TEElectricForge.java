@@ -123,7 +123,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
                 if (targetTemperature > itemTemp && energyContainer.consumeEnergy(energy, false))
                 {
                     float heatSpeed = (float) TechConfig.DEVICES.electricForgeSpeed * 15.0F;
-                    float temp = cap.getTemperature() + heatSpeed * cap.getHeatCapacity() * (float) ConfigTFC.GENERAL.temperatureModifierGlobal;
+                    float temp = cap.getTemperature() + heatSpeed * cap.getHeatCapacity() * (float) ConfigTFC.Devices.TEMPERATURE.globalModifier;
                     cap.setTemperature(Math.min(temp, targetTemperature));
                     litTime = 15;
                 }

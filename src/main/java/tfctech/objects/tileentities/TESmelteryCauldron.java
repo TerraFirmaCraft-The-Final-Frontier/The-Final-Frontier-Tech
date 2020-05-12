@@ -87,7 +87,7 @@ public class TESmelteryCauldron extends TEInventory implements ITickable, IFluid
                             inventory.setStackInSlot(i, input.get(i));
                         }
                         tank.fillInternal(output, true);
-                        temp -= ConfigTFC.GENERAL.temperatureModifierHeating * 150;
+                        temp -= ConfigTFC.Devices.TEMPERATURE.heatingModifier * 150;
                         if (firebox != null)
                         {
                             firebox.setTemperature(temp);

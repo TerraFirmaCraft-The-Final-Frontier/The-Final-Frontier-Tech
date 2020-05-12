@@ -11,6 +11,7 @@ import net.dries007.tfc.ConfigTFC;
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
 import net.dries007.tfc.objects.te.ITileFields;
 import net.dries007.tfc.objects.te.TEInventory;
+import net.dries007.tfc.objects.te.TETickableInventory;
 import net.dries007.tfc.util.calendar.CalendarTFC;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.dries007.tfc.util.fuel.Fuel;
@@ -19,7 +20,7 @@ import tfctech.objects.blocks.devices.BlockSmelteryCauldron;
 
 import static net.dries007.tfc.objects.blocks.property.ILightableBlock.LIT;
 
-public class TESmelteryFirebox extends TEInventory implements ITickable, ICalendarTickable, ITileFields
+public class TESmelteryFirebox extends TETickableInventory implements ITickable, ICalendarTickable, ITileFields
 {
     private float temperature;
     private float burnTemperature;
@@ -76,7 +77,8 @@ public class TESmelteryFirebox extends TEInventory implements ITickable, ICalend
     @Override
     public void update()
     {
-        ICalendarTickable.super.update();
+        super.update();
+        checkForCalendarUpdate();
         if (!world.isRemote)
         {
             IBlockState state = world.getBlockState(pos);
@@ -112,7 +114,7 @@ public class TESmelteryFirebox extends TEInventory implements ITickable, ICalend
                 float targetTemperature = burnTemperature + airTicks;
                 if (temperature != targetTemperature)
                 {
-                    float delta = (float) ConfigTFC.GENERAL.temperatureModifierHeating;
+                    float delta = (float) ConfigTFC.Devices.TEMPERATURE.heatingModifier;
                     temperature = CapabilityItemHeat.adjustTempTowards(temperature, targetTemperature, delta * (airTicks > 0 ? 2 : 1));
                 }
             }
@@ -153,14 +155,14 @@ public class TESmelteryFirebox extends TEInventory implements ITickable, ICalend
             if (burnTicks > deltaPlayerTicks)
             {
                 burnTicks -= deltaPlayerTicks;
-                float delta = (float) ConfigTFC.GENERAL.temperatureModifierHeating * deltaPlayerTicks;
+                float delta = (float) ConfigTFC.Devices.TEMPERATURE.heatingModifier * deltaPlayerTicks;
                 temperature = CapabilityItemHeat.adjustTempTowards(temperature, burnTemperature, delta, delta);
                 deltaPlayerTicks = 0;
             }
             else
             {
                 deltaPlayerTicks -= burnTicks;
-                float delta = (float) ConfigTFC.GENERAL.temperatureModifierHeating * burnTicks;
+                float delta = (float) ConfigTFC.Devices.TEMPERATURE.heatingModifier * burnTicks;
                 temperature = CapabilityItemHeat.adjustTempTowards(temperature, burnTemperature, delta, delta);
                 consumeFuel();
             }

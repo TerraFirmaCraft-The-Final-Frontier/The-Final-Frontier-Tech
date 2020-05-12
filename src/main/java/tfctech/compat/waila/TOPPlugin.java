@@ -59,41 +59,6 @@ public final class TOPPlugin implements Function<ITheOneProbe, Void>, IProbeInfo
             {
                 IProbeInfo horizontalPane = iProbeInfo.horizontal(iProbeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER));
                 horizontalPane.text((new TextComponentTranslation("waila.tfctech.fridge.efficiency", (int) fridge.getEfficiency())).getFormattedText());
-                iProbeInfo.progress(fridge.getEnergyStored(), fridge.getEnergyCapacity(),
-                    iProbeInfo.defaultProgressStyle()
-                        .suffix("RF")
-                        .filledColor(0xFF419099)
-                        .alternateFilledColor(0xFF43748E)
-                        .borderColor(0xFFFFFFFF)
-                        .numberFormat(NumberFormat.COMPACT));
-            }
-        }
-        if (b instanceof BlockElectricForge)
-        {
-            TEElectricForge forge = Helpers.getTE(world, pos, TEElectricForge.class);
-            if (forge != null)
-            {
-                iProbeInfo.progress(forge.getEnergyStored(), forge.getEnergyCapacity(),
-                    iProbeInfo.defaultProgressStyle()
-                        .suffix("RF")
-                        .filledColor(0xFF419099)
-                        .alternateFilledColor(0xFF43748E)
-                        .borderColor(0xFFFFFFFF)
-                        .numberFormat(NumberFormat.COMPACT));
-            }
-        }
-        if (b instanceof BlockInductionCrucible)
-        {
-            TEInductionCrucible crucible = Helpers.getTE(world, pos, TEInductionCrucible.class);
-            if (crucible != null)
-            {
-                iProbeInfo.progress(crucible.getEnergyStored(), crucible.getEnergyCapacity(),
-                    iProbeInfo.defaultProgressStyle()
-                        .suffix("RF")
-                        .filledColor(0xFF419099)
-                        .alternateFilledColor(0xFF43748E)
-                        .borderColor(0xFFFFFFFF)
-                        .numberFormat(NumberFormat.COMPACT));
             }
         }
         if (b instanceof BlockLatexExtractor)

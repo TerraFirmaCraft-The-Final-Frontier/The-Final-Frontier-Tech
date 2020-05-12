@@ -71,7 +71,7 @@ public class GuiElectricForge extends GuiContainerTE<TEElectricForge>
         drawTexturedModalRect(guiLeft + 8, guiTop + 66 - temperaturePixels, 36, 54, 15, 5);
 
         // Draw the energy bar
-        int energyPixels = 60 * tile.getField(1) / tile.getEnergyCapacity();
+        int energyPixels = Math.round(60 * tile.getField(1) / (float)tile.getEnergyCapacity());
         int emptyPixels = 60 - energyPixels;
         drawTexturedModalRect(guiLeft + 153, guiTop + 6, 0, 0, 18, emptyPixels);
         drawTexturedModalRect(guiLeft + 153, guiTop + 6 + emptyPixels, 18, emptyPixels, 18, energyPixels);

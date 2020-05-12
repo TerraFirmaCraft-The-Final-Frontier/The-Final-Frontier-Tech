@@ -212,7 +212,7 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     {
         if (index == 0)
         {
-            super.setField(index, value);
+            super.setField(0, value);
         }
         else if (index == 1)
         {
@@ -229,7 +229,7 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     {
         if (index == 0)
         {
-            return super.getField(index);
+            return super.getField(0);
         }
         else if (index == 1)
         {
