@@ -8,7 +8,7 @@
   "key": {
     "I": {
       "type": "forge:ore_dict",
-      "ore": "longRodWroughtIron"
+      "ore": "stickLongWroughtIron"
     },
     "S": {
       "type": "forge:ore_dict",
