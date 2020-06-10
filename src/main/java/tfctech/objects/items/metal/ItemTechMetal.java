@@ -30,7 +30,7 @@ public class ItemTechMetal extends ItemTFC implements IMetalItem
     @Nullable
     public static ItemTechMetal get(Metal metal, ItemTechMetal.ItemType type)
     {
-        return (ItemTechMetal) ((EnumMap) TABLE.get(metal)).get(type);
+        return TABLE.get(metal).get(type);
     }
 
     protected final Metal metal;
@@ -101,7 +101,7 @@ public class ItemTechMetal extends ItemTFC implements IMetalItem
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt)
+    public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt)
     {
         return new ForgeableHeatableHandler(nbt, metal.getSpecificHeat(), metal.getMeltTemp());
     }
@@ -131,7 +131,7 @@ public class ItemTechMetal extends ItemTFC implements IMetalItem
         ROD(50),
         BOLT(25),
         SCREW(25),
-        SLEEVE(100),
+        SLEEVE(100, true),
         RACKWHEEL_PIECE(100, true),
         RACKWHEEL(400),
         GEAR(400, false, ItemGear::new),

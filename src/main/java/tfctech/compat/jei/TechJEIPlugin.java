@@ -113,9 +113,8 @@ public class TechJEIPlugin implements IModPlugin
                 {
                     for (ItemTechMetal.ItemType type : ItemTechMetal.ItemType.values())
                     {
-                        if (type.hasMold())
+                        if (type.hasMold() && ItemTechMetal.get(metal, type) != null)
                         {
-
                             unmoldList.add(new UnmoldRecipeWrapper(metal, type));
                             castingList.add(new CastingRecipeWrapper(metal, type));
                         }

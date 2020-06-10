@@ -36,6 +36,10 @@ public final class TechConfig
         @Config.Comment({"Should TFCTech remove TFC and vanilla glass recipes?"})
         @Config.LangKey("config." + MODID + ".tweaks.removeGlassRecipes")
         public boolean removeGlassRecipes = true;
+
+        @Config.Comment({"Which blocks are considered valid for rubber tapping?"})
+        @Config.LangKey("config." + MODID + ".tweaks.validRubberTrees")
+        public String[] rubberTrees = new String[] {"tfc:wood/log/hevea{placed=false,axis=y}", "dynamictreestfc:branch/hevea{radius=8}"};
     }
 
     public static class Devices

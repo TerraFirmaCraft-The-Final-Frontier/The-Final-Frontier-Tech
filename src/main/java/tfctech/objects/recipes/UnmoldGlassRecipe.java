@@ -19,7 +19,7 @@ import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import net.dries007.tfc.Constants;
 import net.dries007.tfc.client.TFCSounds;
@@ -31,55 +31,57 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 /**
  * Used for unmolding glass molds, since they don't extend ItemTechMolds or TFC's ItemMold
  */
-@SuppressWarnings("WeakerAccess")
-public class UnmoldGlassRecipe extends ShapelessOreRecipe
+@SuppressWarnings("unused")
+public class UnmoldGlassRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe
 {
+    private final NonNullList<Ingredient> input;
+    private final ResourceLocation group;
+    private final ItemStack result;
     /* This is return chance, not break chance */
     private final float chance;
 
     public UnmoldGlassRecipe(ResourceLocation group, NonNullList<Ingredient> input, @Nonnull ItemStack result, float chance)
     {
-        super(group, input, result);
+        this.group = group;
+        this.input = input;
+        this.result = result;
         this.chance = chance;
     }
 
-    @Override
-    @Nonnull
-    public NonNullList<ItemStack> getRemainingItems(final InventoryCrafting inv)
+    public float getChance()
     {
-        // Return empty molds
+        return chance;
+    }
+
+    @Override
+    public boolean matches(@Nonnull InventoryCrafting inv, @Nonnull World world)
+    {
+        boolean found = false;
         for (int slot = 0; slot < inv.getSizeInventory(); slot++)
         {
             ItemStack stack = inv.getStackInSlot(slot);
             if (!stack.isEmpty())
             {
-                EntityPlayer player = ForgeHooks.getCraftingPlayer();
-                if (!player.world.isRemote)
+                if (found)
                 {
-                    if (Constants.RNG.nextFloat() <= chance)
+                    return false;
+                }
+                for (Ingredient ingredient : this.getIngredients())
+                {
+                    if (ingredient.apply(stack))
                     {
-                        ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(stack.getItem()));
+                        found = true;
+                        break;
                     }
-                    else
-                    {
-                        player.world.playSound(null, player.getPosition(), TFCSounds.CERAMIC_BREAK, SoundCategory.PLAYERS, 1.0f, 1.0f);
-                    }
-                    break;
+                }
+                if (!found)
+                {
+                    return false;
                 }
             }
         }
-        return super.getRemainingItems(inv);
+        return found;
     }
-
-    @Override
-    public boolean isDynamic()
-    {
-        return true;
-    }
-
-    @Override
-    @Nonnull
-    public ItemStack getRecipeOutput() { return ItemStack.EMPTY; }
 
     @Override
     @Nonnull
@@ -117,7 +119,7 @@ public class UnmoldGlassRecipe extends ShapelessOreRecipe
                 ItemGlassMolder.GlassMolderCapability cap = (ItemGlassMolder.GlassMolderCapability) moldCap;
                 if (cap.isSolidified())
                 {
-                    return this.output.copy();
+                    return getRecipeOutput();
                 }
             }
         }
@@ -125,33 +127,54 @@ public class UnmoldGlassRecipe extends ShapelessOreRecipe
     }
 
     @Override
-    public boolean matches(@Nonnull InventoryCrafting inv, @Nonnull World world)
+    public boolean canFit(int width, int height)
     {
-        boolean found = false;
+        return true;
+    }
+
+    @Override
+    @Nonnull
+    public ItemStack getRecipeOutput() { return result.copy(); }
+
+    @Override
+    @Nonnull
+    public NonNullList<ItemStack> getRemainingItems(final InventoryCrafting inv)
+    {
+        // Return empty molds
         for (int slot = 0; slot < inv.getSizeInventory(); slot++)
         {
             ItemStack stack = inv.getStackInSlot(slot);
             if (!stack.isEmpty())
             {
-                if (found)
+                EntityPlayer player = ForgeHooks.getCraftingPlayer();
+                if (!player.world.isRemote)
                 {
-                    return false;
-                }
-                for (Ingredient ingredient : this.getIngredients())
-                {
-                    if (ingredient.apply(stack))
+                    if (Constants.RNG.nextFloat() <= chance)
                     {
-                        found = true;
-                        break;
+                        ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(stack.getItem()));
                     }
-                }
-                if (!found)
-                {
-                    return false;
+                    else
+                    {
+                        player.world.playSound(null, player.getPosition(), TFCSounds.CERAMIC_BREAK, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                    }
+                    break;
                 }
             }
         }
-        return found;
+        return ForgeHooks.defaultRecipeGetRemainingItems(inv);
+    }
+
+    @Override
+    @Nonnull
+    public NonNullList<Ingredient> getIngredients()
+    {
+        return input;
+    }
+
+    @Override
+    public boolean isDynamic()
+    {
+        return true;
     }
 
     @Override
@@ -159,12 +182,6 @@ public class UnmoldGlassRecipe extends ShapelessOreRecipe
     public String getGroup()
     {
         return group == null ? "" : group.toString();
-    }
-
-    @Override
-    public boolean canFit(int width, int height)
-    {
-        return true;
     }
 
     @SuppressWarnings("unused")

@@ -2,6 +2,7 @@ package tfctech.objects.items;
 
 import java.util.function.Function;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
@@ -9,8 +10,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -28,6 +32,7 @@ import net.dries007.tfc.api.types.Rock;
 import net.dries007.tfc.objects.ToolMaterialsTFC;
 import net.dries007.tfc.objects.blocks.BlocksTFC;
 import net.dries007.tfc.objects.blocks.stone.BlockRockVariant;
+import net.dries007.tfc.objects.fluids.FluidsTFC;
 import net.dries007.tfc.objects.items.ItemsTFC;
 import net.dries007.tfc.objects.items.ceramics.ItemPottery;
 import net.dries007.tfc.util.OreDictionaryHelper;
@@ -112,6 +117,11 @@ public final class TechItems
     @GameRegistry.ObjectHolder("ceramics/mold/rackwheel_piece")
     public static final ItemTechMold MOLD_RACKWHEEL_PIECE = getNull();
 
+    @GameRegistry.ObjectHolder("ceramics/unfired/sleeve")
+    public static final ItemPottery UNFIRED_SLEEVE = getNull();
+    @GameRegistry.ObjectHolder("ceramics/mold/sleeve")
+    public static final ItemTechMold MOLD_SLEEVE = getNull();
+
 
     private static ImmutableList<Item> allSimpleItems;
     private static ImmutableList<Item> allMetalItems;
@@ -167,6 +177,7 @@ public final class TechItems
         simpleItems.add(register(r, "wiredraw/winch", new ItemMiscTech(Size.NORMAL, Weight.MEDIUM), CT_MISC));
 
         //Unfired is simple
+        simpleItems.add(register(r, "ceramics/unfired/sleeve", new ItemPottery(), CT_MISC));
         simpleItems.add(register(r, "ceramics/unfired/rackwheel_piece", new ItemPottery(), CT_MISC));
         simpleItems.add(register(r, "ceramics/unfired/glass_block", new ItemPottery(), CT_MISC));
         simpleItems.add(register(r, "ceramics/unfired/glass_pane", new ItemPottery(), CT_MISC));
@@ -177,6 +188,44 @@ public final class TechItems
         ceramicItems.add(register(r, "ceramics/mold/glass_block", new ItemGlassMolder(ItemGlassMolder.BLOCK_TANK), CT_MISC));
         ceramicItems.add(register(r, "ceramics/mold/glass_pane", new ItemGlassMolder(ItemGlassMolder.PANE_TANK), CT_MISC));
         ceramicItems.add(register(r, "ceramics/mold/rackwheel_piece", new ItemTechMold(ItemTechMetal.ItemType.RACKWHEEL_PIECE), CT_MISC));
+        // This one is special since we only have 3 sleeves: tin, brass and steel
+        // In 1.15, refactor the mod to properly use recipes instead of this ugly code
+        ItemTechMold sleeveMold = new ItemTechMold(ItemTechMetal.ItemType.SLEEVE)
+        {
+            @Override
+            public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt)
+            {
+                return new FilledMoldCapability(nbt)
+                {
+                    @Override
+                    public int fill(FluidStack resource, boolean doFill)
+                    {
+                        if (resource != null)
+                        {
+                            Metal metal = FluidsTFC.getMetalFromFluid(resource.getFluid());
+                            if (isValidMetal(metal))
+                            {
+                                return super.fill(resource, doFill);
+                            }
+                        }
+                        return 0;
+                    }
+
+                    private boolean isValidMetal(@Nullable Metal metal)
+                    {
+                        if (metal != null)
+                        {
+                            //noinspection ConstantConditions
+                            return "tin".equals(metal.getRegistryName().getPath()) ||
+                                "brass".equals(metal.getRegistryName().getPath()) ||
+                                "steel".equals(metal.getRegistryName().getPath());
+                        }
+                        return false;
+                    }
+                };
+            }
+        };
+        ceramicItems.add(register(r, "ceramics/mold/sleeve", sleeveMold, CT_MISC));
         allCeramicMoldItems = ceramicItems.build();
 
         ImmutableList.Builder<Item> metalItems = ImmutableList.builder();

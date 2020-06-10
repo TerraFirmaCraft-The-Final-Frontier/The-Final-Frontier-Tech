@@ -97,12 +97,12 @@ public class ItemTechMold extends ItemPottery
     /**
      * Copy of {@link ItemMold} FilledMoldCapability
      */
-    private class FilledMoldCapability extends ItemHeatHandler implements ICapabilityProvider, IMoldHandler
+    public class FilledMoldCapability extends ItemHeatHandler implements ICapabilityProvider, IMoldHandler
     {
         private final FluidTank tank;
         private IFluidTankProperties[] fluidTankProperties;
 
-        FilledMoldCapability(@Nullable NBTTagCompound nbt)
+        public FilledMoldCapability(@Nullable NBTTagCompound nbt)
         {
             tank = new FluidTank(100);
 
@@ -186,7 +186,7 @@ public class ItemTechMold extends ItemPottery
                 String desc = TextFormatting.DARK_GREEN + I18n.format(Helpers.getTypeName(metal)) + ": " + I18n.format("tfc.tooltip.units", getAmount());
                 if (isMolten())
                 {
-                    desc += " - " + I18n.format("tfc.tooltip.liquid");
+                    desc += I18n.format("tfc.tooltip.liquid");
                 }
                 text.add(desc);
             }
