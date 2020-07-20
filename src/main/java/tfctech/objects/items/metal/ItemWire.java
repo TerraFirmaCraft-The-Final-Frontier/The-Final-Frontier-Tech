@@ -20,6 +20,7 @@ public class ItemWire extends ItemTechMetal
     public ItemWire(Metal metal, ItemType type)
     {
         super(metal, type);
+        this.setHasSubtypes(true);
     }
 
     @SideOnly(Side.CLIENT)
