@@ -269,7 +269,7 @@ public final class TechRecipes
             if (!output.isEmpty())
             {
                 //noinspection ConstantConditions
-                r.register(new WeldingRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_gear"), ingredient1, ingredient2, output, metal.getTier()));
+                r.register(new WeldingRecipe(new ResourceLocation(MODID, (metal.getRegistryName().getPath()).toLowerCase() + "_gear"), ingredient1, ingredient2, output, metal.getTier(),null));
             }
         }
     }
