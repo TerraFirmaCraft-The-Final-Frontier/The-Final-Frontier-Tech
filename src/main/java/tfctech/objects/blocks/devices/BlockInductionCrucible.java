@@ -124,7 +124,7 @@ public class BlockInductionCrucible extends Block implements IItemSize
         {
             return BlockFaceShape.BOWL;
         }
-        return BlockFaceShape.UNDEFINED;
+        return isSideSolid(state, worldIn, pos, face) ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
 
     @SuppressWarnings("deprecation")
@@ -199,7 +199,7 @@ public class BlockInductionCrucible extends Block implements IItemSize
     @Override
     public boolean isSideSolid(IBlockState baseState, IBlockAccess world, BlockPos pos, EnumFacing side)
     {
-        return false;
+        return side == baseState.getValue(FACING);
     }
 
     @Override
