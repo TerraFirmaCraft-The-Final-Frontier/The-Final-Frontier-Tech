@@ -5,9 +5,15 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath "com.wynprice.cursemaven:CurseMaven:2.1.0"
     }
 }
+plugins {
+    id 'java'
+    id 'idea'
+}
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.wynprice.cursemaven'
 
 if (System.getenv('VERSION') != null) {
     version = System.getenv('VERSION')
@@ -39,10 +45,6 @@ repositories {
         name = "CraftTweaker Maven"
         url = "https://maven.blamejared.com/"
     }
-    maven {
-        name = "Hwyla maven"
-        url "http://tehnut.info/maven"
-    }
 	maven { // TOP
         name 'tterrag maven'
         url "https://maven.tterrag.com/"
@@ -63,12 +65,16 @@ repositories {
     maven {
 		url "https://minecraft.curseforge.com/api/maven"
 	}
+    maven {
+        name = "CurseForge"
+        url = "https://minecraft.curseforge.com/api/maven/"
+    }
 }
 
 dependencies {
     deobfProvided "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.11.505"
     deobfProvided "mezz.jei:jei_1.12.2:4.15.0.291"
-	compileOnly "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2"
+    deobfProvided "curse.maven:hwyla:2568751"
 	deobfProvided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.12-6"
     compileOnly "gregtechce:gregtech:1.12.2:1.8.5.436"
     compileOnly 'net.industrial-craft:industrialcraft-2:2.8.170-ex112:api'
