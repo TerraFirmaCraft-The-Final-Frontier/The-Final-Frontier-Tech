@@ -251,9 +251,9 @@ public class TELatexExtractor extends TEBase implements ITickable
      * Update client TE for gui purposes only!
      */
     @SideOnly(Side.CLIENT)
-    public void updateClient(int flowTicks, int fluid, boolean pot, boolean base)
+    public void updateClient(int cutState, int fluid, boolean pot, boolean base)
     {
-        this.flowTicks = flowTicks;
+        this.flowTicks = cutState - 1;
         this.fluid = fluid;
         this.pot = pot;
         this.base = base;
