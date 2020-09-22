@@ -35,6 +35,7 @@ import net.dries007.tfc.util.Helpers;
 import tfctech.TFCTech;
 import tfctech.TechConfig;
 import tfctech.client.TechSounds;
+import tfctech.network.PacketFridgeUpdate;
 import tfctech.network.PacketTileEntityUpdate;
 import tfctech.objects.blocks.devices.BlockFridge;
 import tfctech.objects.storage.MachineEnergyContainer;
@@ -56,6 +57,7 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
     private int openingState = 0;
     private float efficiency = 0.0F;
     private int applyTrait = 0;
+    private int serverUpdate;
 
     private boolean addedToIc2Network = false;
     private int mainBlock = 0; // 0 - not initialized, 1 = main block, -1 not main block
@@ -69,6 +71,14 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
     public float getEfficiency()
     {
         return efficiency;
+    }
+
+    /**
+     * Update client's info for waila tooltips
+     */
+    public void updateClient(float efficiency)
+    {
+        this.efficiency = efficiency;
     }
 
     public int getEnergyCapacity()
@@ -477,6 +487,11 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
                         }
                     }
                 }
+            }
+            if (++serverUpdate % 40 == 0)
+            {
+                serverUpdate = 0;
+                TFCTech.getNetwork().sendToAllTracking(new PacketFridgeUpdate(pos, efficiency), new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
             }
         }
     }

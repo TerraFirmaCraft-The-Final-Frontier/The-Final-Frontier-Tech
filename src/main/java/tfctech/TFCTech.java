@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
 import tfctech.client.TechGuiHandler;
+import tfctech.network.PacketFridgeUpdate;
 import tfctech.network.PacketLatexUpdate;
 import tfctech.network.PacketTileEntityUpdate;
 import tfctech.registry.TechFoodTraits;
@@ -62,6 +63,7 @@ public class TFCTech
         int id = 0;
         network.registerMessage(new PacketLatexUpdate.Handler(), PacketLatexUpdate.class, ++id, Side.CLIENT);
         network.registerMessage(new PacketTileEntityUpdate.Handler(), PacketTileEntityUpdate.class, ++id, Side.CLIENT);
+        network.registerMessage(new PacketFridgeUpdate.Handler(), PacketFridgeUpdate.class, ++id, Side.CLIENT);
         if (!signedBuild)
         {
             logger.error("INVALID FINGERPRINT DETECTED! This means this jar file has been compromised and are not supported.");
