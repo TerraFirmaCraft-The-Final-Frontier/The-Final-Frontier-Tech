@@ -33,6 +33,7 @@ import net.dries007.tfc.api.recipes.knapping.KnappingType;
 import net.dries007.tfc.api.registries.TFCRegistries;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.objects.inventory.ingredient.IIngredient;
+import net.dries007.tfc.objects.items.ItemsTFC;
 import net.dries007.tfc.objects.items.metal.ItemMetal;
 import net.dries007.tfc.objects.recipes.ShapelessDamageRecipe;
 import net.dries007.tfc.util.OreDictionaryHelper;
@@ -101,6 +102,7 @@ public final class TechRecipes
         if (TechConfig.TWEAKS.removeGlassRecipes)
         {
             modRegistry.remove(new ResourceLocation(TerraFirmaCraft.MOD_ID, "glass"));
+            modRegistry.remove(new ResourceLocation(TerraFirmaCraft.MOD_ID, "glass_shard"));
         }
 
     }
@@ -208,6 +210,10 @@ public final class TechRecipes
                 .addInput(IIngredient.of("paneGlass"))
                 .setOutput(new FluidStack(TechFluids.GLASS.get(), 375), 800).build()
                 .setRegistryName(new ResourceLocation(MODID, "glass_pane")),
+            new SmelteryRecipe.Builder()
+                .addInput(IIngredient.of(ItemsTFC.GLASS_SHARD))
+                .setOutput(new FluidStack(TechFluids.GLASS.get(), 500), 800).build()
+                .setRegistryName(new ResourceLocation(MODID, "glass_shard")),
             new SmelteryRecipe.Builder()
                 .addInput(IIngredient.of(Items.GLASS_BOTTLE))
                 .setOutput(new FluidStack(TechFluids.GLASS.get(), 250), 800).build()
