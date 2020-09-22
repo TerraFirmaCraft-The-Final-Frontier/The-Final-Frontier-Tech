@@ -125,7 +125,7 @@ public class ItemTechMetal extends ItemTFC implements IMetalItem
         DRAW_PLATE(100),
         GROOVE(50, false, ItemGroove::new),
         INDUCTOR(200),
-        TONGS(200),
+        TONGS(100),
         STRIP(50),
         LONG_ROD(100),
         ROD(50),
