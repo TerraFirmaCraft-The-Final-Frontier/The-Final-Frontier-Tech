@@ -320,7 +320,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     @Override
     public int getSinkTier()
     {
-        return Integer.MAX_VALUE;
+        return TechConfig.DEVICES.ic2Voltage;
     }
 
     @Override
