@@ -72,6 +72,11 @@ public final class TechConfig
         @Config.LangKey("config." + MODID + ".devices.gtceVoltage")
         public int gtceVoltage = 32;
 
+        @Config.Comment({"Should TFCTech machines accepts FE?"})
+        @Config.LangKey("config." + MODID + ".devices.acceptFE")
+        public boolean acceptFE = true;
+
+
         @Config.Comment({"Modifier for how quickly electric forge heats items. Smaller number = slower temperature changes. Note: This is affected by TFC global modifier."})
         @Config.RangeDouble(min = 0.01D, max = 1000.0D)
         @Config.LangKey("config." + MODID + ".devices.electricForgeSpeed")
