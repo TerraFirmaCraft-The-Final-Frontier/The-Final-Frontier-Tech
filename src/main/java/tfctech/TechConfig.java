@@ -53,6 +53,11 @@ public final class TechConfig
         @Config.LangKey("config." + MODID + ".devices.ratioIc2")
         public int ratioIc2 = 4;
 
+        @Config.Comment({"Which voltage tier machines should register to?"})
+        @Config.RangeInt(min = 1)
+        @Config.LangKey("config." + MODID + ".devices.ic2Voltage")
+        public int ic2Voltage = Integer.MAX_VALUE;
+
         @Config.Comment({"Should TFCTech machines accepts GTCE EU?"})
         @Config.LangKey("config." + MODID + ".devices.acceptIc2EU")
         public boolean acceptGTCEEU = true;
