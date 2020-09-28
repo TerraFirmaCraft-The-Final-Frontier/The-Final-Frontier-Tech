@@ -85,7 +85,7 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     @Override
     public int getSinkTier()
     {
-        return Integer.MAX_VALUE;
+        return TechConfig.DEVICES.ic2Voltage;
     }
 
     @Override
@@ -171,7 +171,7 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     {
         if (facing == null || facing == world.getBlockState(pos).getValue(FACING))
         {
-            if (capability == CapabilityEnergy.ENERGY)
+            if (TechConfig.DEVICES.acceptFE && capability == CapabilityEnergy.ENERGY)
             {
                 return true;
             }
@@ -189,7 +189,7 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
     {
         if (facing == null || facing == world.getBlockState(pos).getValue(FACING))
         {
-            if (capability == CapabilityEnergy.ENERGY)
+            if (TechConfig.DEVICES.acceptFE && capability == CapabilityEnergy.ENERGY)
             {
                 return (T) this.energyContainer;
             }
