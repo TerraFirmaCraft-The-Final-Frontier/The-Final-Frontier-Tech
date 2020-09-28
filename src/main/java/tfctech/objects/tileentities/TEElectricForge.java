@@ -174,7 +174,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     {
         if (facing == null || facing == EnumFacing.UP || facing == EnumFacing.DOWN || facing == world.getBlockState(pos).getValue(BlockElectricForge.FACING).getOpposite())
         {
-            if (capability == CapabilityEnergy.ENERGY)
+            if (TechConfig.DEVICES.acceptFE && capability == CapabilityEnergy.ENERGY)
             {
                 return true;
             }
@@ -192,7 +192,7 @@ public class TEElectricForge extends TEInventory implements ITickable, ITileFiel
     {
         if (facing == null || facing == EnumFacing.UP || facing == EnumFacing.DOWN || facing == world.getBlockState(pos).getValue(BlockElectricForge.FACING).getOpposite())
         {
-            if (capability == CapabilityEnergy.ENERGY)
+            if (TechConfig.DEVICES.acceptFE && capability == CapabilityEnergy.ENERGY)
             {
                 return (T) this.energyContainer;
             }
