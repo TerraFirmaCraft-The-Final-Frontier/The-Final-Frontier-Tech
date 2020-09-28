@@ -177,7 +177,7 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
         }
         if (facing == null || facing == this.getRotation().getOpposite())
         {
-            if (capability == CapabilityEnergy.ENERGY)
+            if (TechConfig.DEVICES.acceptFE && capability == CapabilityEnergy.ENERGY)
             {
                 return true;
             }
@@ -207,7 +207,7 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
         }
         if (facing == null || facing == this.getRotation().getOpposite())
         {
-            if (capability == CapabilityEnergy.ENERGY)
+            if (TechConfig.DEVICES.acceptFE && capability == CapabilityEnergy.ENERGY)
             {
                 return (T) this.energyContainer;
             }
@@ -281,7 +281,7 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
     @Override
     public int getSinkTier()
     {
-        return Integer.MAX_VALUE;
+        return TechConfig.DEVICES.ic2Voltage;
     }
 
     @Override
