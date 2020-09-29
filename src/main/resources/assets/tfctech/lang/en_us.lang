@@ -128,6 +128,9 @@ config.tfctech.devices.acceptIc2EU.tooltip=Should TFCTech machines accepts IC2 E
 config.tfctech.devices.ratioIc2=IC2 EU Ratio
 config.tfctech.devices.ratioIc2.tooltip=How much energy 1 IC2 EU unit gives to machines?
 
+config.tfctech.devices.ic2Voltage=IC2 Voltage Input
+config.tfctech.devices.ic2Voltage.tooltip=Which voltage tier machines should register to?
+
 config.tfctech.devices.acceptGTCEEU=Accept GTCE EU
 config.tfctech.devices.acceptGTCEEU.tooltip=Should TFCTech machines accepts GTCE EU?
 
@@ -136,6 +139,9 @@ config.tfctech.devices.ratioGTCE.tooltip=How much energy 1 GTCE EU unit gives to
 
 config.tfctech.devices.gtceVoltage=GTCE Voltage Input
 config.tfctech.devices.gtceVoltage.tooltip=Which voltage tier machines should register to?
+
+config.tfctech.devices.acceptFE=Accept FE
+config.tfctech.devices.acceptFE.tooltip=Should TFCTech machines accepts FE?
 
 ### Electric Forge
 config.tfctech.devices.electricForgeSpeed=Electric Forge Speed

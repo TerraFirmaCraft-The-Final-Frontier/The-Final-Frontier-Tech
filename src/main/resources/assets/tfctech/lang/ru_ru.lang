@@ -122,6 +122,9 @@ config.tfctech.devices.acceptIc2EU.tooltip=Должны ли механизмы 
 config.tfctech.devices.ratioIc2=Соотношение EU в IC2
 config.tfctech.devices.ratioIc2.tooltip=Как много энергии 1 EU из IC2 передаёт машинам?
 
+config.tfctech.devices.ic2Voltage=Входное напряжение в IC2
+config.tfctech.devices.gtceVoltage.tooltip=На какой уровень напряжения машины должны настраиваться?
+
 config.tfctech.devices.acceptGTCEEU=Принять энергию из GTCE
 config.tfctech.devices.acceptGTCEEU.tooltip=Должны ли механизмы TFCTech использовать стандартную EU энергию GTCE?
 
@@ -130,6 +133,9 @@ config.tfctech.devices.ratioGTCE.tooltip=Как много энергии 1 EU �
 
 config.tfctech.devices.gtceVoltage=Входное напряжение в GTCE
 config.tfctech.devices.gtceVoltage.tooltip=На какой уровень напряжения машины должны настраиваться?
+
+config.tfctech.devices.acceptFE=Принять энергию из FE
+config.tfctech.devices.acceptFE.tooltip=Должны ли механизмы TFCTech использовать стандартную FE энергию?
 
 ### Electric Forge
 config.tfctech.devices.electricForgeSpeed=Скорость электро-кузницы
