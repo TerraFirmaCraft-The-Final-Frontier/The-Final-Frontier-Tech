@@ -3,6 +3,7 @@ package tfctech;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -56,10 +57,10 @@ public final class TechConfig
         @Config.Comment({"Which voltage tier machines should register to?"})
         @Config.RangeInt(min = 1)
         @Config.LangKey("config." + MODID + ".devices.ic2Voltage")
-        public int ic2Voltage = Integer.MAX_VALUE;
+        public int ic2Voltage = Loader.isModLoaded("ic2-classic-spmod") ? 13 : Integer.MAX_VALUE;
 
         @Config.Comment({"Should TFCTech machines accepts GTCE EU?"})
-        @Config.LangKey("config." + MODID + ".devices.acceptIc2EU")
+        @Config.LangKey("config." + MODID + ".devices.acceptGTCEEU")
         public boolean acceptGTCEEU = true;
 
         @Config.Comment({"How much energy 1 GTCE EU unit gives to machines?"})
