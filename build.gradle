@@ -74,10 +74,12 @@ repositories {
 dependencies {
     deobfProvided "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.11.505"
     deobfProvided "mezz.jei:jei_1.12.2:4.15.0.291"
-    deobfProvided "curse.maven:hwyla:2568751"
+    deobfProvided "curse.maven:hwyla-253449:2568751"
 	deobfProvided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.12-6"
     compileOnly "gregtechce:gregtech:1.12.2:1.8.5.436"
     compileOnly 'net.industrial-craft:industrialcraft-2:2.8.170-ex112:api'
+    //runtime 'net.industrial-craft:industrialcraft-2:2.8.170-ex112'
+    runtime "curse.maven:ic2_classic-242942:3014827"
     compile fileTree(include: ["*.jar"], dir: "libs")
 }
 
