@@ -57,7 +57,7 @@ public final class TechConfig
         @Config.Comment({"Which voltage tier machines should register to?"})
         @Config.RangeInt(min = 1)
         @Config.LangKey("config." + MODID + ".devices.ic2Voltage")
-        public int ic2Voltage = Loader.isModLoaded("ic2-classic-spmod") ? 13 : Integer.MAX_VALUE;
+        public int ic2Voltage = Integer.MAX_VALUE;
 
         @Config.Comment({"Should TFCTech machines accepts GTCE EU?"})
         @Config.LangKey("config." + MODID + ".devices.acceptGTCEEU")
