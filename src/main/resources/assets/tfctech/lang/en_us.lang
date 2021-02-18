@@ -32,8 +32,8 @@ tile.tfctech.smeltery_firebox.name=Smeltery Firebox
 
 # Items
 ## Ceramics
-item.tfctech.ceramics.fluid_bowl.name=Empty Bowl
-item.tfctech.ceramics.fluid_bowl.filled=%s Bowl
+item.tfctech.ceramics.fluid_bowl.name=Empty Fluid Bowl
+item.tfctech.ceramics.fluid_bowl.filled=%s Fluid Bowl
 item.tfctech.ceramics.unfired.rackwheel_piece.name=Unfired Rackwheel Piece Mold
 item.tfctech.ceramics.mold.rackwheel_piece.name=Rackwheel Piece Mold
 item.tfctech.ceramics.mold.rackwheel_piece.filled=%s Rackwheel Piece Mold
