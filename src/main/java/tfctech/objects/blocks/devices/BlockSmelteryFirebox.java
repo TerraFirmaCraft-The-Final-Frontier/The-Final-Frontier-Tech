@@ -236,13 +236,13 @@ public class BlockSmelteryFirebox extends BlockHorizontal implements IBellowsCon
     }
 
     @Override
-    public boolean canIntakeFrom(@Nonnull TEBellows teBellows, @Nonnull Vec3i offset, @Nonnull EnumFacing direction)
+    public boolean canIntakeFrom(@Nonnull Vec3i offset, @Nonnull EnumFacing direction)
     {
         return offset.equals(TEBellows.OFFSET_LEVEL);
     }
 
     @Override
-    public void onAirIntake(@Nonnull TEBellows teBellows, @Nonnull World world, @Nonnull BlockPos pos, int airAmount)
+    public void onAirIntake(@Nonnull World world, @Nonnull BlockPos pos, int airAmount)
     {
         TESmelteryFirebox firebox = Helpers.getTE(world, pos, TESmelteryFirebox.class);
         if (firebox != null)
