@@ -169,6 +169,9 @@ config.tfctech.devices.inductionCrucibleEnergyConsumption.tooltip=Induction cruc
 config.tfctech.devices.inductionCrucibleEnergyCapacity=Induction Crucible Energy Capacity
 config.tfctech.devices.inductionCrucibleEnergyCapacity.tooltip=Induction crucible energy capacity.
 
+config.tfctech.devices.inductionCrucibleTargetTemperature=Induction Crucible Target Temperature
+config.tfctech.devices.inductionCrucibleTargetTemperature.tooltip=Temperature at which the induction crucible heats.
+
 
 ### Fridge
 config.tfctech.devices.fridgeEnergyConsumption=Fridge Energy Consumption

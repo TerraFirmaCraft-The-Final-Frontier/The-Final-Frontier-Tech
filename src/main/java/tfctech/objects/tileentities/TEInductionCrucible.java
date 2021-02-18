@@ -135,7 +135,7 @@ public class TEInductionCrucible extends TECrucible implements IMachineSoundEffe
         }
         if(acceptHeat && energyContainer.consumeEnergy(energyUsage, false))
         {
-            this.acceptHeat(Heat.maxVisibleTemperature());
+            this.acceptHeat(TechConfig.DEVICES.inductionCrucibleTargetTemperature);
             litTime = 15;
             if (!isLit)
             {

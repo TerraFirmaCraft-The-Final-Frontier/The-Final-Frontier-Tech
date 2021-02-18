@@ -110,6 +110,11 @@ public final class TechConfig
         @Config.LangKey("config." + MODID + ".devices.inductionCrucibleEnergyCapacity")
         public int inductionCrucibleEnergyCapacity = 10000;
 
+        @Config.Comment({"Induction crucible target temperature."})
+        @Config.RangeInt(min = 1, max = 1_000_000)
+        @Config.LangKey("config." + MODID + ".devices.inductionCrucibleTargetTemperature")
+        public float inductionCrucibleTargetTemperature = 1601;
+
         @Config.Comment({"Fridge energy consumption modifier."})
         @Config.RangeDouble(min = 0.01D, max = 1000.0D)
         @Config.LangKey("config." + MODID + ".devices.fridgeEnergyConsumption")
