@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -81,8 +82,6 @@ public final class TechItems
     public static final ItemMiscTech POTASH = getNull();
     @GameRegistry.ObjectHolder("pot_potash")
     public static final ItemPottery POTASH_POT = getNull();
-    @GameRegistry.ObjectHolder("powder/wood")
-    public static final ItemMiscTech WOOD_POWDER = getNull();
     @GameRegistry.ObjectHolder("powder/ash")
     public static final ItemMiscTech ASH = getNull();
     @GameRegistry.ObjectHolder("pot_ash")
@@ -166,8 +165,6 @@ public final class TechItems
         }, CT_MISC));
         simpleItems.add(register(r, "powder/potash", new ItemMiscTech(Size.SMALL, Weight.LIGHT, "dustPotash"), CT_MISC));
         simpleItems.add(register(r, "powder/lime", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.22f, 2000f, "dustLime"), CT_MISC));
-        simpleItems.add(register(r, "powder/wood", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.22f, 2000f, "dustWood"), CT_MISC));
-        simpleItems.add(register(r, "powder/ash", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.22f, 2000f, "dustAsh"), CT_MISC));
 
         simpleItems.add(register(r, "latex/vulcanizing_agents", new ItemMiscTech(Size.SMALL, Weight.LIGHT), CT_MISC));
         simpleItems.add(register(r, "latex/rubber_mix", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.8f, 800f), CT_MISC));
@@ -319,7 +316,6 @@ public final class TechItems
                 OreDictionary.registerOre("sandSilica", x);
             }
         });
-
     }
 
     private static boolean isSilica(BlockRockVariant block)

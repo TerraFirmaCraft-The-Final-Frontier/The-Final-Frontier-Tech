@@ -90,7 +90,6 @@ public final class TechRecipes
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.RUBBER_MIX)), new ItemStack(TechItems.RUBBER), 600f, Metal.Tier.TIER_I).setRegistryName("rubber"),
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_RACKWHEEL_PIECE)), new ItemStack(TechItems.MOLD_RACKWHEEL_PIECE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_rackwheel"),
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_SLEEVE)), new ItemStack(TechItems.MOLD_SLEEVE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_sleeve"),
-            new HeatRecipeSimple(IIngredient.of("dustWood"), new ItemStack(TechItems.ASH), 850f, Metal.Tier.TIER_I).setRegistryName("ash"),
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.ASH_POT)), new ItemStack(TechItems.POTASH_POT), 500f, Metal.Tier.TIER_I).setRegistryName("potash_pot"),
             new HeatRecipeSimple(IIngredient.of("rockFlux"), new ItemStack(TechItems.LIME, 2), 600f, Metal.Tier.TIER_I).setRegistryName("lime"),
             new HeatRecipeSimple(IIngredient.of(new ItemStack(TechItems.UNFIRED_MOLD_PANE)), new ItemStack(TechItems.MOLD_PANE), 1599f, Metal.Tier.TIER_I).setRegistryName("fired_mold_pane"),

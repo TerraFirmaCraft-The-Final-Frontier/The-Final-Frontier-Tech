@@ -1,6 +1,7 @@
 package tfctech;
 
 import org.apache.logging.log4j.Logger;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -8,12 +9,17 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.oredict.OreDictionary;
 
+import net.dries007.tfc.TerraFirmaCraft;
+import net.dries007.tfc.objects.items.ItemsTFC;
 import tfctech.client.TechGuiHandler;
 import tfctech.network.PacketFridgeUpdate;
 import tfctech.network.PacketLatexUpdate;
 import tfctech.network.PacketTileEntityUpdate;
+import tfctech.objects.items.TechItems;
 import tfctech.registry.TechFoodTraits;
 
 @SuppressWarnings("WeakerAccess")
@@ -50,6 +56,9 @@ public class TFCTech
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
+        // Register dust ash ore dictionary
+        // Unfortunately, this has to be done after TFC registered it's items, which is only safe after preInit
+        OreDictionary.registerOre("dustAsh", ItemsTFC.WOOD_ASH);
         FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "tfctech.compat.waila.TOPPlugin");
         TechFoodTraits.init();
     }

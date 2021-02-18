@@ -36,22 +36,4 @@ public final class CommonEventHandler
             }
         }
     }
-
-    @SubscribeEvent
-    public static void onHarvestEvent(BlockEvent.HarvestDropsEvent event)
-    {
-        if (event.getHarvester() != null && !event.getWorld().isRemote)
-        {
-            final ItemStack heldItem = event.getHarvester().getHeldItemMainhand();
-            if (event.getState().getBlock() instanceof BlockLogTFC && heldItem.getItem().getToolClasses(heldItem).contains("saw") && Constants.RNG.nextFloat() < 0.5F)
-            {
-                if (Constants.RNG.nextFloat() < 0.5F)
-                {
-                    event.getDrops().clear(); // Also, consume log
-                }
-                event.getDrops().add(new ItemStack(TechItems.WOOD_POWDER, 1));
-
-            }
-        }
-    }
 }

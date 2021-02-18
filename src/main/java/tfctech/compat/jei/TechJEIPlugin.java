@@ -96,7 +96,6 @@ public class TechJEIPlugin implements IModPlugin
         registry.addRecipeClickArea(GuiGlassworking.class, 132, 27, 9, 14, GLASSWORKING_UID);
 
         // Information
-        registry.addIngredientInfo(new ItemStack(TechItems.WOOD_POWDER), VanillaTypes.ITEM, "jei.information.tfctech.wood_powder");
         registry.addIngredientInfo(new ItemStack(TechItems.IRON_GROOVE), VanillaTypes.ITEM, "jei.information.tfctech.groove");
         registry.addIngredientInfo(new FluidStack(TechFluids.LATEX.get(), 1000), VanillaTypes.FLUID, "jei.information.tfctech.latex");
         registry.addIngredientInfo(new ItemStack(TechBlocks.FRIDGE), VanillaTypes.ITEM, "jei.information.tfctech.fridge");
