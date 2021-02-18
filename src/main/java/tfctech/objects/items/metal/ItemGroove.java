@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 
 import mcp.MethodsReturnNonnullByDefault;
 import net.dries007.tfc.api.types.Metal;
+import tfctech.TFCTech;
 import tfctech.TechConfig;
 import tfctech.client.TechSounds;
 import tfctech.objects.blocks.TechBlocks;
@@ -120,42 +121,49 @@ public class ItemGroove extends ItemTechMetal
         ResourceLocation resourceLocation = state.getBlock().getRegistryName();
         for (String entry : TechConfig.TWEAKS.rubberTrees)
         {
-            String id;
             int paramStart = entry.indexOf("{");
             int paramEnd = entry.indexOf("}");
-            if (paramStart > -1)
+            if (paramStart > -1 && paramEnd > -1)
             {
-                id = entry.substring(0, paramStart).trim();
+                String id = entry.substring(0, paramStart).trim();
+                if (resourceLocation != null && id.equals(resourceLocation.toString()))
+                {
+                    String[] params = entry.substring(paramStart + 1, paramEnd).split(",");
+                    for (String param : params)
+                    {
+                        boolean valid = false;
+                        String paramName = param.substring(0, param.indexOf("=")).trim();
+                        String paramValue = param.substring(param.indexOf("=") + 1).trim();
+                        for (IProperty<?> property : state.getProperties().keySet())
+                        {
+                            if (property.getName().equals(paramName))
+                            {
+                                if (state.getValue(property).toString().equals(paramValue))
+                                {
+                                    valid = true;
+                                }
+                                break;
+                            }
+                        }
+                        if (!valid)
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            }
+            else if (paramStart <= -1 && paramEnd <= -1)
+            {
+                if (resourceLocation != null && entry.equals(resourceLocation.toString()))
+                {
+                    return true;
+                }
             }
             else
             {
-                id = entry;
-            }
-            if (resourceLocation != null && id.equals(resourceLocation.toString()))
-            {
-                String[] params = entry.substring(paramStart + 1, paramEnd).split(",");
-                for (String param : params)
-                {
-                    boolean valid = false;
-                    String paramName = param.substring(0, param.indexOf("=")).trim();
-                    String paramValue = param.substring(param.indexOf("=") + 1).trim();
-                    for (IProperty<?> property : state.getProperties().keySet())
-                    {
-                        if (property.getName().equals(paramName))
-                        {
-                            if (state.getValue(property).toString().equals(paramValue))
-                            {
-                                valid = true;
-                            }
-                            break;
-                        }
-                    }
-                    if (!valid)
-                    {
-                        return false;
-                    }
-                }
-                return true;
+                // Incorrect config, warning user
+                TFCTech.getLog().error("Incorrect rubber tree config found: " + entry);
             }
         }
         return false;
