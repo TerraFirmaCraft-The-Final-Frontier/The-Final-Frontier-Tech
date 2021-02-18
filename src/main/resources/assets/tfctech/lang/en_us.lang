@@ -22,6 +22,10 @@ item.tfc.wood.lumber.hevea.name=Hevea Lumber
 item.tfc.wood.door.hevea.name=Hevea Door
 item.tfc.wood.boat.hevea.name=Hevea Boat
 
+### TFC Storage's Hevea
+tile.wood/food_shelf/hevea.name=Hevea Food Shelf
+tile.wood/hanger/hevea.name=Hevea Hanger
+
 ## Devices
 tile.tfctech.electric_forge.name=Electric Forge
 tile.tfctech.induction_crucible.name=Induction Crucible
