@@ -86,6 +86,7 @@ public class CTSmeltery
     }
 
     @ZenClass("mods.tfctech.SmelteryRecipeBuilder")
+    @ZenRegister
     public static class CTSmelteryRecipeBuilder
     {
         private final SmelteryRecipe.Builder internal;
