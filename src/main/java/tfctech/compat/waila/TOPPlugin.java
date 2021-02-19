@@ -1,17 +1,23 @@
 package tfctech.compat.waila;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import mcjty.theoneprobe.api.*;
+import net.dries007.tfc.api.capability.food.CapabilityFood;
+import net.dries007.tfc.api.capability.food.IFood;
 import net.dries007.tfc.util.Helpers;
+import tfctech.TFCTech;
 import tfctech.objects.blocks.devices.*;
 import tfctech.objects.tileentities.*;
 
@@ -59,6 +65,31 @@ public final class TOPPlugin implements Function<ITheOneProbe, Void>, IProbeInfo
             {
                 IProbeInfo horizontalPane = iProbeInfo.horizontal(iProbeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER));
                 horizontalPane.text((new TextComponentTranslation("waila.tfctech.fridge.efficiency", (int) fridge.getEfficiency())).getFormattedText());
+                if(fridge.isOpen())
+                {
+                    int slot = BlockFridge.getPlayerLookingItem(TEPos.down(), entityPlayer, iBlockState.getValue(BlockFridge.FACING));
+                    if (slot > -1)
+                    {
+                        ItemStack stack = fridge.getSlot(slot);
+                        if (!stack.isEmpty())
+                        {
+                            iProbeInfo.horizontal(iProbeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
+                                .item(stack)
+                                .vertical()
+                                .itemLabel(stack);
+                            IFood cap = stack.getCapability(CapabilityFood.CAPABILITY, null);
+                            List<String> list = new ArrayList<>();
+                            if (cap != null)
+                            {
+                                cap.addTooltipInfo(stack, list, entityPlayer);
+                            }
+                            for(String text : list)
+                            {
+                                iProbeInfo.text(text);
+                            }
+                        }
+                    }
+                }
             }
         }
         if (b instanceof BlockLatexExtractor)

@@ -107,6 +107,9 @@ tooltip.tfctech.wiredraw.low_tier=Drawing Plate is too low tier!
 tooltip.tfctech.gui.energy_format=%s RF/%s RF
 tooltip.tfctech.gui.electric_forge.temperature_format=%s ºC
 
+##
+tfc.food_traits.cold=§bCold
+tfc.food_traits.frozen=§fFrozen
 
 #Config
 config.tfctech=TFCTech

@@ -1,5 +1,6 @@
 package tfctech.compat.waila;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -8,8 +9,13 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 
+import mcjty.theoneprobe.api.ElementAlignment;
+import mcjty.theoneprobe.api.IProbeInfo;
 import mcp.mobius.waila.api.*;
+import net.dries007.tfc.api.capability.food.CapabilityFood;
+import net.dries007.tfc.api.capability.food.IFood;
 import net.dries007.tfc.util.Helpers;
 import tfctech.objects.blocks.devices.BlockFridge;
 import tfctech.objects.blocks.devices.BlockLatexExtractor;
@@ -61,6 +67,23 @@ public final class WailaIntegration implements IWailaDataProvider, IWailaPlugin
             if (fridge != null)
             {
                 currenttip.add((new TextComponentTranslation("waila.tfctech.fridge.efficiency", (int) fridge.getEfficiency())).getFormattedText());
+                if(fridge.isOpen())
+                {
+                    int slot = BlockFridge.getPlayerLookingItem(TEPos.down(), accessor.getPlayer(), accessor.getBlockState().getValue(BlockFridge.FACING));
+                    if (slot > -1)
+                    {
+                        ItemStack stack = fridge.getSlot(slot);
+                        if (!stack.isEmpty())
+                        {
+                            currenttip.add(TextFormatting.WHITE + stack.getDisplayName());
+                            IFood cap = stack.getCapability(CapabilityFood.CAPABILITY, null);
+                            if (cap != null)
+                            {
+                                cap.addTooltipInfo(stack, currenttip, accessor.getPlayer());
+                            }
+                        }
+                    }
+                }
             }
         }
         if (b instanceof BlockLatexExtractor)

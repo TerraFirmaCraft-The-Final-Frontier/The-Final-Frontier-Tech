@@ -440,12 +440,12 @@ public class TEFridge extends TEInventory implements ITickable, IEnergySink
             }
             if (this.isOpen() || !energyContainer.consumeEnergy(consumption, false))
             {
-                efficiency -= (100.0F / (TechConfig.DEVICES.fridgeLoseEfficiency * 6000.0F)); //5 Minutes to 0 default
+                efficiency -= (100.0F / (6000.0F / TechConfig.DEVICES.fridgeLoseEfficiency)); //5 Minutes to 0 default
                 if (efficiency <= 0) efficiency = 0;
             }
             else
             {
-                efficiency += (100.0F / (TechConfig.DEVICES.fridgeEfficiency * 36000.0F)); //30 Minutes to 100 default
+                efficiency += (100.0F / (36000.0F / TechConfig.DEVICES.fridgeEfficiency)); //30 Minutes to 100 default
                 if (efficiency >= 100) efficiency = 100;
             }
             if (++applyTrait >= 100)
