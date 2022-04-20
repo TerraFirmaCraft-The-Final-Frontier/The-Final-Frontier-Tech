@@ -12,8 +12,8 @@ import net.dries007.tfc.objects.fluids.properties.FluidWrapper;
 
 public final class TechFluids
 {
-    private static final ResourceLocation LAVA_STILL = new ResourceLocation(TerraFirmaCraft.MOD_ID, "blocks/lava_still");
-    private static final ResourceLocation LAVA_FLOW = new ResourceLocation(TerraFirmaCraft.MOD_ID, "blocks/lava_flow");
+    private static final ResourceLocation MOLTEN_STILL = new ResourceLocation(TerraFirmaCraft.MOD_ID, "blocks/fluids/molten_still");
+    private static final ResourceLocation MOLTEN_FLOWING = new ResourceLocation(TerraFirmaCraft.MOD_ID, "blocks/fluids/molten_flowing");
     private static final HashBiMap<Fluid, FluidWrapper> WRAPPERS = HashBiMap.create();
 
     public static FluidWrapper LATEX;
@@ -21,8 +21,8 @@ public final class TechFluids
 
     public static void registerFluids()
     {
-        LATEX = registerFluid(new Fluid("latex", LAVA_STILL, LAVA_FLOW, 0xFFF8F8F8));
-        GLASS = registerFluid(new Fluid("glass", LAVA_STILL, LAVA_FLOW, 0xFFED97B5));
+        LATEX = registerFluid(new Fluid("latex", MOLTEN_STILL, MOLTEN_FLOWING, 0xFFF8F8F8));
+        GLASS = registerFluid(new Fluid("glass", MOLTEN_STILL, MOLTEN_FLOWING, 0xFFED97B5));
 
         setFluidTemperatures();
     }

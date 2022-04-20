@@ -27,7 +27,7 @@ import tfctech.registry.TechFoodTraits;
 public class TFCTech
 {
     public static final String MODID = "tfctech";
-    public static final String NAME = "TFCTech Unofficial";
+    public static final String NAME = "The Final Frontier: Tech";
     public static final String VERSION = "@VERSION@";
     public static final String DEPENDENCIES = "required-after:tfc@[1.0.0,);after:ic2;after:gregtech";
     private static final boolean signedBuild = true;
@@ -58,7 +58,7 @@ public class TFCTech
     {
         // Register dust ash ore dictionary
         // Unfortunately, this has to be done after TFC registered it's items, which is only safe after preInit
-        OreDictionary.registerOre("dustAsh", ItemsTFC.WOOD_ASH);
+//        OreDictionary.registerOre("dustAsh", ItemsTFC.WOOD_ASH);
         FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "tfctech.compat.waila.TOPPlugin");
         TechFoodTraits.init();
     }

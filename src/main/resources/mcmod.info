@@ -1,16 +1,17 @@
 [
   {
     "modid": "tfctech",
-    "name": "TFCTech Unofficial",
+    "name": "The Final Frontier: Tech",
     "description": "Adds devices to work into industrial era for TerraFirmaCraft",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "logoFile": "/assets/tfc/textures/gui/logo.png",
     "url": "https://github.com/TFC-Metallum/TFCTech",
     "authorList": [
+      "Lylythii"
       "DisasterMoo",
 	  "Abdyman"
     ],
-    "credits": "Shurgent for the original addon, DrFair for TFCEngineer and the TFC dev team for their extraordinary mod."
+    "credits": "Shurgent, DrFair, DisasterMoo, Abdyman."
   }
 ]
