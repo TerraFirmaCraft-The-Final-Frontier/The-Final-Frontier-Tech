@@ -101,7 +101,7 @@ public final class TechRecipes
         if (TechConfig.TWEAKS.removeGlassRecipes)
         {
             modRegistry.remove(new ResourceLocation(TerraFirmaCraft.MOD_ID, "glass"));
-            modRegistry.remove(new ResourceLocation(TerraFirmaCraft.MOD_ID, "glass_shard"));
+//            modRegistry.remove(new ResourceLocation(TerraFirmaCraft.MOD_ID, "glass_shard"));
         }
 
     }
@@ -197,26 +197,37 @@ public final class TechRecipes
     {
         IForgeRegistry<SmelteryRecipe> r = event.getRegistry();
         r.registerAll(
+
+
             new SmelteryRecipe.Builder()
                 .addInput(IIngredient.of("dustPotash")).addInput(IIngredient.of("sandSilica")).addInput(IIngredient.of("dustLime"))
                 .setOutput(new FluidStack(TechFluids.GLASS.get(), 1000), 800).build()
                 .setRegistryName(new ResourceLocation(MODID, "glass")),
+
+
             new SmelteryRecipe.Builder()
                 .addInput(IIngredient.of("blockGlass"))
                 .setOutput(new FluidStack(TechFluids.GLASS.get(), 1000), 800).build()
                 .setRegistryName(new ResourceLocation(MODID, "glass_block")),
+
+
             new SmelteryRecipe.Builder()
                 .addInput(IIngredient.of("paneGlass"))
                 .setOutput(new FluidStack(TechFluids.GLASS.get(), 375), 800).build()
                 .setRegistryName(new ResourceLocation(MODID, "glass_pane")),
+
+/*
             new SmelteryRecipe.Builder()
                 .addInput(IIngredient.of(ItemsTFC.GLASS_SHARD))
                 .setOutput(new FluidStack(TechFluids.GLASS.get(), 500), 800).build()
                 .setRegistryName(new ResourceLocation(MODID, "glass_shard")),
+*/
+
             new SmelteryRecipe.Builder()
                 .addInput(IIngredient.of(Items.GLASS_BOTTLE))
                 .setOutput(new FluidStack(TechFluids.GLASS.get(), 250), 800).build()
                 .setRegistryName(new ResourceLocation(MODID, "glass_bottle"))
+				
         );
     }
 
