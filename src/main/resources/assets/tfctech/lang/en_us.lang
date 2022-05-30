@@ -1,30 +1,4 @@
-## Hevea
-tile.tfc.wood.pressure_plate.hevea.name=Hevea Pressure Plate
-tile.tfc.wood.bookshelf.hevea.name=Hevea Bookshelf
-tile.tfc.wood.workbench.hevea.name=Hevea Workbench
-tile.tfc.wood.planks.hevea.name=Hevea Planks
-tile.tfc.wood.leaves.hevea.name=Hevea Leaves
-tile.tfc.wood.chest.hevea.name=Hevea Chest
-tile.tfc.wood.chest_trap.hevea.name=Trapped Hevea Chest
-tile.tfc.wood.tool_rack.hevea.name=Hevea Tool Rack
-tile.tfc.wood.loom.hevea.name=Hevea Loom
-tile.tfc.wood.support.hevea.name=Hevea Support beam
-tile.tfc.stairs.wood.hevea.name=Hevea Stairs
-tile.tfc.wood.fence.hevea.name=Hevea Fence
-tile.tfc.wood.button.hevea.name=Hevea Button
-tile.tfc.wood.fence_gate.hevea.name=Hevea Fence Gate
-tile.tfc.wood.sapling.hevea.name=Hevea Sapling
-tile.tfc.wood.trapdoor.hevea.name=Hevea Trapdoor
-tile.tfc.wood.barrel.hevea.name=Hevea Barrel
-tile.tfc.wood.log.hevea.name=Hevea Log
-tile.tfc.slab.wood.hevea.name=Hevea Slab
-item.tfc.wood.lumber.hevea.name=Hevea Lumber
-item.tfc.wood.door.hevea.name=Hevea Door
-item.tfc.wood.boat.hevea.name=Hevea Boat
 
-### TFC Storage's Hevea
-tile.wood/food_shelf/hevea.name=Hevea Food Shelf
-tile.wood/hanger/hevea.name=Hevea Hanger
 
 ## Devices
 tile.tfctech.electric_forge.name=Electric Forge
