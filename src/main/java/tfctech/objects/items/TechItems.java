@@ -96,25 +96,12 @@ public final class TechItems
     public static final ItemTechMetal BLACK_STEEL_DRAW_PLATE = getNull();
     @GameRegistry.ObjectHolder("metal/iron_tongs")
     public static final ItemTechMetal IRON_TONGS = getNull();
-    @GameRegistry.ObjectHolder("wiredraw/leather_belt")
-    public static final ItemMiscTech LEATHER_BELT = getNull();
     @GameRegistry.ObjectHolder("wiredraw/winch")
     public static final ItemMiscTech WINCH = getNull();
 
     @GameRegistry.ObjectHolder("metal/copper_inductor")
     public static final ItemTechMetal COPPER_INDUCTOR = getNull();
 
-    @GameRegistry.ObjectHolder("metal/tin_sleeve")
-    public static final ItemTechMetal TIN_SLEEVE = getNull();
-    @GameRegistry.ObjectHolder("metal/brass_sleeve")
-    public static final ItemTechMetal BRASS_SLEEVE = getNull();
-    @GameRegistry.ObjectHolder("metal/steel_sleeve")
-    public static final ItemTechMetal STEEL_SLEEVE = getNull();
-
-    @GameRegistry.ObjectHolder("ceramics/unfired/rackwheel_piece")
-    public static final ItemPottery UNFIRED_RACKWHEEL_PIECE = getNull();
-    @GameRegistry.ObjectHolder("ceramics/mold/rackwheel_piece")
-    public static final ItemTechMold MOLD_RACKWHEEL_PIECE = getNull();
 
     @GameRegistry.ObjectHolder("ceramics/unfired/sleeve")
     public static final ItemPottery UNFIRED_SLEEVE = getNull();
@@ -170,12 +157,9 @@ public final class TechItems
         simpleItems.add(register(r, "latex/rubber_mix", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.8f, 800f), CT_MISC));
         simpleItems.add(register(r, "latex/rubber", new ItemMiscHeatable(Size.SMALL, Weight.LIGHT, 0.8f, 800f, "rubber"), CT_MISC));
 
-        simpleItems.add(register(r, "wiredraw/leather_belt", new ItemMiscTech(Size.NORMAL, Weight.LIGHT), CT_MISC));
         simpleItems.add(register(r, "wiredraw/winch", new ItemMiscTech(Size.NORMAL, Weight.MEDIUM), CT_MISC));
 
         //Unfired is simple
-        simpleItems.add(register(r, "ceramics/unfired/sleeve", new ItemPottery(), CT_MISC));
-        simpleItems.add(register(r, "ceramics/unfired/rackwheel_piece", new ItemPottery(), CT_MISC));
         simpleItems.add(register(r, "ceramics/unfired/glass_block", new ItemPottery(), CT_MISC));
         simpleItems.add(register(r, "ceramics/unfired/glass_pane", new ItemPottery(), CT_MISC));
 
@@ -184,7 +168,6 @@ public final class TechItems
         ImmutableList.Builder<Item> ceramicItems = ImmutableList.builder();
         ceramicItems.add(register(r, "ceramics/mold/glass_block", new ItemGlassMolder(ItemGlassMolder.BLOCK_TANK), CT_MISC));
         ceramicItems.add(register(r, "ceramics/mold/glass_pane", new ItemGlassMolder(ItemGlassMolder.PANE_TANK), CT_MISC));
-        ceramicItems.add(register(r, "ceramics/mold/rackwheel_piece", new ItemTechMold(ItemTechMetal.ItemType.RACKWHEEL_PIECE), CT_MISC));
         // This one is special since we only have 3 sleeves: tin, brass and steel
         // In 1.15, refactor the mod to properly use recipes instead of this ugly code
         ItemTechMold sleeveMold = new ItemTechMold(ItemTechMetal.ItemType.SLEEVE)
@@ -237,24 +220,11 @@ public final class TechItems
 
         metalItems.add(register(r, "metal/copper_inductor", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TerraFirmaCraft.MOD_ID, "copper")), ItemTechMetal.ItemType.INDUCTOR), CT_METAL));
 
-        metalItems.add(register(r, "metal/tin_sleeve", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TerraFirmaCraft.MOD_ID, "tin")), ItemTechMetal.ItemType.SLEEVE), CT_METAL));
-        metalItems.add(register(r, "metal/brass_sleeve", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TerraFirmaCraft.MOD_ID, "brass")), ItemTechMetal.ItemType.SLEEVE), CT_METAL));
-        metalItems.add(register(r, "metal/steel_sleeve", ItemTechMetal.ItemType.create(TFCRegistries.METALS.getValue(new ResourceLocation(TerraFirmaCraft.MOD_ID, "steel")), ItemTechMetal.ItemType.SLEEVE), CT_METAL));
 
         for (Metal metal : TFCRegistries.METALS.getValuesCollection())
         {
             if (ObfuscationReflectionHelper.getPrivateValue(Metal.class, metal, "usable").equals(false))
                 continue;
-            //noinspection ConstantConditions
-            metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_strip", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.STRIP), CT_METAL));
-            metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_rackwheel_piece", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.RACKWHEEL_PIECE), CT_METAL));
-            metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_rackwheel", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.RACKWHEEL), CT_METAL));
-            metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_gear", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.GEAR), CT_METAL));
-            metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_wire", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.WIRE), CT_METAL));
-            metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_long_rod", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.LONG_ROD), CT_METAL));
-            metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_rod", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.ROD), CT_METAL));
-            metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_bolt", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.BOLT), CT_METAL));
-            metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_screw", ItemTechMetal.ItemType.create(metal, ItemTechMetal.ItemType.SCREW), CT_METAL));
             if (metal.getTier().isAtLeast(Metal.Tier.TIER_III) && metal.getToolMetal() != null)
             {
                 metalItems.add(register(r, "metal/" + metal.getRegistryName().getPath().toLowerCase() + "_blowpipe", new ItemBlowpipe(metal), CT_METAL));
@@ -272,22 +242,6 @@ public final class TechItems
         for (Item metalItem : allMetalItems)
         {
             if (metalItem instanceof ItemTechMetal)
-            {
-                ItemTechMetal techMetal = (ItemTechMetal) metalItem;
-                if(techMetal.getType() == ItemTechMetal.ItemType.ROD)
-                {
-                    OreDictionary.registerOre(OreDictionaryHelper.toString("stick", techMetal.getMetal(ItemStack.EMPTY)), new ItemStack(metalItem, 1, 0));
-                }
-                else if(techMetal.getType() == ItemTechMetal.ItemType.LONG_ROD)
-                {
-                    OreDictionary.registerOre(OreDictionaryHelper.toString("stick", "long", techMetal.getMetal(ItemStack.EMPTY)), new ItemStack(metalItem, 1, 0));
-                }
-                else
-                {
-                    OreDictionary.registerOre(OreDictionaryHelper.toString(techMetal.getType(), techMetal.getMetal(ItemStack.EMPTY)), new ItemStack(metalItem, 1, 0));
-                }
-            }
-            else
             {
                 Metal metal = ((IMetalItem) metalItem).getMetal(ItemStack.EMPTY);
                 OreDictionary.registerOre(OreDictionaryHelper.toString("blowpipe"), new ItemStack(metalItem, 1, 0));

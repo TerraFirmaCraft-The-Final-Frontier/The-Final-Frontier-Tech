@@ -38,7 +38,6 @@ item.tfctech.pot_potash.name=Pot with Potash
 item.tfctech.pot_ash.name=Pot with Ash
 
 ## Wiredraw
-item.tfctech.wiredraw.leather_belt.name=Leather Belt
 item.tfctech.wiredraw.winch.name=Winch
 
 ## Metal
@@ -48,17 +47,6 @@ item.tfctech.metalitem.draw_plate.name=%s Draw Plate
 item.tfctech.metalitem.groove.name=%s Groove
 item.tfctech.metalitem.inductor.name=%s Inductor
 item.tfctech.metalitem.tongs.name=%s Tongs
-item.tfctech.metalitem.strip.name=%s Strip
-item.tfctech.metalitem.sleeve.name=%s Sleeve
-item.tfctech.metalitem.long_rod.name=Long %s Rod
-item.tfctech.metalitem.rod.name=%s Rod
-item.tfctech.metalitem.bolt.name=%s Bolt
-item.tfctech.metalitem.screw.name=%s Screw
-item.tfctech.metalitem.rackwheel_piece.name=%s Rackwheel Piece
-item.tfctech.metalitem.rackwheel.name=%s Rackwheel
-item.tfctech.metalitem.gear.name=%s Gear
-item.tfctech.metalitem.wire.name=%s Wire
-item.tfctech.metalitem.wire.unfinished=Unfinished %s Wire
 
 ## Fluids
 fluid.latex=Latex
